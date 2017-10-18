@@ -46,6 +46,7 @@ public class Game{
 	// general test
 	public static void main(String[] args) {
 		Game game = new Game(Player.Bird.DUNLIN, GameBoard.Difficulty.HARD);
+		GUI gameGUI = new GUI();
 		int x = 0;
 		int y = 0;
 		while (game.board.clicks != 0) {
