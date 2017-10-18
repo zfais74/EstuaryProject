@@ -8,14 +8,8 @@ public class Game{
 	GUI gameGUI;
 
 	// constructor
-	Game(Player.Bird gameBird, GameBoard.Difficulty gameDifficulty) {
-		player = new Player(gameBird);
-		board = new GameBoard(gameDifficulty);
-		connectGUI();
-	}
-	
-	// allows click listeners to call checkSpace
-	public void connectGUI() {
+	Game() {
+		// GUI will create the player and board objects
 		gameGUI = new GUI(this);
 	}
 	
@@ -37,11 +31,13 @@ public class Game{
 			case EGG:
 				// up player score
 				player.score++;
+				player.eggs++;
 				System.out.println("Found an Egg!!!");
 				break;
 			case TRASH:
 				// reduce player score
 				player.score--;
+				player.trash++;
 				System.out.println("Ate some trash...");
 				break;
 			case EMPTY:
@@ -50,9 +46,7 @@ public class Game{
 		}
 		// when all clicks have been used, print score and exit
 		if (board.clicks == 0){
-			System.out.println(" ");
-			System.out.println("Score = " + player.getScore());
-			System.exit(0);
+			gameGUI.endScreen(player.getScore());
 		}
 	}
 	
@@ -61,7 +55,7 @@ public class Game{
 		// the main thread with an anonymous implementation of the Runnable class
 		javax.swing.SwingUtilities.invokeLater(new Runnable() {
             public void run() {
-            	Game game = new Game(Player.Bird.DUNLIN, GameBoard.Difficulty.EASY);
+            	Game game = new Game();
             }
         });
 	}
