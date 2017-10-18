@@ -8,7 +8,7 @@ public class GameBoard{
 	public static enum Difficulty {EASY, MEDIUM, HARD};
 	
 	// size of the board
-	public int size = 100;
+	public static int size = 50;
 	// the GameBoard is an empty 2D array of GridSpace pointers
 	public GridSpace[][] board = new GridSpace[size][size];
 	// timer is unused so far
@@ -22,7 +22,7 @@ public class GameBoard{
 	GameBoard(Difficulty difficulty) {
 		
 		timer = 100;
-		clicks = 25;
+		clicks = 10;
 		
 		Random rand = new Random();
 		// cycle through each GridSpace pointer

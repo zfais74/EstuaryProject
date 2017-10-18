@@ -5,11 +5,17 @@ public class Game{
 	
 	Player player;
 	GameBoard board;
+	GUI gameGUI;
 
 	// constructor
 	Game(Player.Bird gameBird, GameBoard.Difficulty gameDifficulty) {
 		player = new Player(gameBird);
 		board = new GameBoard(gameDifficulty);
+		connectGUI();
+	}
+	
+	public void connectGUI() {
+		gameGUI = new GUI(this);
 	}
 	
 	// method to check contents of a space on the board
@@ -41,29 +47,20 @@ public class Game{
 				System.out.println("Nothing.");
 				break;
 		}
+		if (board.clicks == 0){
+			System.out.println(" ");
+			System.out.println("Score = " + player.getScore());
+			System.exit(0);
+		}
 	}
 	
 	// general test
 	public static void main(String[] args) {
-		Game game = new Game(Player.Bird.DUNLIN, GameBoard.Difficulty.HARD);
-		GUI gameGUI = new GUI();
-		int x = 0;
-		int y = 0;
-		while (game.board.clicks != 0) {
-			game.checkSpace(x, y);
-			if (x < 99){
-				x++;
-			}
-			else if (y < 99){
-				x = 0;
-				y++;
-			}
-			else {
-				System.out.println("Checked all space");
-			}
-		}
-		System.out.println(" ");
-		System.out.println("Score = " + game.player.getScore());
+		javax.swing.SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+            	Game game = new Game(Player.Bird.DUNLIN, GameBoard.Difficulty.EASY);
+            }
+        });
 	}
 	
 }
