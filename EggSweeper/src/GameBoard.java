@@ -1,10 +1,16 @@
 import java.util.Random;
 
+
 public class GameBoard{
 	
 	public GridSpace[][] board = new GridSpace[100][100];
+	public int timer;
+	public int clicks;
 	
 	public GameBoard() {
+		
+		timer = 100;
+		clicks = 25;
 		
 		Random rand = new Random();
 		
@@ -18,18 +24,16 @@ public class GameBoard{
 		}
 	}
 	
+	public GridSpace.Item checkSpace(int i, int j) {
+		this.clicks--;
+		return this.board[i][j].getItem();
+	}
+	
 	public static void main(String[] args) {
 		GameBoard gameBoard = new GameBoard();
-		System.out.println(gameBoard.board[10][10].contents);
-		System.out.println(gameBoard.board[30][30].contents);
-		System.out.println(gameBoard.board[50][50].contents);
-		System.out.println(gameBoard.board[70][70].contents);
-		System.out.println(gameBoard.board[90][90].contents);
-		System.out.println(gameBoard.board[15][10].contents);
-		System.out.println(gameBoard.board[35][30].contents);
-		System.out.println(gameBoard.board[55][50].contents);
-		System.out.println(gameBoard.board[75][70].contents);
-		System.out.println(gameBoard.board[95][90].contents);
+		for (int i = 0; i < 10; i++) {
+			System.out.println(gameBoard.checkSpace(i, 10));
+		}
 	}
 	
 }
