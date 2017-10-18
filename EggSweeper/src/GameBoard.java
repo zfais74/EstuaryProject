@@ -1,39 +1,43 @@
 import java.util.Random;
 
+// The Model
 
 public class GameBoard{
+
+	// the Difficulty affects distribution of EGGs and TRASH
+	public static enum Difficulty {EASY, MEDIUM, HARD};
 	
-	public GridSpace[][] board = new GridSpace[100][100];
+	// size of the board
+	public int size = 100;
+	// the GameBoard is an empty 2D array of GridSpace pointers
+	public GridSpace[][] board = new GridSpace[size][size];
+	// timer is unused so far
 	public int timer;
+	// remaining clicks
 	public int clicks;
+	// randConst is used in setting Items in GridSpaces
+	public static final int randConst = 100;
 	
-	public GameBoard() {
+	// constructor
+	GameBoard(Difficulty difficulty) {
 		
 		timer = 100;
 		clicks = 25;
 		
 		Random rand = new Random();
-		
-		for (int i = 0; i < 100; i++) {
-			for (int j = 0; j < 100; j++) {
-				
-				int randomInt = rand.nextInt(10);
-				board[i][j] = new GridSpace(randomInt);
-				
+		// cycle through each GridSpace pointer
+		for (int i = 0; i < size; i++) {
+			for (int j = 0; j < size; j++) {
+				// generate random integer to use for determining contents of GridSpace
+				int randomInt = rand.nextInt(randConst);
+				board[i][j] = new GridSpace(randomInt, difficulty);
 			}
 		}
 	}
 	
-	public GridSpace.Item checkSpace(int i, int j) {
-		this.clicks--;
-		return this.board[i][j].getItem();
-	}
-	
-	public static void main(String[] args) {
-		GameBoard gameBoard = new GameBoard();
-		for (int i = 0; i < 10; i++) {
-			System.out.println(gameBoard.checkSpace(i, 10));
-		}
+	// get GridSpace (x, y)
+	public GridSpace getSpace(int xIndex, int yIndex) {
+		return board[xIndex][yIndex];
 	}
 	
 }
