@@ -14,6 +14,7 @@ public class Game{
 		connectGUI();
 	}
 	
+	// allows click listeners to call checkSpace
 	public void connectGUI() {
 		gameGUI = new GUI(this);
 	}
@@ -47,6 +48,7 @@ public class Game{
 				System.out.println("Nothing.");
 				break;
 		}
+		// when all clicks have been used, print score and exit
 		if (board.clicks == 0){
 			System.out.println(" ");
 			System.out.println("Score = " + player.getScore());
@@ -56,6 +58,7 @@ public class Game{
 	
 	// general test
 	public static void main(String[] args) {
+		// the main thread with an anonymous implementation of the Runnable class
 		javax.swing.SwingUtilities.invokeLater(new Runnable() {
             public void run() {
             	Game game = new Game(Player.Bird.DUNLIN, GameBoard.Difficulty.EASY);

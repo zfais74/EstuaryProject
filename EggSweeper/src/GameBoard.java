@@ -20,8 +20,9 @@ public class GameBoard{
 	
 	// constructor
 	GameBoard(Difficulty difficulty) {
-		
+		//timer is currently unused
 		timer = 100;
+		// max number of clicks
 		clicks = 10;
 		
 		Random rand = new Random();
