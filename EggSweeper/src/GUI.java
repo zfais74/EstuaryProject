@@ -1,4 +1,6 @@
 import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JComponent;
@@ -25,6 +27,13 @@ public class GUI{
 		helloButton.setVisible(true);
 		helloButton.setLocation(250, 275);
 		helloButton.setSize(100, 50);
+		helloButton.addActionListener(new ActionListener(){
+	        public void actionPerformed(ActionEvent ae2){
+
+	                System.out.println("Hello!!");
+
+	        }
+	    });
 		gui.getContentPane().add(helloButton);
 	}
 	
