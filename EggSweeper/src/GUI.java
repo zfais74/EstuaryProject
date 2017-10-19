@@ -136,10 +136,9 @@ public class GUI{
 				addButton(i, j);
 			}
 		}
-		ImageIcon beach = new ImageIcon("images/beach.png");
+		ImageIcon beach = new ImageIcon(GUI.class.getResource("images/beach.png"));
         JLabel beachLabel = new JLabel(beach);
-        System.out.println(beach.getImageLoadStatus());
-        beachLabel.setBounds(0, 0, beach.getIconWidth(), beach.getIconHeight());
+        beachLabel.setBounds(buffer, buffer, gridButtonSize*Game.boardSize, gridButtonSize*Game.boardSize);
         gui.getContentPane().add(beachLabel, 1);
 	}
 
@@ -151,6 +150,9 @@ public class GUI{
 		JButton gridButton = new JButton();
 		gridButton.setLocation(xLocation, yLocation);
 		gridButton.setSize(gridButtonSize, gridButtonSize);
+		//gridButton.setOpaque(true);
+		gridButton.setContentAreaFilled(false);
+		gridButton.setBorderPainted(false);
 		gridButton.setVisible(true);
 		// adding the click listener
 		gridButton.addActionListener(new ActionListener(){

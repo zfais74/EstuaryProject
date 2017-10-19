@@ -1,7 +1,6 @@
 
 // The Model
 
-
 public class GridSpace{
 	
 	// possible contents of a GridSpace
