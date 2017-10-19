@@ -17,7 +17,7 @@ public class GUI{
 	JFrame gui;
 	// constants for placing buttons
 	int buffer = 50;
-	int gridButtonSize = (int) (18 * (50./((float) Game.boardSize)));
+	int gridButtonSize = (int) Math.floor(18 * (50./((float) Game.boardSize)));
 	int generalButtonSize = 200;
 	int contentPaneSize = 2*buffer + Game.boardSize*gridButtonSize;
 	
