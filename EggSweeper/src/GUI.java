@@ -3,6 +3,7 @@ import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
@@ -16,14 +17,16 @@ public class GUI{
 	JFrame gui;
 	// constants for placing buttons
 	int buffer = 50;
-	int gridButtonSize = 18;
+	int gridButtonSize = (int) (18 * (50./((float) Game.boardSize)));
 	int generalButtonSize = 200;
 	int contentPaneSize = 2*buffer + Game.boardSize*gridButtonSize;
+	
 	// the game being played on the GUI
 	Game game;
 	
 	// constructor, takes a Game object to link GUI to controller
 	GUI(Game newGame){
+		System.out.println(contentPaneSize);
 		game = newGame;
 		// create and display the window
 		gui = buildWindow();
@@ -39,6 +42,7 @@ public class GUI{
         //Create and set up the content pane.
         JComponent contentPane = new JLayeredPane();
         contentPane.setPreferredSize(new Dimension(contentPaneSize, contentPaneSize)); 
+        
         // adding the pane to the window
         frame.setContentPane(contentPane);
         
@@ -55,6 +59,7 @@ public class GUI{
 	        public void actionPerformed(ActionEvent e){
 	        		
 	        		gui.getContentPane().remove(startButton);
+	        		gui.getContentPane().repaint();
 	        		// when clicked calls method to generate difficulty selection screen
 	        		pickDifficulty();
 	                
@@ -90,6 +95,7 @@ public class GUI{
 	        		gui.getContentPane().remove(easyButton);
 	        		gui.getContentPane().remove(mediumButton);
 	        		gui.getContentPane().remove(hardButton);
+	        		gui.getContentPane().repaint();
 	        		// when clicked picks character and difficulty
 	        		game.easyGame();
 	        		// then displays the board buttons
@@ -104,6 +110,7 @@ public class GUI{
 	        		gui.getContentPane().remove(easyButton);
 	        		gui.getContentPane().remove(mediumButton);
 	        		gui.getContentPane().remove(hardButton);
+	        		gui.getContentPane().repaint();
 	        		game.mediumGame();
 	        		buildBoard();
 	        }
@@ -115,6 +122,7 @@ public class GUI{
 	        		gui.getContentPane().remove(easyButton);
 	        		gui.getContentPane().remove(mediumButton);
 	        		gui.getContentPane().remove(hardButton);
+	        		gui.getContentPane().repaint();
 	        		game.hardGame();
 	        		buildBoard();
 	        }
@@ -128,6 +136,11 @@ public class GUI{
 				addButton(i, j);
 			}
 		}
+		ImageIcon beach = new ImageIcon("images/beach.png");
+        JLabel beachLabel = new JLabel(beach);
+        System.out.println(beach.getImageLoadStatus());
+        beachLabel.setBounds(0, 0, beach.getIconWidth(), beach.getIconHeight());
+        gui.getContentPane().add(beachLabel, 1);
 	}
 
 	// adds a button at corresponding to an index not a location on the board
@@ -150,29 +163,28 @@ public class GUI{
 	        }
 	    });
 		// add the button to the contentPane
-		gui.getContentPane().add(gridButton);
+		gui.getContentPane().add(gridButton, 0);
 	}
 	
 	// displays score, and a quit button
 	public void endScreen(int playerScore) {
 		gui.getContentPane().removeAll();
+		// need to repaint the contentPane to get rid of buttons
+		gui.getContentPane().repaint();
 		
 		// create a label
-		JLabel eggLabel = new JLabel("You found " + Integer.toString(game.getEggs()) + " eggs!");
+		JLabel eggLabel = new JLabel("You found " + Integer.toString(game.getEggs()) + " eggs,");
 		eggLabel.setFont(new Font("Arial", Font.PLAIN, 60));
 		// bounds must be set for label to display
 		eggLabel.setBounds((contentPaneSize/2) - 400, (contentPaneSize/4) - 80, 800, 70);
-		eggLabel.setVisible(true);
 		
-		JLabel trashLabel = new JLabel("But you ate " + Integer.toString(game.getTrash()) + " pieces of trash,");
+		JLabel trashLabel = new JLabel("and you ate " + Integer.toString(game.getTrash()) + " pieces of trash,");
 		trashLabel.setFont(new Font("Arial", Font.PLAIN, 60));
 		trashLabel.setBounds((contentPaneSize/2) - 400, (contentPaneSize/4), 850, 70);
-		trashLabel.setVisible(true);
 		
-		JLabel scoreLabel = new JLabel("So your score is " + Integer.toString(game.getScore()));
+		JLabel scoreLabel = new JLabel("so your score is " + Integer.toString(game.getScore()) + "!!!");
 		scoreLabel.setFont(new Font("Arial", Font.PLAIN, 60));
 		scoreLabel.setBounds((contentPaneSize/2) - 400, (contentPaneSize/4) + 80, 800, 70);
-		scoreLabel.setVisible(true);
 		
 		JButton quitButton = new JButton("Quit");
 		quitButton.setFont(new Font("Arial", Font.PLAIN, 30));
@@ -191,10 +203,6 @@ public class GUI{
 		gui.getContentPane().add(trashLabel);
 		gui.getContentPane().add(scoreLabel);
 		gui.getContentPane().add(quitButton);
-		
-		// for some reason need to repaint the contentPane to get rid of buttons generated in another method
-		gui.setVisible(true);
-		gui.getContentPane().repaint();
 		
 	}
 	

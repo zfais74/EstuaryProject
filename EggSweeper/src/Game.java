@@ -13,7 +13,7 @@ public class Game{
 	GUI gameGUI;
 	Difficulty difficulty;
 	// size of the board
-	public static int boardSize = 50;
+	public static int boardSize = 20;
 	
 	// randConst is used in setting Items in GridSpaces
 	public static final int randConst = 100;
