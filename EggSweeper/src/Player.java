@@ -1,16 +1,16 @@
 
-// Support class, is this part of the model?
+// The Model
 
 public class Player{
 	
 	// the bird type
 	static enum Bird {REDKNOT, SANDPIPER, SANDERLING, DUNLIN, RUDDYTURNSTONE};
 	
-	// player's bird and score
-	Bird birdType;
-	int score;
-	int eggs;
-	int trash;
+	// Player data
+	private Bird birdType;
+	private int score;
+	private int eggs;
+	private int trash;
 	
 	// constructor
 	Player (Bird bird) {
@@ -20,13 +20,32 @@ public class Player{
 		trash = 0;
 	}
 	
-	// get the score
+	public Bird getBirdType() {
+		return birdType;
+	}
+	
+	public void incScore() {
+		score++;
+	}
+	
+	public void decScore() {
+		score--;
+	}
+	
 	public int getScore() {
 		return score;
 	}
 	
+	public void incEggs() {
+		eggs++;
+	}
+	
 	public int getEggs() {
 		return eggs;
+	}
+	
+	public void incTrash() {
+		trash++;
 	}
 	
 	public int getTrash() {

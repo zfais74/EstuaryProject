@@ -18,18 +18,31 @@ public class GUI{
 	int buffer = 50;
 	int gridButtonSize = 18;
 	int generalButtonSize = 200;
-	int contentPaneSize = 2*buffer + GameBoard.size*gridButtonSize;
+	int contentPaneSize = 2*buffer + Game.boardSize*gridButtonSize;
 	// the game being played on the GUI
 	Game game;
 	
-	// constructor, takes a Game object so the player can manipulate the model through the GUI
+	// constructor, takes a Game object to link GUI to controller
 	GUI(Game newGame){
 		game = newGame;
 		// create and display the window
 		gui = buildWindow();
         gui.pack();
         gui.setVisible(true);
-        startScreen();
+	}
+	
+	//Create and set up the window.
+	public JFrame buildWindow(){
+        JFrame frame = new JFrame("Egg Sweeper");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        //Create and set up the content pane.
+        JComponent contentPane = new JLayeredPane();
+        contentPane.setPreferredSize(new Dimension(contentPaneSize, contentPaneSize)); 
+        // adding the pane to the window
+        frame.setContentPane(contentPane);
+        
+        return frame;
 	}
 	
 	// displays start button
@@ -78,8 +91,7 @@ public class GUI{
 	        		gui.getContentPane().remove(mediumButton);
 	        		gui.getContentPane().remove(hardButton);
 	        		// when clicked picks character and difficulty
-	        		game.board = new GameBoard(GameBoard.Difficulty.EASY);
-	        		game.player = new Player(Player.Bird.DUNLIN);
+	        		game.easyGame();
 	        		// then displays the board buttons
 	        		buildBoard();
 	                
@@ -92,8 +104,7 @@ public class GUI{
 	        		gui.getContentPane().remove(easyButton);
 	        		gui.getContentPane().remove(mediumButton);
 	        		gui.getContentPane().remove(hardButton);
-	        		game.board = new GameBoard(GameBoard.Difficulty.MEDIUM);
-	        		game.player = new Player(Player.Bird.SANDPIPER);
+	        		game.mediumGame();
 	        		buildBoard();
 	        }
 	    });
@@ -104,8 +115,7 @@ public class GUI{
 	        		gui.getContentPane().remove(easyButton);
 	        		gui.getContentPane().remove(mediumButton);
 	        		gui.getContentPane().remove(hardButton);
-	        		game.board = new GameBoard(GameBoard.Difficulty.HARD);
-	        		game.player = new Player(Player.Bird.REDKNOT);
+	        		game.hardGame();
 	        		buildBoard();
 	        }
 	    });
@@ -113,56 +123,13 @@ public class GUI{
 	
 	// add the buttons representing each GridSpace
 	public void buildBoard() {
-		for (int i = 0; i < GameBoard.size; i++) {
-			for (int j = 0; j < GameBoard.size; j++) {
+		for (int i = 0; i < Game.boardSize; i++) {
+			for (int j = 0; j < Game.boardSize; j++) {
 				addButton(i, j);
 			}
 		}
 	}
-	
-	// displays score, and a quit button
-	public void endScreen(int playerScore) {
-		gui.getContentPane().removeAll();
-		
-		JLabel eggLabel = new JLabel("You found " + Integer.toString(game.player.getEggs()) + " eggs!");
-		eggLabel.setFont(new Font("Arial", Font.PLAIN, 60));
-		eggLabel.setBounds((contentPaneSize/2) - 400, (contentPaneSize/4) - 80, 800, 70);
-		eggLabel.setVisible(true);
-		
-		JLabel trashLabel = new JLabel("But you ate " + Integer.toString(game.player.getTrash()) + " pieces of trash,");
-		trashLabel.setFont(new Font("Arial", Font.PLAIN, 60));
-		trashLabel.setBounds((contentPaneSize/2) - 400, (contentPaneSize/4), 850, 70);
-		trashLabel.setVisible(true);
-		
-		JLabel scoreLabel = new JLabel("So your score is " + Integer.toString(game.player.getScore()));
-		scoreLabel.setFont(new Font("Arial", Font.PLAIN, 60));
-		scoreLabel.setBounds((contentPaneSize/2) - 400, (contentPaneSize/4) + 80, 800, 70);
-		scoreLabel.setVisible(true);
-		
-		JButton quitButton = new JButton("Quit");
-		quitButton.setFont(new Font("Arial", Font.PLAIN, 30));
-		quitButton.setLocation((contentPaneSize/2) - (generalButtonSize/2), 8*(contentPaneSize/10));
-		quitButton.setSize(generalButtonSize, generalButtonSize/2);
-		quitButton.addActionListener(new ActionListener(){
-	        public void actionPerformed(ActionEvent e){
-	        	
-	        	// when clicked, exits
-		        System.exit(0);
-	                
-	        }
-	    });
-		
-		gui.getContentPane().add(eggLabel);
-		gui.getContentPane().add(trashLabel);
-		gui.getContentPane().add(scoreLabel);
-		gui.getContentPane().add(quitButton);
-		
-		// for some reason need to repaint the contentPane to get rid of buttons generated in another mehtod
-		gui.setVisible(true);
-		gui.getContentPane().repaint();
-		
-	}
-	
+
 	// adds a button at corresponding to an index not a location on the board
 	public void addButton(int xIndex, int yIndex) {
 		int xLocation = buffer + xIndex*(gridButtonSize);
@@ -186,19 +153,49 @@ public class GUI{
 		gui.getContentPane().add(gridButton);
 	}
 	
-	public JFrame buildWindow(){
-		//Create and set up the window.
-        JFrame frame = new JFrame("Egg Sweeper");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-        //Create and set up the content pane.
-        JComponent contentPane = new JLayeredPane();
-        contentPane.setPreferredSize(new Dimension(contentPaneSize, contentPaneSize)); 
-        // adding the pane to the window
-        frame.setContentPane(contentPane);
-        
-        return frame;
+	// displays score, and a quit button
+	public void endScreen(int playerScore) {
+		gui.getContentPane().removeAll();
+		
+		// create a label
+		JLabel eggLabel = new JLabel("You found " + Integer.toString(game.getEggs()) + " eggs!");
+		eggLabel.setFont(new Font("Arial", Font.PLAIN, 60));
+		// bounds must be set for label to display
+		eggLabel.setBounds((contentPaneSize/2) - 400, (contentPaneSize/4) - 80, 800, 70);
+		eggLabel.setVisible(true);
+		
+		JLabel trashLabel = new JLabel("But you ate " + Integer.toString(game.getTrash()) + " pieces of trash,");
+		trashLabel.setFont(new Font("Arial", Font.PLAIN, 60));
+		trashLabel.setBounds((contentPaneSize/2) - 400, (contentPaneSize/4), 850, 70);
+		trashLabel.setVisible(true);
+		
+		JLabel scoreLabel = new JLabel("So your score is " + Integer.toString(game.getScore()));
+		scoreLabel.setFont(new Font("Arial", Font.PLAIN, 60));
+		scoreLabel.setBounds((contentPaneSize/2) - 400, (contentPaneSize/4) + 80, 800, 70);
+		scoreLabel.setVisible(true);
+		
+		JButton quitButton = new JButton("Quit");
+		quitButton.setFont(new Font("Arial", Font.PLAIN, 30));
+		quitButton.setLocation((contentPaneSize/2) - (generalButtonSize/2), 8*(contentPaneSize/10));
+		quitButton.setSize(generalButtonSize, generalButtonSize/2);
+		quitButton.addActionListener(new ActionListener(){
+	        public void actionPerformed(ActionEvent e){
+	        	
+	        	// when clicked, exits
+		        System.exit(0);
+	                
+	        }
+	    });
+		
+		gui.getContentPane().add(eggLabel);
+		gui.getContentPane().add(trashLabel);
+		gui.getContentPane().add(scoreLabel);
+		gui.getContentPane().add(quitButton);
+		
+		// for some reason need to repaint the contentPane to get rid of buttons generated in another method
+		gui.setVisible(true);
+		gui.getContentPane().repaint();
+		
 	}
-	
 	
 }
