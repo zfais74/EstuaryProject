@@ -7,21 +7,58 @@ public class Player{
 	static enum Bird {REDKNOT, SANDPIPER, SANDERLING, DUNLIN, RUDDYTURNSTONE};
 	
 	// Player data
-	private Bird birdType;
+	private Bird bird;
 	private int score;
 	private int eggs;
 	private int trash;
 	
 	// constructor
-	Player (Bird bird) {
-		birdType = bird;
+	Player(Bird newBird) {
+		bird = newBird;
 		score = 0;
 		eggs = 0;
 		trash = 0;
 	}
 	
+	// method to check contents of a space on the board
+	public void checkSpace(int xIndex, int yIndex, Board board) {
+		GridSpace space = board.getSpace(xIndex, yIndex);
+		// if space has already been checked do not continue
+		if (space.getIsCovered() == false) {
+			System.out.println("Already checked there!");
+			return;
+		}
+		else {
+			// take a turn
+			space.setIsCovered(false);
+			board.decClicks();
+		}
+		GridSpace.Item item = space.getItem();
+		switch (item) {
+			case EGG:
+				// up player score
+				score++;;
+				eggs++;
+				System.out.println("Found an Egg!!!");
+				break;
+			case TRASH:
+				// reduce player score
+				score--;
+				trash++;
+				System.out.println("Ate some trash...");
+				break;
+			case EMPTY:
+				System.out.println("Nothing.");
+				break;
+		}
+	}
+	
 	public Bird getBirdType() {
-		return birdType;
+		return bird;
+	}
+	
+	public void setBirdType(Bird newBird) {
+		bird = newBird;
 	}
 	
 	public void incScore() {
