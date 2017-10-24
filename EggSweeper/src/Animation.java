@@ -25,10 +25,10 @@ public class Animation extends JPanel{
 	private List<AniObject> images;
 	
 	// constants for placing buttons
-	public static int buffer = 50;
-	public static int gridButtonSize = 45;
-	public static int generalButtonSize = 200;
-	public static int contentPaneSize = 1000;
+	public int buffer = 50;
+	public int gridButtonSize = 45;
+	public int generalButtonSize = 200;
+	public int contentPaneSize = 1000;
 	
 	public List<AniObject> getImages() {
 		return images;

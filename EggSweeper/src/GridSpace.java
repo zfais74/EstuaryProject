@@ -4,7 +4,7 @@
 public class GridSpace{
 	
 	// possible contents of a GridSpace
-	public enum Item {EMPTY, EGG, TRASH};
+	public enum Item {EMPTY, EGG, TRASH, ALREADYCHECKED};
 	
 	// GridSpace data
 	private Item contents;

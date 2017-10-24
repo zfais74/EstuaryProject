@@ -28,16 +28,23 @@ public class Controller{
 	
 	// displays start button
 	public void startScreen() {
+		JLabel title = new JLabel("EGG SWEEPER");
+		title.setFont(new Font("Arial", Font.PLAIN, 80));
+		// bounds must be set for label to display
+		title.setBounds(175, 125, 650, 100);
+		frame.getContentPane().add(title);
+		
 		JButton startButton = new JButton("Start Game");
 		startButton.setFont(new Font("Arial", Font.PLAIN, 30));
-		startButton.setLocation((Animation.contentPaneSize/2) - (Animation.generalButtonSize/2), (Animation.contentPaneSize/2) - (Animation.generalButtonSize/4));
-		startButton.setSize(Animation.generalButtonSize, Animation.generalButtonSize/2);
+		startButton.setLocation((animation.contentPaneSize/2) - (animation.generalButtonSize/2), (animation.contentPaneSize/2) - (animation.generalButtonSize/4));
+		startButton.setSize(animation.generalButtonSize, animation.generalButtonSize/2);
 		startButton.setVisible(true);
 		frame.getContentPane().add(startButton);
 		startButton.addActionListener(new ActionListener(){
 	        public void actionPerformed(ActionEvent e){
 	        		
 	        		frame.getContentPane().remove(startButton);
+	        		frame.getContentPane().remove(title);
 	        		frame.getContentPane().repaint();
 	        		// when clicked calls method to generate difficulty selection screen
 	        		pickDifficulty();
@@ -50,20 +57,20 @@ public class Controller{
 	public void pickDifficulty() {
 		JButton easyButton = new JButton("Easy");
 		easyButton.setFont(new Font("Arial", Font.PLAIN, 30));
-		easyButton.setLocation((Animation.contentPaneSize/2) - (Animation.generalButtonSize/2), (Animation.contentPaneSize/2) - (Animation.generalButtonSize/4) - Animation.generalButtonSize);
-		easyButton.setSize(Animation.generalButtonSize, Animation.generalButtonSize/2);
+		easyButton.setLocation((animation.contentPaneSize/2) - (animation.generalButtonSize/2), (animation.contentPaneSize/2) - (animation.generalButtonSize/4) - animation.generalButtonSize);
+		easyButton.setSize(animation.generalButtonSize, animation.generalButtonSize/2);
 		easyButton.setVisible(true);
 		
 		JButton mediumButton = new JButton("Medium");
 		mediumButton.setFont(new Font("Arial", Font.PLAIN, 30));
-		mediumButton.setLocation((Animation.contentPaneSize/2) - (Animation.generalButtonSize/2), (Animation.contentPaneSize/2) - (Animation.generalButtonSize/4));
-		mediumButton.setSize(Animation.generalButtonSize, Animation.generalButtonSize/2);
+		mediumButton.setLocation((animation.contentPaneSize/2) - (animation.generalButtonSize/2), (animation.contentPaneSize/2) - (animation.generalButtonSize/4));
+		mediumButton.setSize(animation.generalButtonSize, animation.generalButtonSize/2);
 		mediumButton.setVisible(true);
 		
 		JButton hardButton = new JButton("Hard");
 		hardButton.setFont(new Font("Arial", Font.PLAIN, 30));
-		hardButton.setLocation((Animation.contentPaneSize/2) - (Animation.generalButtonSize/2), (Animation.contentPaneSize/2) - (Animation.generalButtonSize/4) + Animation.generalButtonSize);
-		hardButton.setSize(Animation.generalButtonSize, Animation.generalButtonSize/2);
+		hardButton.setLocation((animation.contentPaneSize/2) - (animation.generalButtonSize/2), (animation.contentPaneSize/2) - (animation.generalButtonSize/4) + animation.generalButtonSize);
+		hardButton.setSize(animation.generalButtonSize, animation.generalButtonSize/2);
 		hardButton.setVisible(true);
 		
 		frame.getContentPane().add(easyButton);
@@ -113,22 +120,36 @@ public class Controller{
 	
 	// add the buttons representing each GridSpace
 	public void buildBoard() {
+		JLabel clicks = new JLabel("Clicks remaining: " + Integer.toString(gameBoard.getClicks()));
+		clicks.setFont(new Font("Arial", Font.PLAIN, 40));
+		// bounds must be set for label to display
+		clicks.setBounds(animation.contentPaneSize/10, 0, 500, animation.buffer);
+		frame.getContentPane().add(clicks);
+		
+		JLabel score = new JLabel("Score: " + Integer.toString(player.getScore()));
+		score.setFont(new Font("Arial", Font.PLAIN, 40));
+		// bounds must be set for label to display
+		score.setBounds(animation.contentPaneSize/2, 0, 500, animation.buffer);
+		frame.getContentPane().add(score);
+		
 		for (int i = 0; i < Board.boardSize; i++) {
 			for (int j = 0; j < Board.boardSize; j++) {
 				addButton(i, j);
 			}
 		}
+		
 		animation.getImages().get(0).setVisible(true);
 	}
 
 	// adds a button at corresponding to an index not a location on the board
 	public void addButton(int xIndex, int yIndex) {
-		int xLocation = Animation.buffer + xIndex*(Animation.gridButtonSize);
-		int yLocation = Animation.buffer + yIndex*(Animation.gridButtonSize);
+		
+		int xLocation = animation.buffer + xIndex*(animation.gridButtonSize);
+		int yLocation = animation.buffer + yIndex*(animation.gridButtonSize);
 		// create the button
 		JButton gridButton = new JButton();
 		gridButton.setLocation(xLocation, yLocation);
-		gridButton.setSize(Animation.gridButtonSize, Animation.gridButtonSize);
+		gridButton.setSize(animation.gridButtonSize, animation.gridButtonSize);
 		//gridButton.setOpaque(true);
 		gridButton.setContentAreaFilled(false);
 		gridButton.setBorderPainted(true);
@@ -139,8 +160,57 @@ public class Controller{
 	        		
 	        		// clicking a button will call the checkSpace method for that GridSpace
 	                System.out.println("Clicked (" + Integer.toString(xIndex) + "," + Integer.toString(yIndex) + ")");
-	                player.checkSpace(xIndex, yIndex, gameBoard);
+	                GridSpace.Item item = player.checkSpace(xIndex, yIndex, gameBoard);
 	                animation.addHole(xIndex, yIndex);
+	                
+	                JLabel newClicks = new JLabel("Clicks remaining: " + Integer.toString(gameBoard.getClicks()));
+	        		newClicks.setFont(new Font("Arial", Font.PLAIN, 40));
+	        		// bounds must be set for label to display
+	        		newClicks.setBounds(animation.contentPaneSize/10, 0, 500, animation.buffer);
+	        		newClicks.setOpaque(true);
+	        		frame.getContentPane().add(newClicks, 0);
+	                //clickLabel.setText("Clicks remaining: " + Integer.toString(gameBoard.getClicks()));
+	        		
+	        		JLabel newScore = new JLabel("Score: " + Integer.toString(player.getScore()));
+	        		newScore.setFont(new Font("Arial", Font.PLAIN, 40));
+	        		// bounds must be set for label to display
+	        		newScore.setBounds(animation.contentPaneSize/2, 0, 500, animation.buffer);
+	        		newScore.setOpaque(true);
+	        		frame.getContentPane().add(newScore, 0);
+	        		
+	        		if (item == GridSpace.Item.TRASH) {
+		        		JLabel ateSome = new JLabel("Ate Some Trash :(");
+		        		ateSome.setFont(new Font("Arial", Font.PLAIN, 40));
+		        		// bounds must be set for label to display
+		        		ateSome.setBounds(animation.contentPaneSize/10, animation.contentPaneSize - animation.buffer, 500, animation.buffer);
+		        		ateSome.setOpaque(true);
+		        		frame.getContentPane().add(ateSome, 0);
+	        		}
+	        		else if (item == GridSpace.Item.EGG) {
+		        		JLabel ateSome = new JLabel("You Found and egg!!!");
+		        		ateSome.setFont(new Font("Arial", Font.PLAIN, 40));
+		        		// bounds must be set for label to display
+		        		ateSome.setBounds(animation.contentPaneSize/10, animation.contentPaneSize - animation.buffer, 500, animation.buffer);
+		        		ateSome.setOpaque(true);
+		        		frame.getContentPane().add(ateSome, 0);
+	        		}
+	        		else if (item == GridSpace.Item.EMPTY) {
+		        		JLabel ateSome = new JLabel("Nothing there...");
+		        		ateSome.setFont(new Font("Arial", Font.PLAIN, 40));
+		        		// bounds must be set for label to display
+		        		ateSome.setBounds(animation.contentPaneSize/10, animation.contentPaneSize - animation.buffer, 500, animation.buffer);
+		        		ateSome.setOpaque(true);
+		        		frame.getContentPane().add(ateSome, 0);
+	        		}
+	        		else if (item == GridSpace.Item.ALREADYCHECKED) {
+		        		JLabel ateSome = new JLabel("Already checked there.");
+		        		ateSome.setFont(new Font("Arial", Font.PLAIN, 40));
+		        		// bounds must be set for label to display
+		        		ateSome.setBounds(animation.contentPaneSize/10, animation.contentPaneSize - animation.buffer, 500, animation.buffer);
+		        		ateSome.setOpaque(true);
+		        		frame.getContentPane().add(ateSome, 0);
+	        		}
+	        		
 	                if (gameBoard.getClicks() == 0){
 	                	endScreen();
 	                }
@@ -165,20 +235,20 @@ public class Controller{
 		JLabel eggLabel = new JLabel("You found " + Integer.toString(player.getEggs()) + " eggs,");
 		eggLabel.setFont(new Font("Arial", Font.PLAIN, 60));
 		// bounds must be set for label to display
-		eggLabel.setBounds((Animation.contentPaneSize/2) - 400, (Animation.contentPaneSize/4) - 80, 800, 70);
+		eggLabel.setBounds((animation.contentPaneSize/2) - 400, (animation.contentPaneSize/4) - 80, 800, 70);
 		
 		JLabel trashLabel = new JLabel("and you ate " + Integer.toString(player.getTrash()) + " pieces of trash,");
 		trashLabel.setFont(new Font("Arial", Font.PLAIN, 60));
-		trashLabel.setBounds((Animation.contentPaneSize/2) - 400, (Animation.contentPaneSize/4), 850, 70);
+		trashLabel.setBounds((animation.contentPaneSize/2) - 400, (animation.contentPaneSize/4), 850, 70);
 		
 		JLabel scoreLabel = new JLabel("so your score is " + Integer.toString(player.getScore()) + "!!!");
 		scoreLabel.setFont(new Font("Arial", Font.PLAIN, 60));
-		scoreLabel.setBounds((Animation.contentPaneSize/2) - 400, (Animation.contentPaneSize/4) + 80, 800, 70);
+		scoreLabel.setBounds((animation.contentPaneSize/2) - 400, (animation.contentPaneSize/4) + 80, 800, 70);
 		
 		JButton quitButton = new JButton("Quit");
 		quitButton.setFont(new Font("Arial", Font.PLAIN, 30));
-		quitButton.setLocation((Animation.contentPaneSize/2) - (Animation.generalButtonSize/2), 8*(Animation.contentPaneSize/10));
-		quitButton.setSize(Animation.generalButtonSize, Animation.generalButtonSize/2);
+		quitButton.setLocation((animation.contentPaneSize/2) - (animation.generalButtonSize/2), 8*(animation.contentPaneSize/10));
+		quitButton.setSize(animation.generalButtonSize, animation.generalButtonSize/2);
 		quitButton.addActionListener(new ActionListener(){
 	        public void actionPerformed(ActionEvent e){
 	        	
