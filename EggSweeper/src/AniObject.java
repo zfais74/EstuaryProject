@@ -20,7 +20,7 @@ public class AniObject {
 		visible = false;
 	}
 	
-	public String getName() {
+	public String toString() {
 		return name;
 	}
 	

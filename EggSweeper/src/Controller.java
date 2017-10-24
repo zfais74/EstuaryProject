@@ -5,6 +5,7 @@ import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
@@ -266,19 +267,28 @@ public class Controller{
 	}
 	
 	public static void tick(Animation animation, Controller controller) {
-		List<AniObject> imgObjects = animation.getImages();
-		for(int imageNum = 0; imageNum < imgObjects.size(); imageNum++) {
-			if (imgObjects.get(imageNum).getName() == "bird") {
-				imgObjects.get(imageNum).setY(imgObjects.get(imageNum).getY() - 10);
-				if (imgObjects.get(imageNum).getY() == animation.contentPaneSize/5) {
-					// remove the bird
-					animation.getImages().remove(imageNum);
-					//remove US
-					animation.getImages().remove(imageNum - 1);
-	        		// then displays the board buttons
-	        		controller.buildBoard(); 
+		Iterator<AniObject> itrMigration = animation.getImages().iterator();
+		boolean buildBoard = false;
+		while (itrMigration.hasNext()) {
+			AniObject aniObject = itrMigration.next();
+			if (aniObject.toString() == "bird") {
+				aniObject.setY(aniObject.getY() - 10);
+				if (aniObject.getY() == animation.contentPaneSize/5) {
+					buildBoard = true;
+					break;
 				}
 			}
+		}
+		if (buildBoard == true) {
+			buildBoard = false;
+			Iterator<AniObject> itrRemove = animation.getImages().iterator();
+			while (itrRemove.hasNext()) {
+				AniObject aniObjectRemove = itrRemove.next();
+				if ((aniObjectRemove.toString() == "US") || (aniObjectRemove.toString() == "bird")) {
+					itrRemove.remove();
+				}
+			}
+			controller.buildBoard();
 		}
 	}
 	

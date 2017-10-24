@@ -7,6 +7,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.imageio.ImageIO;
@@ -48,9 +49,11 @@ public class Animation extends JPanel{
 	}
 	
 	public void paint(Graphics g) {
-		for(int imageNum = 0; imageNum < images.size(); imageNum++) {
-			if (images.get(imageNum).getVisible() == true) {
-				g.drawImage(images.get(imageNum).getImage(), images.get(imageNum).getX(), images.get(imageNum).getY(), images.get(imageNum).getXSize(), images.get(imageNum).getYSize(), this);
+		Iterator<AniObject> imageIterator = images.iterator();
+		while (imageIterator.hasNext()) {
+			AniObject image = imageIterator.next();
+			if (image.getVisible() == true) {
+				g.drawImage(image.getImage(), image.getX(), image.getY(), image.getXSize(), image.getYSize(), this);
 			}
 		}
     	
