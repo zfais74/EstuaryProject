@@ -22,10 +22,14 @@ public class Player{
 	
 	// method to check contents of a space on the board
 	public GridSpace.Item checkSpace(int xIndex, int yIndex, Board board) {
+		System.out.println(" ");
+		System.out.println("Clicked (" + Integer.toString(xIndex) + "," + Integer.toString(yIndex) + ")");
 		GridSpace space = board.getSpace(xIndex, yIndex);
 		// if space has already been checked do not continue
 		if (space.getIsCovered() == false) {
 			System.out.println("Already checked there!");
+			System.out.println("Score: " + Integer.toString(score));
+			System.out.println("Remaining clicks: " + Integer.toString(board.getClicks()));
 			return GridSpace.Item.ALREADYCHECKED;
 		}
 		else {
@@ -39,16 +43,43 @@ public class Player{
 				// up player score
 				score++;;
 				eggs++;
-				System.out.println("Found an Egg!!!");
+				if (board.getClicks() == 0) {
+					System.out.println("Out of clicks!");
+					System.out.println("Your score is: " + Integer.toString(score));
+					
+				}
+				else {
+					System.out.println("Found an egg!!!");
+					System.out.println("Score: " + Integer.toString(score));
+					System.out.println("Remaining clicks: " + Integer.toString(board.getClicks()));
+				}
 				return GridSpace.Item.EGG;
 			case TRASH:
 				// reduce player score
 				score--;
 				trash++;
-				System.out.println("Ate some trash...");
+				if (board.getClicks() == 0) {
+					System.out.println("Out of clicks!");
+					System.out.println("Your score is: " + Integer.toString(score));
+					
+				}
+				else {
+					System.out.println("Ate some trash :(");
+					System.out.println("Score: " + Integer.toString(score));
+					System.out.println("Remaining clicks: " + Integer.toString(board.getClicks()));
+				}
 				return GridSpace.Item.TRASH;
 			case EMPTY:
-				System.out.println("Nothing.");
+				if (board.getClicks() == 0) {
+					System.out.println("Out of clicks!");
+					System.out.println("Your score is: " + Integer.toString(score));
+					
+				}
+				else {
+					System.out.println("Nothing.");
+					System.out.println("Score: " + Integer.toString(score));
+					System.out.println("Remaining clicks: " + Integer.toString(board.getClicks()));
+				}
 				return GridSpace.Item.EMPTY;
 		}
 		return null;

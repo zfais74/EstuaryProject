@@ -160,7 +160,6 @@ public class Controller{
 	        public void actionPerformed(ActionEvent e){
 	        		
 	        		// clicking a button will call the checkSpace method for that GridSpace
-	                System.out.println("Clicked (" + Integer.toString(xIndex) + "," + Integer.toString(yIndex) + ")");
 	                GridSpace.Item item = player.checkSpace(xIndex, yIndex, gameBoard);
 	                animation.addHole(xIndex, yIndex);
 	                
