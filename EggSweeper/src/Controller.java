@@ -4,6 +4,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
@@ -161,7 +162,7 @@ public class Controller{
 	        		
 	        		// clicking a button will call the checkSpace method for that GridSpace
 	                GridSpace.Item item = player.checkSpace(xIndex, yIndex, gameBoard);
-	                animation.addHole(xIndex, yIndex);
+	                animation.addChest(xIndex, yIndex);
 	                
 	                JLabel newClicks = new JLabel("Clicks remaining: " + Integer.toString(gameBoard.getClicks()));
 	        		newClicks.setFont(new Font("Arial", Font.PLAIN, 40));
@@ -311,6 +312,7 @@ public class Controller{
     			e.printStackTrace();
     		}
     	}
+		
 	}
 	
 }
