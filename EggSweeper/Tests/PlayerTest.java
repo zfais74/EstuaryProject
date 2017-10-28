@@ -1,61 +1,55 @@
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-
 import static org.junit.Assert.*;
 
+import org.junit.Test;
 
 public class PlayerTest {
+	
+	private Player player = new Player(Player.Bird.REDKNOT);
 
-    private Player player = new Player(Player.Bird.DUNLIN);
+	@Test
+	public void testGetBirdType() {
+		Enum playerBird = player.getBirdType();
+		assertEquals("playerBird should be the same value as the constructor value", playerBird, Player.Bird.REDKNOT);
+	}
 
-    @Test
-    public void checkSpace() {
-    }
+	@Test
+	public void testSetBirdType() {
+		player.setBirdType(Player.Bird.DUNLIN);
+		Enum playerBird = player.getBirdType();
+		assertEquals("the returned bird should be DUNLIN", playerBird, Player.Bird.DUNLIN);
+	}
 
-    @Test
-    public void getBirdType() {
-        Enum result = player.getBirdType();
-        assertEquals("should return dunlin",result, Player.Bird.DUNLIN);
-    }
+	@Test
+	public void testIncScore() {
+		int scoreBeforeInc = player.getScore();
+		player.incScore();
+		int scoreAfterInc = player.getScore();
+		assertTrue("the older score should be less than the newer score", scoreBeforeInc < scoreAfterInc);
+	}
 
-    @Test
-    public void setBirdType() {
-        player.setBirdType(Player.Bird.REDKNOT);
-        Enum result = player.getBirdType();
-        assertEquals("should return redknot", result, Player.Bird.REDKNOT);
-    }
+	@Test
+	public void testDecScore() {
+		int scoreBeforeDec = player.getScore();
+		player.decScore();
+		int scoreAfterDec = player.getScore();
+		assertTrue("the older score should be greater than the newer score", scoreBeforeDec > scoreAfterDec);
+	}
 
-    @Test
-    public void incScore() {
-        int initialScore = player.getScore();
-        player.incScore();
-        int changedScore = player.getScore();
-        assertTrue("the new score should be higher", initialScore < changedScore);
-    }
+	@Test
+	public void testIncEggs() {
+		int eggsBeforeInc = player.getEggs();
+		player.incEggs();
+		int eggsAfterInc = player.getEggs();
+		assertTrue("the amount of eggs should increase", eggsBeforeInc < eggsAfterInc);
+	}
 
-    @Test
-    public void decScore() {
-        int initialScore = player.getScore();
-        player.decScore();
-        int changedScore = player.getScore();
-        assertTrue("the new score should be lower", initialScore > changedScore);
-    }
 
-    @Test
-    public void incEggs() {
-        int initialEggs = player.getEggs();
-        player.incEggs();
-        int changedEggs = player.getEggs();
-        assertTrue("should have more eggs", initialEggs < changedEggs);
-    }
-
-    @Test
-    public void incTrash() {
-        int initialTrash = player.getTrash();
-        player.incTrash();
-        int changedTrash = player.getTrash();
-        assertTrue("should have more trash", initialTrash < changedTrash);
-    }
+	@Test
+	public void testIncTrash() {
+		int trashBeforeInc = player.getTrash();
+		player.incTrash();
+		int trashAfterInc = player.getTrash();
+		assertTrue("the amount of trash should increase", trashBeforeInc < trashAfterInc);
+	}
 
 }
