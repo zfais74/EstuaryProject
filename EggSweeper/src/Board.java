@@ -1,4 +1,7 @@
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.Random;
+import java.util.Scanner;
 
 // The Model
 
@@ -115,4 +118,61 @@ public class Board{
 		timer = newTime;
 	}
 	
+	public String getPowerupQuestion() throws FileNotFoundException {
+		StringBuilder question = new StringBuilder(); // question string builder
+		StringBuilder qNum = new StringBuilder(); // string builder for the question number
+		qNum.append("Q"); //marker for questions
+		File questionsFile = new File("questions/powerQuestions.txt");
+		int questionNum = generateQuestionNum(5);
+		qNum.append(questionNum);
+		qNum.append(":"); // another marker for questions
+		try {
+			Scanner fn = new Scanner (questionsFile);
+			while(fn.hasNextLine()) {
+				String line = fn.nextLine();
+				if(line.contains(qNum.toString())){ // if the line contains the Q(number):, then add it to the question string builder 
+					question.append(line);
+					break;
+				}
+			}
+			fn.close();
+			String answer = this.getPowerupAnswer(questionNum);
+			question.append(answer);
+		} catch (FileNotFoundException e){
+			System.out.println(e.getMessage());
+			System.exit(0);
+		}
+		
+		return question.toString();
+	}
+	
+	private int generateQuestionNum(int range) {
+		return (int)(Math.random() * ((range - 1) + 1)) + 1;
+	}
+	
+	private String getPowerupAnswer(int questionNum) throws FileNotFoundException{
+		StringBuilder answer = new StringBuilder(); 
+		StringBuilder aNum = new StringBuilder(); 
+		aNum.append("A"); //marker for questions
+		File questionsFile = new File("questions/answers.txt");
+		aNum.append(questionNum);
+		aNum.append(":");
+		try {
+			Scanner fn = new Scanner (questionsFile);
+			while(fn.hasNextLine()) {
+				String line = fn.nextLine();
+				if(line.contains(aNum.toString())){ 
+					answer.append(line);
+					break;
+				}
+			}
+			fn.close();
+		} catch (FileNotFoundException e){
+			System.out.println(e.getMessage());
+			System.exit(0);
+		}
+		
+		return answer.toString();
+	}
 }
+	
