@@ -294,27 +294,25 @@ public class Controller{
 	
 	// general test
 	public static void main(String[] args) throws FileNotFoundException {
-//		Controller cont = new Controller();
-//       	cont.frame = new JFrame();
-//    	cont.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-//	  	cont.animation = new Animation();
-//	  	cont.animation.setVisible(true);
-//	  	cont.frame.getContentPane().add(cont.animation);
-//	  	cont.frame.pack();
-//	  	cont.frame.setVisible(true);
-//	  	cont.startScreen();
-//	  	while (true) {
-//    		cont.frame.repaint();
-//    		tick(cont.animation, cont);
-//   		try {
-//    			Thread.sleep(40);
-//    		} catch (InterruptedException e) {
-//    			e.printStackTrace();
-//    		}
-//    	}
-		Board board = new Board(Board.Difficulty.EASY);
-		String val = board.getPowerupQuestion();
-		System.out.println(val);
+		Controller cont = new Controller();
+       	cont.frame = new JFrame();
+    	cont.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	  	cont.animation = new Animation();
+	  	cont.animation.setVisible(true);
+	  	cont.frame.getContentPane().add(cont.animation);
+	  	cont.frame.pack();
+	  	cont.frame.setVisible(true);
+	  	cont.startScreen();
+	  	while (true) {
+    		cont.frame.repaint();
+    		tick(cont.animation, cont);
+   		try {
+    			Thread.sleep(40);
+    		} catch (InterruptedException e) {
+    			e.printStackTrace();
+    		}
+    	}
+		
 	}
 	
 }
