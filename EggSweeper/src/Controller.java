@@ -293,7 +293,7 @@ public class Controller{
 	}
 	
 	// general test
-	public static void main(String[] args) throws FileNotFoundException {
+	public static void main(String[] args) {
 		Controller cont = new Controller();
        	cont.frame = new JFrame();
     	cont.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
