@@ -162,7 +162,7 @@ public class Controller{
 	        		
 	        		// clicking a button will call the checkSpace method for that GridSpace
 	                GridSpace.Item item = player.checkSpace(xIndex, yIndex, gameBoard);
-	                animation.addHole(xIndex, yIndex);
+	                animation.addChest(xIndex, yIndex);
 	                
 	                JLabel newClicks = new JLabel("Clicks remaining: " + Integer.toString(gameBoard.getClicks()));
 	        		newClicks.setFont(new Font("Arial", Font.PLAIN, 40));

@@ -1,5 +1,7 @@
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 import java.util.Scanner;
 
@@ -29,6 +31,8 @@ public class Board{
 	private double easyEggRatio = randConst * (9./10.);
 	private double mediumEggRatio = randConst * (8.5/10.);
 	private double hardEggRatio = randConst * (8./10.);
+	private List<String> questionsAsked = new ArrayList<String>();
+	private String answer;
 	
 	// sets EMPTY, TRASH and EGG spaces in the board
 	Board(Difficulty newDifficulty) {
@@ -132,12 +136,13 @@ public class Board{
 				String line = fn.nextLine();
 				if(line.contains(qNum.toString())){ // if the line contains the Q(number):, then add it to the question string builder 
 					question.append(line);
+					System.out.println("Selected Question:" + question.toString());
 					break;
 				}
 			}
 			fn.close();
-			String answer = this.getPowerupAnswer(questionNum);
-			question.append(answer);
+			this.answer = this.getPowerupAnswer(questionNum);
+			
 		} catch (FileNotFoundException e){
 			System.out.println(e.getMessage());
 			System.exit(0);

@@ -70,6 +70,18 @@ public class Animation extends JPanel{
 		}
 		
 	}
+	
+	public void addChest(int xIndex, int yIndex) {
+		AniObject chest;
+		try {
+			chest = new AniObject("hole", buffer + (xIndex*gridButtonSize), buffer + (yIndex*gridButtonSize), gridButtonSize, gridButtonSize, ImageIO.read(new File("src/images/chest.png")));
+			chest.setVisible(true);
+            images.add(chest);
+		} catch (IOException e1) {
+			System.out.println("failed to load chest");
+		}
+		
+	}
 
 	public void migrationAnimation() {
 		AniObject bird;
