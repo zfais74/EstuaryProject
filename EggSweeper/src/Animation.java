@@ -71,10 +71,10 @@ public class Animation extends JPanel{
 		
 	}
 	
-	public void addChest(int xIndex, int yIndex) {
+	public void addChest() {
 		AniObject chest;
 		try {
-			chest = new AniObject("hole", buffer + (xIndex*gridButtonSize), buffer + (yIndex*gridButtonSize), gridButtonSize, gridButtonSize, ImageIO.read(new File("src/images/chest.png")));
+			chest = new AniObject("chest", contentPaneSize - (3*buffer), contentPaneSize - (3*buffer), 2 * buffer, 2 * buffer, ImageIO.read(new File("src/images/chest.png")));
 			chest.setVisible(true);
             images.add(chest);
 		} catch (IOException e1) {
