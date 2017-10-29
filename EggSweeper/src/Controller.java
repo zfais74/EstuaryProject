@@ -134,9 +134,15 @@ public class Controller{
 		score.setBounds(animation.contentPaneSize/2, 0, 500, animation.buffer);
 		frame.getContentPane().add(score);
 		
+		JButton chestButton = new JButton();
+		chestButton.setLocation(animation.contentPaneSize - (3*animation.buffer), animation.contentPaneSize - (3*animation.buffer));
+		chestButton.setSize(animation.buffer * 2, animation.buffer * 2);
+		chestButton.setContentAreaFilled(false);
+		chestButton.setVisible(true);
+		
 		for (int i = 0; i < Board.boardSize; i++) {
 			for (int j = 0; j < Board.boardSize; j++) {
-				addButton(i, j);
+				addButton(i, j, chestButton);
 			}
 		}
 		
@@ -144,7 +150,7 @@ public class Controller{
 	}
 
 	// adds a button at corresponding to an index not a location on the board
-	public void addButton(int xIndex, int yIndex) {
+	public void addButton(int xIndex, int yIndex, JButton powerChestButton) {
 		
 		int xLocation = animation.buffer + xIndex*(animation.gridButtonSize);
 		int yLocation = animation.buffer + yIndex*(animation.gridButtonSize);
@@ -162,7 +168,7 @@ public class Controller{
 	        		
 	        		// clicking a button will call the checkSpace method for that GridSpace
 	                GridSpace.Item item = player.checkSpace(xIndex, yIndex, gameBoard);
-	                animation.addChest(xIndex, yIndex);
+	                animation.addHole(xIndex, yIndex);
 	                
 	                JLabel newClicks = new JLabel("Clicks remaining: " + Integer.toString(gameBoard.getClicks()));
 	        		newClicks.setFont(new Font("Arial", Font.PLAIN, 40));
@@ -214,6 +220,22 @@ public class Controller{
 	        		
 	                if (gameBoard.getClicks() == 0){
 	                	endScreen();
+	                }
+	                if ((gameBoard.getClicks() % 3 == 0) && gameBoard.getClicks() != 0) {
+	                	frame.getContentPane().add(powerChestButton, 1);
+	                	animation.addChest();
+	                	frame.getContentPane().repaint();
+	                }
+	                if (gameBoard.getClicks() % 3 == 2) {
+	                	frame.getContentPane().remove(powerChestButton);
+	                	animation.addChest();
+	                	Iterator<AniObject> chestItr = animation.getImages().iterator();
+	                	while (chestItr.hasNext() == true) {
+	                		if (chestItr.next().toString() == "chest") {
+	                			chestItr.remove();
+	                		}
+	                	}
+	                	frame.getContentPane().repaint();
 	                }
 	                
 	        }
@@ -292,7 +314,7 @@ public class Controller{
 		}
 	}
 	
-	// general test
+	// Game with GUI
 	public static void main(String[] args) {
 		Controller cont = new Controller();
        	cont.frame = new JFrame();
