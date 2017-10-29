@@ -59,6 +59,7 @@ public class Player{
 				score--;
 				trash++;
 				if (board.getClicks() == 0) {
+					System.out.println(" ");
 					System.out.println("Out of clicks!");
 					System.out.println("Your score is: " + Integer.toString(score));
 					

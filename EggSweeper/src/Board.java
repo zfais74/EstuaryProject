@@ -36,6 +36,7 @@ public class Board{
 	
 	// sets EMPTY, TRASH and EGG spaces in the board
 	Board(Difficulty newDifficulty) {
+		System.out.println(" ");
 		System.out.println("Difficulty selected: " + newDifficulty);
 		System.out.println("Score: 0");
 		difficulty = newDifficulty;
