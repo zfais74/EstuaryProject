@@ -1,4 +1,8 @@
+import java.io.File;
+import java.io.IOException;
 import java.util.Scanner;
+
+import javax.imageio.ImageIO;
 
 public class CommandController{
 	
@@ -9,6 +13,18 @@ public class CommandController{
 	public void startGame(Board.Difficulty difficulty) {
 		gameBoard = new Board(difficulty);
     	player = new Player(Player.Bird.SANDPIPER); 
+    	try {
+            AniObject bird = new AniObject("bird", (int) Math.round(1000*(3./5.)), (int) Math.round(1000*(4./5.)), 100, 150, ImageIO.read(new File("bird.png")));
+            for (int step = 0; step < 50; step ++) {
+        		bird.setY(bird.getY() - 10);
+        		System.out.println("Bird Image Location = " + Integer.toString(bird.getY()));
+        		Thread.sleep(40);
+        	}
+    	} catch (IOException e1) {
+			System.out.println("failed to load US or Bird");
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public void playGame() {
