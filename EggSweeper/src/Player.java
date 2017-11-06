@@ -11,6 +11,10 @@ public class Player{
 	private int score;
 	private int eggs;
 	private int trash;
+	private boolean hasPowerUp = false;
+	private int xLoc;
+	private int yLoc;
+	
 	
 	// constructor
 	Player(Bird newBird) {
@@ -82,6 +86,18 @@ public class Player{
 					System.out.println("Remaining clicks: " + Integer.toString(board.getClicks()));
 				}
 				return GridSpace.Item.EMPTY;
+			case CHEST:
+				if (board.getClicks() == 0) {
+					System.out.println("Out of clicks!");
+					System.out.println("Your score is: " + Integer.toString(score));
+					
+				}
+				else {
+					System.out.println("Chest.");
+					System.out.println("Score: " + Integer.toString(score));
+					System.out.println("Remaining clicks: " + Integer.toString(board.getClicks()));
+				}
+				return GridSpace.Item.CHEST;
 		}
 		return null;
 	}
@@ -120,6 +136,22 @@ public class Player{
 	
 	public int getTrash() {
 		return trash;
+	}
+	
+	public void setXLoc(int xPos) {
+		this.xLoc = xPos;
+	}
+	
+	public int getXLoc() {
+		return this.xLoc;
+	}
+	
+	public void setYLoc(int yPos) {
+		this.yLoc = yPos;
+	}
+	
+	public int getYLoc() {
+		return this.yLoc;
 	}
 	
 }
