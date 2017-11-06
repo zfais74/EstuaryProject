@@ -2,10 +2,19 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.Iterator;
+import java.util.List;
+import java.util.Random;
 
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -13,7 +22,7 @@ import javax.swing.JPanel;
 
 // The Controller
 
-public class Controller{
+public class NewController{
 	
 	// The Model
 	Player player;
@@ -324,7 +333,7 @@ public class Controller{
 		frame.getContentPane().add(quitButton);
 	}
 	
-	public static void tick(Animation animation, Controller controller) {
+	public static void tick(Animation animation, NewController controller) {
 		Iterator<AniObject> itrMigration = animation.getImages().iterator();
 		boolean buildBoard = false;
 		while (itrMigration.hasNext()) {
@@ -352,7 +361,7 @@ public class Controller{
 	
 	// Game with GUI
 	public static void main(String[] args) {
-		Controller cont = new Controller();
+		NewController cont = new NewController();
        	cont.frame = new JFrame();
        	cont.frame.setPreferredSize(new Dimension(1000,1000));
        	cont.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
