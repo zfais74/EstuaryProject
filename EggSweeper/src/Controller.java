@@ -1,5 +1,8 @@
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
@@ -15,6 +18,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
 
 // The Controller
 
@@ -28,63 +32,107 @@ public class Controller{
 	JFrame frame;
 	Animation animation;
 	
+	private GridBagConstraints constraintFactory() {
+		GridBagConstraints constraints = new GridBagConstraints();
+		
+		//The constraints are defined every time you add an element
+		//Grid x and grid y are the positions the component starts at
+		constraints.gridx = 0;
+		constraints.gridy = 0;
+		//Grid width and grid height define how many spaces the component takes up
+		constraints.gridwidth = 1;
+		constraints.gridheight = 1;
+		//Something about a hint on how the components can fit into place
+		constraints.weightx = 1.0;
+		constraints.weighty = 1.0;
+		//More settings
+		constraints.anchor = GridBagConstraints.CENTER;
+		constraints.fill = GridBagConstraints.NONE;
+		return constraints;
+	}
 	// displays start button
 	public void startScreen() {
+		//Declare a new JPanel
+		JPanel startPanel = new JPanel();
+		//Set its layout manager to GridBag
+		startPanel.setLayout(new GridBagLayout());
+		
+		//The constraints describe each new component's location
+		GridBagConstraints constraints = constraintFactory();
+		//The component will render in the 3rd column of the first row
+		constraints.gridx = 3;
+		
 		JLabel title = new JLabel("EGG SWEEPER");
 		title.setFont(new Font("Arial", Font.PLAIN, 80));
-		// bounds must be set for label to display
-		title.setBounds(175, 125, 650, 100);
-		frame.getContentPane().add(title);
+		
+		//Add components to the start panel instead of the frame's contentPane directly
+		startPanel.add(title, constraints);
 		
 		JButton startButton = new JButton("Start Game");
 		startButton.setFont(new Font("Arial", Font.PLAIN, 30));
-		startButton.setLocation((animation.contentPaneSize/2) - (animation.generalButtonSize/2), (animation.contentPaneSize/2) - (animation.generalButtonSize/4));
-		startButton.setSize(animation.generalButtonSize, animation.generalButtonSize/2);
 		startButton.setVisible(true);
-		frame.getContentPane().add(startButton);
+		
+		//This component will be in the same column, just 3 rows below
+		constraints.gridy = 3;
+		
+		startPanel.add(startButton,constraints);
+		
 		startButton.addActionListener(new ActionListener(){
 	        public void actionPerformed(ActionEvent e){
 	        		
-	        		frame.getContentPane().remove(startButton);
-	        		frame.getContentPane().remove(title);
+	        		frame.getContentPane().remove(startPanel);
+	        		frame.validate();
 	        		frame.getContentPane().repaint();
 	        		// when clicked calls method to generate difficulty selection screen
 	        		pickDifficulty();
 	                
 	        }
 	    });
+		//When built add the component to the frame
+		frame.add(startPanel);
+		frame.validate();
 	}
 	
 	// displays easy, medium and hard button
 	public void pickDifficulty() {
+		JPanel difficultyPanel = new JPanel();
+		difficultyPanel.setLayout(new GridBagLayout());
+		
+		GridBagConstraints constraints = constraintFactory();
+		constraints.gridx = 3;
+		constraints.weightx = 50;
+		constraints.weighty = 50;
+		
+		//The width of space between each button
+		int width = 3;
+		
 		JButton easyButton = new JButton("Easy");
 		easyButton.setFont(new Font("Arial", Font.PLAIN, 30));
-		easyButton.setLocation((animation.contentPaneSize/2) - (animation.generalButtonSize/2), (animation.contentPaneSize/2) - (animation.generalButtonSize/4) - animation.generalButtonSize);
-		easyButton.setSize(animation.generalButtonSize, animation.generalButtonSize/2);
 		easyButton.setVisible(true);
 		
 		JButton mediumButton = new JButton("Medium");
 		mediumButton.setFont(new Font("Arial", Font.PLAIN, 30));
-		mediumButton.setLocation((animation.contentPaneSize/2) - (animation.generalButtonSize/2), (animation.contentPaneSize/2) - (animation.generalButtonSize/4));
-		mediumButton.setSize(animation.generalButtonSize, animation.generalButtonSize/2);
 		mediumButton.setVisible(true);
 		
 		JButton hardButton = new JButton("Hard");
 		hardButton.setFont(new Font("Arial", Font.PLAIN, 30));
-		hardButton.setLocation((animation.contentPaneSize/2) - (animation.generalButtonSize/2), (animation.contentPaneSize/2) - (animation.generalButtonSize/4) + animation.generalButtonSize);
-		hardButton.setSize(animation.generalButtonSize, animation.generalButtonSize/2);
 		hardButton.setVisible(true);
 		
-		frame.getContentPane().add(easyButton);
-		frame.getContentPane().add(mediumButton);
-		frame.getContentPane().add(hardButton);
+		//After a button is added add the width
+		difficultyPanel.add(easyButton,constraints);
+		constraints.gridy = width;
+		difficultyPanel.add(mediumButton,constraints);
+		constraints.gridy = 2*width;
+		difficultyPanel.add(hardButton,constraints);
 		
+		frame.add(difficultyPanel);
+		frame.validate();
+		frame.repaint();
 		easyButton.addActionListener(new ActionListener(){
 	        public void actionPerformed(ActionEvent e){
 	        		
-	        	frame.getContentPane().remove(easyButton);
-	        	frame.getContentPane().remove(mediumButton);
-	        	frame.getContentPane().remove(hardButton);
+	        	frame.getContentPane().remove(difficultyPanel);
+	        	frame.getContentPane().revalidate();
 	        	frame.getContentPane().repaint();
         		// when clicked picks character and difficulty
         		gameBoard = new Board(Board.Difficulty.EASY);
@@ -96,9 +144,8 @@ public class Controller{
 		mediumButton.addActionListener(new ActionListener(){
 	        public void actionPerformed(ActionEvent e){
 	        		
-	        	frame.getContentPane().remove(easyButton);
-	        	frame.getContentPane().remove(mediumButton);
-	        	frame.getContentPane().remove(hardButton);
+	        	frame.getContentPane().remove(difficultyPanel);
+	        	frame.getContentPane().revalidate();
 	        	frame.getContentPane().repaint();
 	        	gameBoard = new Board(Board.Difficulty.MEDIUM);
 	        	player = new Player(Player.Bird.SANDPIPER); 
@@ -109,9 +156,8 @@ public class Controller{
 		hardButton.addActionListener(new ActionListener(){
 	        public void actionPerformed(ActionEvent e){
 	        		
-	        	frame.getContentPane().remove(easyButton);
-	        	frame.getContentPane().remove(mediumButton);
-	        	frame.getContentPane().remove(hardButton);
+	        	frame.getContentPane().remove(difficultyPanel);
+	        	frame.getContentPane().revalidate();
 	        	frame.getContentPane().repaint();
 	        	gameBoard = new Board(Board.Difficulty.HARD);
 	        	player = new Player(Player.Bird.REDKNOT);
@@ -285,7 +331,6 @@ public class Controller{
 		frame.getContentPane().add(trashLabel);
 		frame.getContentPane().add(scoreLabel);
 		frame.getContentPane().add(quitButton);
-		
 	}
 	
 	public static void tick(Animation animation, Controller controller) {
@@ -318,7 +363,8 @@ public class Controller{
 	public static void main(String[] args) {
 		Controller cont = new Controller();
        	cont.frame = new JFrame();
-    	cont.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+       	cont.frame.setPreferredSize(new Dimension(1000,1000));
+       	cont.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	  	cont.animation = new Animation();
 	  	cont.animation.setVisible(true);
 	  	cont.frame.getContentPane().add(cont.animation);
@@ -326,14 +372,14 @@ public class Controller{
 	  	cont.frame.setVisible(true);
 	  	cont.startScreen();
 	  	while (true) {
-    		cont.frame.repaint();
-    		tick(cont.animation, cont);
-   		try {
-    			Thread.sleep(40);
-    		} catch (InterruptedException e) {
-    			e.printStackTrace();
-    		}
-    	}
+	    		cont.frame.repaint();
+	    		tick(cont.animation, cont);
+	   		try {
+	    			Thread.sleep(40);
+	    		} catch (InterruptedException e) {
+	    			e.printStackTrace();
+	    		}
+	  	}
 		
 	}
 	
