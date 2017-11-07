@@ -3,6 +3,14 @@ import enums.Item;
 
 // The Model
 
+/**
+ * @author Will Ransom
+ *
+ */
+/**
+ * @author ThisMac
+ *
+ */
 public class Player{
 	
 	// Player data
@@ -16,6 +24,12 @@ public class Player{
 	
 	
 	// constructor
+	
+	/**
+	 * Player constructor to create a new Player object
+	 * @param newBird The bird representing the player
+	 * @return Player
+	 */
 	Player(Bird newBird) {
 		bird = newBird;
 		score = 0;
@@ -24,6 +38,13 @@ public class Player{
 	}
 	
 	// method to check contents of a space on the board
+	/**
+	 * This method checks the x and y co-ordinate of the board and returns what item is there
+	 * @param xIndex  The xPosition
+	 * @param yIndex  The yPosition
+	 * @param board  The Board object
+	 * @return Item
+	 */
 	public Item checkSpace(int xIndex, int yIndex, Board board) {
 		System.out.println(" ");
 		System.out.println("Clicked (" + Integer.toString(xIndex) + "," + Integer.toString(yIndex) + ")");
@@ -89,54 +110,103 @@ public class Player{
 		return null;
 	}
 	
+	/**
+	 * Bird getter
+	 * @return bird
+	 */
 	public Bird getBirdType() {
 		return bird;
 	}
 	
+	/**
+	 * Bird setter
+	 * @param newBird  The new Bird
+	 */
 	public void setBirdType(Bird newBird) {
 		bird = newBird;
 	}
 	
+	/**
+	 * Increments the score
+	 */
 	public void incScore() {
 		score++;
 	}
 	
+	/**
+	 * Decrements the score
+	 */
 	public void decScore() {
 		score--;
 	}
 	
+	/**
+	 * Returns the score
+	 * @return score
+	 */
 	public int getScore() {
 		return score;
 	}
 	
+	/**
+	 * Increments the eggs
+	 */
 	public void incEggs() {
 		eggs++;
 	}
 	
+	/**
+	 * Returns the eggs
+	 * @return eggs
+	 */
 	public int getEggs() {
 		return eggs;
 	}
 	
+	/**
+	 * Increments the amount of trash
+	 */
 	public void incTrash() {
 		trash++;
 	}
 	
+	/**
+	 * Returns the amount of trash
+	 * @return trash
+	 */
 	public int getTrash() {
 		return trash;
 	}
 	
+	/**
+	 * Setter for the xLocation
+	 * @param xPos  The new xPosition
+	 */
 	public void setXLoc(int xPos) {
 		this.xLoc = xPos;
 	}
 	
+	/**
+	 * Getter for the xLocation
+	 * @return xLoc
+	 */
 	public int getXLoc() {
 		return this.xLoc;
 	}
 	
+	
+	/**
+	 * Setter for the yPosition
+	 * @param yPos  The new yPosition
+	 */
 	public void setYLoc(int yPos) {
 		this.yLoc = yPos;
 	}
 	
+	/**
+	 * Getter for the yPosition
+	 * @return yLoc
+	 */
 	public int getYLoc() {
 		return this.yLoc;
 	}
