@@ -64,7 +64,6 @@ public class Animation extends JPanel{
 	 * an AniObject. If image is not loaded from src folder, bin folder is tried.
 	 * @param xIndex the x-coordinate for the grid space in which the hole is added
 	 * @param yIndex the y-coordinate for the grid space in which the hole is being added
-	 * @return null
 	 * @see AniObject
 	 */
 	public void addHole(int xIndex, int yIndex) {
@@ -92,7 +91,6 @@ public class Animation extends JPanel{
 	/**
 	 * Creates and Configures the Chest which holds powerups in the game.
 	 * src and bin are checked for image of chest. If no image is found, exception is thrown
-	 * @return null
 	 */
 	public void addChest() {
 		AniObject chest;
