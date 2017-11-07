@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Random;
 import java.util.Scanner;
 
+import enums.Item;
+
 // The Model
 
 public class Board{
@@ -51,40 +53,40 @@ public class Board{
 			for (int j = 0; j < boardSize; j++) {
 				// generate random integer to use for determining contents of GridSpace
 				int randomInt = rand.nextInt(randConst);
-				GridSpace.Item spaceItem = GridSpace.Item.EMPTY;
+				Item spaceItem = Item.EMPTY;
 				switch (difficulty) {
 					// on EASY Difficulty, 30% EMPTY, 60% EGGs, 10% TRASH
 					case EASY:
 						if (randomInt < (emptyRatio)) {
-							spaceItem = GridSpace.Item.EMPTY;
+							spaceItem = Item.EMPTY;
 						}
 						else if (randomInt < (easyEggRatio)) {
-							spaceItem = GridSpace.Item.EGG;
+							spaceItem = Item.EGG;
 						}
 						else {
-							spaceItem = GridSpace.Item.TRASH;
+							spaceItem = Item.TRASH;
 						}
 						break;
 					case MEDIUM:
 						if (randomInt < (emptyRatio)) {
-							spaceItem = GridSpace.Item.EMPTY;
+							spaceItem = Item.EMPTY;
 						}
 						else if (randomInt < (mediumEggRatio)) {
-							spaceItem = GridSpace.Item.EGG;
+							spaceItem = Item.EGG;
 						}
 						else {
-							spaceItem = GridSpace.Item.TRASH;
+							spaceItem = Item.TRASH;
 						}
 						break;
 					case HARD:
 						if (randomInt < (emptyRatio)) {
-							spaceItem = GridSpace.Item.EMPTY;
+							spaceItem = Item.EMPTY;
 						}
 						else if (randomInt < (hardEggRatio)) {
-							spaceItem = GridSpace.Item.EGG;
+							spaceItem = Item.EGG;
 						}
 						else {
-							spaceItem = GridSpace.Item.TRASH;
+							spaceItem = Item.TRASH;
 						}
 						break;
 				}
