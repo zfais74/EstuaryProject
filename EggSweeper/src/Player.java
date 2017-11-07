@@ -86,18 +86,6 @@ public class Player{
 					System.out.println("Remaining clicks: " + Integer.toString(board.getClicks()));
 				}
 				return GridSpace.Item.EMPTY;
-			case CHEST:
-				if (board.getClicks() == 0) {
-					System.out.println("Out of clicks!");
-					System.out.println("Your score is: " + Integer.toString(score));
-					
-				}
-				else {
-					System.out.println("Chest.");
-					System.out.println("Score: " + Integer.toString(score));
-					System.out.println("Remaining clicks: " + Integer.toString(board.getClicks()));
-				}
-				return GridSpace.Item.CHEST;
 		}
 		return null;
 	}
