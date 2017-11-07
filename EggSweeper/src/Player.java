@@ -1,10 +1,9 @@
+import enums.Bird;
+import enums.Item;
 
 // The Model
 
 public class Player{
-	
-	// the bird type
-	static enum Bird {REDKNOT, SANDPIPER, SANDERLING, DUNLIN, RUDDYTURNSTONE};
 	
 	// Player data
 	private Bird bird;
@@ -25,7 +24,7 @@ public class Player{
 	}
 	
 	// method to check contents of a space on the board
-	public GridSpace.Item checkSpace(int xIndex, int yIndex, Board board) {
+	public Item checkSpace(int xIndex, int yIndex, Board board) {
 		System.out.println(" ");
 		System.out.println("Clicked (" + Integer.toString(xIndex) + "," + Integer.toString(yIndex) + ")");
 		GridSpace space = board.getSpace(xIndex, yIndex);
@@ -34,14 +33,14 @@ public class Player{
 			System.out.println("Already checked there!");
 			System.out.println("Score: " + Integer.toString(score));
 			System.out.println("Remaining clicks: " + Integer.toString(board.getClicks()));
-			return GridSpace.Item.ALREADYCHECKED;
+			return Item.ALREADYCHECKED;
 		}
 		else {
 			// take a turn
 			space.setIsCovered(false);
 			board.decClicks();
 		}
-		GridSpace.Item item = space.getItem();
+		Item item = space.getItem();
 		switch (item) {
 			case EGG:
 				// up player score
@@ -57,7 +56,7 @@ public class Player{
 					System.out.println("Score: " + Integer.toString(score));
 					System.out.println("Remaining clicks: " + Integer.toString(board.getClicks()));
 				}
-				return GridSpace.Item.EGG;
+				return Item.EGG;
 			case TRASH:
 				// reduce player score
 				score--;
@@ -73,7 +72,7 @@ public class Player{
 					System.out.println("Score: " + Integer.toString(score));
 					System.out.println("Remaining clicks: " + Integer.toString(board.getClicks()));
 				}
-				return GridSpace.Item.TRASH;
+				return Item.TRASH;
 			case EMPTY:
 				if (board.getClicks() == 0) {
 					System.out.println("Out of clicks!");
@@ -85,7 +84,7 @@ public class Player{
 					System.out.println("Score: " + Integer.toString(score));
 					System.out.println("Remaining clicks: " + Integer.toString(board.getClicks()));
 				}
-				return GridSpace.Item.EMPTY;
+				return Item.EMPTY;
 		}
 		return null;
 	}

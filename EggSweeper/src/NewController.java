@@ -20,6 +20,9 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import enums.Bird;
+import enums.Item;
+
 // The Controller
 
 public class NewController{
@@ -136,7 +139,7 @@ public class NewController{
 	        	frame.getContentPane().repaint();
         		// when clicked picks character and difficulty
         		gameBoard = new Board(Board.Difficulty.EASY);
-        		player = new Player(Player.Bird.DUNLIN);
+        		player = new Player(Bird.DUNLIN);
         		animation.migrationAnimation();
 	        }
 	    });
@@ -148,7 +151,7 @@ public class NewController{
 	        	frame.getContentPane().revalidate();
 	        	frame.getContentPane().repaint();
 	        	gameBoard = new Board(Board.Difficulty.MEDIUM);
-	        	player = new Player(Player.Bird.SANDPIPER); 
+	        	player = new Player(Bird.SANDPIPER); 
 	        	animation.migrationAnimation();
 	        }
 	    });
@@ -160,7 +163,7 @@ public class NewController{
 	        	frame.getContentPane().revalidate();
 	        	frame.getContentPane().repaint();
 	        	gameBoard = new Board(Board.Difficulty.HARD);
-	        	player = new Player(Player.Bird.REDKNOT);
+	        	player = new Player(Bird.REDKNOT);
 	        	animation.migrationAnimation();
 	        }
 	    });
@@ -213,7 +216,7 @@ public class NewController{
 	        public void actionPerformed(ActionEvent e){
 	        		
 	        		// clicking a button will call the checkSpace method for that GridSpace
-	                GridSpace.Item item = player.checkSpace(xIndex, yIndex, gameBoard);
+	                Item item = player.checkSpace(xIndex, yIndex, gameBoard);
 	                animation.addHole(xIndex, yIndex);
 	                
 	                JLabel newClicks = new JLabel("Clicks remaining: " + Integer.toString(gameBoard.getClicks()));
@@ -231,7 +234,7 @@ public class NewController{
 	        		newScore.setOpaque(true);
 	        		frame.getContentPane().add(newScore, 0);
 	        		
-	        		if (item == GridSpace.Item.TRASH) {
+	        		if (item == Item.TRASH) {
 		        		JLabel ateSome = new JLabel("Ate Some Trash :(");
 		        		ateSome.setFont(new Font("Arial", Font.PLAIN, 40));
 		        		// bounds must be set for label to display
@@ -239,7 +242,7 @@ public class NewController{
 		        		ateSome.setOpaque(true);
 		        		frame.getContentPane().add(ateSome, 0);
 	        		}
-	        		else if (item == GridSpace.Item.EGG) {
+	        		else if (item == Item.EGG) {
 		        		JLabel ateSome = new JLabel("You Found and egg!!!");
 		        		ateSome.setFont(new Font("Arial", Font.PLAIN, 40));
 		        		// bounds must be set for label to display
@@ -247,7 +250,7 @@ public class NewController{
 		        		ateSome.setOpaque(true);
 		        		frame.getContentPane().add(ateSome, 0);
 	        		}
-	        		else if (item == GridSpace.Item.EMPTY) {
+	        		else if (item == Item.EMPTY) {
 		        		JLabel ateSome = new JLabel("Nothing there...");
 		        		ateSome.setFont(new Font("Arial", Font.PLAIN, 40));
 		        		// bounds must be set for label to display
@@ -255,7 +258,7 @@ public class NewController{
 		        		ateSome.setOpaque(true);
 		        		frame.getContentPane().add(ateSome, 0);
 	        		}
-	        		else if (item == GridSpace.Item.ALREADYCHECKED) {
+	        		else if (item == Item.ALREADYCHECKED) {
 		        		JLabel ateSome = new JLabel("Already checked there.");
 		        		ateSome.setFont(new Font("Arial", Font.PLAIN, 40));
 		        		// bounds must be set for label to display

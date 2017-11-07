@@ -4,6 +4,8 @@ import java.util.Scanner;
 
 import javax.imageio.ImageIO;
 
+import enums.Bird;
+
 public class CommandController{
 	
 	// The Model
@@ -12,7 +14,7 @@ public class CommandController{
 	
 	public void startGame(Board.Difficulty difficulty) {
 		gameBoard = new Board(difficulty);
-    	player = new Player(Player.Bird.SANDPIPER); 
+    	player = new Player(Bird.SANDPIPER); 
     	try {
             AniObject bird = new AniObject("bird", (int) Math.round(1000*(3./5.)), (int) Math.round(1000*(4./5.)), 100, 150, ImageIO.read(new File("bird.png")));
             for (int step = 0; step < 50; step ++) {

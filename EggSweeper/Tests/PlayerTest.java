@@ -2,21 +2,23 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
+import enums.Bird;
+
 public class PlayerTest {
 	
-	private Player player = new Player(Player.Bird.REDKNOT);
+	private Player player = new Player(Bird.REDKNOT);
 
 	@Test
 	public void testGetBirdType() {
-		Enum playerBird = player.getBirdType();
-		assertEquals("playerBird should be the same value as the constructor value", playerBird, Player.Bird.REDKNOT);
+		Bird playerBird = player.getBirdType();
+		assertEquals("playerBird should be the same value as the constructor value", playerBird, Bird.REDKNOT);
 	}
 
 	@Test
 	public void testSetBirdType() {
-		player.setBirdType(Player.Bird.DUNLIN);
-		Enum playerBird = player.getBirdType();
-		assertEquals("the returned bird should be DUNLIN", playerBird, Player.Bird.DUNLIN);
+		player.setBirdType(Bird.DUNLIN);
+		Bird playerBird = player.getBirdType();
+		assertEquals("the returned bird should be DUNLIN", playerBird, Bird.DUNLIN);
 	}
 
 	@Test
@@ -50,6 +52,22 @@ public class PlayerTest {
 		player.incTrash();
 		int trashAfterInc = player.getTrash();
 		assertTrue("the amount of trash should increase", trashBeforeInc < trashAfterInc);
+	}
+	
+	@Test
+	public void gettingAndSettingPlayerXPos() {
+		int xPos = 4;
+		player.setXLoc(xPos);
+		int result = player.getXLoc();
+		assertEquals("The result should be the same value held in the xPos variable", result, xPos);
+	}
+	
+	@Test
+	public void gettingAndSettingPlayerYPos() {
+		int yPos = 4;
+		player.setYLoc(yPos);
+		int result = player.getYLoc();
+		assertEquals("The result should be the same value held in the yPos variable", result, yPos);
 	}
 
 }
