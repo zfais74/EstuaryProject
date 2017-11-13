@@ -290,6 +290,17 @@ public class Controller{
 		// need to repaint the contentPane to get rid of buttons
 		frame.getContentPane().repaint();
 		
+		//Declare a new JPanel
+		JPanel endPanel = new JPanel();
+		//Set its layout manager to GridBag
+		endPanel.setLayout(new GridBagLayout());
+		
+		GridBagConstraints constraints = constraintFactory();
+		
+		constraints.gridx = 3;
+		constraints.weightx = 1.0;
+		constraints.weighty = 1.0;
+		int width = 2;
 		for(AniObject object: animation.getImages()) {
 			object.setVisible(false);
 		}
@@ -298,20 +309,16 @@ public class Controller{
 		JLabel eggLabel = new JLabel("You found " + Integer.toString(player.getEggs()) + " eggs,");
 		eggLabel.setFont(new Font("Arial", Font.PLAIN, 60));
 		// bounds must be set for label to display
-		eggLabel.setBounds((animation.contentPaneSize/2) - 400, (animation.contentPaneSize/4) - 80, 800, 70);
 		
 		JLabel trashLabel = new JLabel("and you ate " + Integer.toString(player.getTrash()) + " pieces of trash,");
 		trashLabel.setFont(new Font("Arial", Font.PLAIN, 60));
-		trashLabel.setBounds((animation.contentPaneSize/2) - 400, (animation.contentPaneSize/4), 850, 70);
 		
 		JLabel scoreLabel = new JLabel("so your score is " + Integer.toString(player.getScore()) + "!!!");
 		scoreLabel.setFont(new Font("Arial", Font.PLAIN, 60));
-		scoreLabel.setBounds((animation.contentPaneSize/2) - 400, (animation.contentPaneSize/4) + 80, 800, 70);
 		
 		JButton quitButton = new JButton("Quit");
 		quitButton.setFont(new Font("Arial", Font.PLAIN, 30));
-		quitButton.setLocation((animation.contentPaneSize/2) - (animation.generalButtonSize/2), 8*(animation.contentPaneSize/10));
-		quitButton.setSize(animation.generalButtonSize, animation.generalButtonSize/2);
+
 		quitButton.addActionListener(new ActionListener(){
 	        public void actionPerformed(ActionEvent e){
 	        	
@@ -321,10 +328,18 @@ public class Controller{
 	        }
 	    });
 		
-		frame.getContentPane().add(eggLabel);
-		frame.getContentPane().add(trashLabel);
-		frame.getContentPane().add(scoreLabel);
-		frame.getContentPane().add(quitButton);
+		endPanel.add(eggLabel, constraints);
+		constraints.gridy = width;
+		endPanel.add(trashLabel, constraints);
+		constraints.gridy = 2*width;
+		endPanel.add(scoreLabel, constraints);
+		constraints.gridy = 3*width;
+		endPanel.add(quitButton, constraints);
+		
+		//Add and repaint
+		frame.getContentPane().add(endPanel);
+		frame.validate();
+		frame.repaint();
 	}
 	
 	public static void tick(Animation animation, Controller controller) {
