@@ -33,17 +33,30 @@ public class Animation extends JPanel{
 		try {
 			BufferedImage beach = ImageIO.read(new File("images/beach.png"));
 			images.add(new AniObject("beach", buffer, buffer, contentPaneSize - (2*buffer), contentPaneSize - (2*buffer), beach));
-			return;
 		} catch (IOException e) {
 			System.out.println("Failed to load beach, trying bin folder");
 		}
-		
 		try {
 			BufferedImage beach = ImageIO.read(new File("beach.png"));
 			images.add(new AniObject("beach", buffer, buffer, contentPaneSize - (2*buffer), contentPaneSize - (2*buffer), beach));
 		} catch (IOException e) {
 			System.out.println("Failed to load beach");
 		}
+
+		try {
+			BufferedImage board = ImageIO.read(new File("images/board.png"));
+			images.add(new AniObject("board", (contentPaneSize - 848)/2, 350, 848, 548, board));
+		} catch (IOException e) {
+			System.out.println("Failed to load board, trying bin folder");
+		}
+		
+		try {
+			BufferedImage board = ImageIO.read(new File("board.png"));
+			images.add(new AniObject("board", (contentPaneSize - 848)/2, 350, 848, 548, board));
+		} catch (IOException e) {
+			System.out.println("Failed to load board");
+		}
+		
 		return;
 		
 	}

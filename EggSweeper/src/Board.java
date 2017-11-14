@@ -30,7 +30,7 @@ public class Board{
 	private Difficulty difficulty;
 	
 	// size of the board
-	public static int boardSize = 20;
+	public static int boardSize = 10;
 	
 	// randConst is used in setting Items in GridSpaces
 	private static final int randConst = 100;
