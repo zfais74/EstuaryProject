@@ -105,7 +105,7 @@ public class Controller{
 	public void DisplayInstructions(){
 		JPanel instructionPanal = new JPanel();
 		instructionPanal.setLayout(new GridBagLayout());
-		
+
 
 	}
 	// displays easy, medium and hard button
