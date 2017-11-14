@@ -31,7 +31,9 @@ public class Animation extends JPanel{
 		images = new ArrayList<AniObject>();
 		this.setPreferredSize(new Dimension(contentPaneSize, contentPaneSize));
 		try {
-			BufferedImage beach = ImageIO.read(new File("images/beach.png"));
+			String dir = System.getProperty("user.dir");
+			System.out.println("current dir = " + dir);
+			BufferedImage beach = ImageIO.read(new File("EggSweeper/images/beach.png"));
 			images.add(new AniObject("beach", buffer, buffer, contentPaneSize - (2*buffer), contentPaneSize - (2*buffer), beach));
 		} catch (IOException e) {
 			System.out.println("Failed to load beach, trying bin folder");
@@ -44,7 +46,7 @@ public class Animation extends JPanel{
 		}
 
 		try {
-			BufferedImage board = ImageIO.read(new File("images/board.png"));
+			BufferedImage board = ImageIO.read(new File("EggSweeper/images/board.png"));
 			images.add(new AniObject("board", (contentPaneSize - 848)/2, 350, 848, 548, board));
 		} catch (IOException e) {
 			System.out.println("Failed to load board, trying bin folder");
@@ -82,7 +84,7 @@ public class Animation extends JPanel{
 	public void addHole(int xIndex, int yIndex) {
 		AniObject hole;
 		try {
-			hole = new AniObject("hole", buffer + (xIndex*gridButtonSize), buffer + (yIndex*gridButtonSize), gridButtonSize, gridButtonSize, ImageIO.read(new File("images/hole.png")));
+			hole = new AniObject("hole", buffer + (xIndex*gridButtonSize), buffer + (yIndex*gridButtonSize), gridButtonSize, gridButtonSize, ImageIO.read(new File("EggSweeper/images/hole.png")));
 			hole.setVisible(true);
 			images.add(hole);
 			return;
@@ -108,7 +110,7 @@ public class Animation extends JPanel{
 	public void addChest() {
 		AniObject chest;
 		try {
-			chest = new AniObject("chest", contentPaneSize - (3*buffer), contentPaneSize - (3*buffer), 2 * buffer, 2 * buffer, ImageIO.read(new File("images/chest.png")));
+			chest = new AniObject("chest", contentPaneSize - (3*buffer), contentPaneSize - (3*buffer), 2 * buffer, 2 * buffer, ImageIO.read(new File("EggSweeper/images/chest.png")));
 			chest.setVisible(true);
 			images.add(chest);
 			return;
@@ -132,10 +134,10 @@ public class Animation extends JPanel{
 		AniObject bird;
 		AniObject US;
 		try {
-			US = new AniObject("US", 100, 100, 600, 800, ImageIO.read(new File("images/US.png")));
+			US = new AniObject("US", 100, 100, 600, 800, ImageIO.read(new File("EggSweeper/images/US.png")));
 			US.setVisible(true);
 			images.add(US);
-			bird = new AniObject("bird", (int) Math.round(contentPaneSize*(3./5.)), (int) Math.round(contentPaneSize*(4./5.)), 100, 150, ImageIO.read(new File("images/bird.png")));
+			bird = new AniObject("bird", (int) Math.round(contentPaneSize*(3./5.)), (int) Math.round(contentPaneSize*(4./5.)), 100, 150, ImageIO.read(new File("EggSweeper/images/bird.png")));
 			bird.setVisible(true);
 			images.add(bird);
 			return;
