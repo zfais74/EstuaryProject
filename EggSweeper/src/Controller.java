@@ -64,14 +64,16 @@ public class Controller{
 		//Add components to the start panel instead of the frame's contentPane directly
 		startPanel.add(title, constraints);
 		
-		JButton startButton = new JButton("Start Game");
-		startButton.setFont(new Font("Arial", Font.PLAIN, 30));
-		startButton.setVisible(true);
+		JButton startButton = new JButton("Start Game");JButton instButton = new JButton("Instructions");
+		startButton.setFont(new Font("Arial", Font.PLAIN, 30));instButton.setFont(new Font("Arial", Font.PLAIN, 30));
+		startButton.setVisible(true);instButton.setVisible(true);
 		
 		//This component will be in the same column, just 3 rows below
 		constraints.gridy = 3;
 		
 		startPanel.add(startButton,constraints);
+		constraints.gridy = 4;
+		startPanel.add(instButton,constraints);
 		
 		startButton.addActionListener(new ActionListener(){
 	        public void actionPerformed(ActionEvent e){
@@ -84,11 +86,28 @@ public class Controller{
 	                
 	        }
 	    });
+
+		instButton.addActionListener(new ActionListener() {
+
+			public void actionPerformed(ActionEvent e) {
+				frame.getContentPane().remove(startPanel);
+				frame.validate();
+				frame.getContentPane().repaint();
+				//
+				DisplayInstructions();
+
+			}
+		});
 		//When built add the component to the frame
 		frame.add(startPanel);
 		frame.validate();
 	}
-	
+	public void DisplayInstructions(){
+		JPanel instructionPanal = new JPanel();
+		instructionPanal.setLayout(new GridBagLayout());
+
+
+	}
 	// displays easy, medium and hard button
 	public void pickDifficulty() {
 		JPanel difficultyPanel = new JPanel();
