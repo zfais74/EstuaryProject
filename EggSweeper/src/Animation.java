@@ -46,7 +46,7 @@ public class Animation extends JPanel{
 		}
 
 		try {
-			BufferedImage board = ImageIO.read(new File("images/board.png"));
+			BufferedImage board = ImageIO.read(new File("EggSweeper/images/board.png"));
 			images.add(new AniObject("board", (contentPaneSize - 848)/2, 350, 848, 548, board));
 		} catch (IOException e) {
 			System.out.println("Failed to load board, trying bin folder");
