@@ -2,12 +2,16 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.File;
 import java.util.Iterator;
 
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -102,10 +106,40 @@ public class Controller{
 		frame.add(startPanel);
 		frame.validate();
 	}
+	
 	public void DisplayInstructions(){
-		JPanel instructionPanal = new JPanel();
-		instructionPanal.setLayout(new GridBagLayout());
-
+		JPanel instructionPanel = new JPanel();
+		instructionPanel.setLayout(new GridBagLayout());
+		GridBagConstraints constraints = constraintFactory();
+		
+		JButton startButton = new JButton("Start Game");
+		startButton.setFont(new Font("Arial", Font.PLAIN, 30));
+		startButton.setVisible(true);
+		startButton.addActionListener(new ActionListener(){
+	        public void actionPerformed(ActionEvent e){
+	        		
+	        		frame.getContentPane().remove(instructionPanel);
+	        		frame.validate();
+	        		frame.getContentPane().repaint();
+	        		// when clicked calls method to generate difficulty selection screen
+	        		pickDifficulty();
+	                
+	        }
+	    });
+		
+		JLabel instructions = new JLabel("Instructions will \n go \n right here");
+		instructions.setFont(new Font("Arial", Font.PLAIN, 40));
+		
+		constraints.gridx = 0;
+		constraints.gridy = 0;
+		instructionPanel.add(instructions, constraints);
+		
+		constraints.gridx = 0;
+		constraints.gridy = 1;
+		instructionPanel.add(startButton, constraints);
+		
+		frame.add(instructionPanel);
+		frame.validate();
 
 	}
 	// displays easy, medium and hard button
@@ -183,6 +217,50 @@ public class Controller{
 	
 	public void buildBoard() {
 		
+		JPanel boardPanel = new JPanel();
+		boardPanel.setLayout(new GridBagLayout());
+		GridBagConstraints constraints = constraintFactory();
+		
+		constraints.gridx = 1;
+		constraints.gridy = 0;
+		constraints.anchor = GridBagConstraints.EAST;
+		
+		JLabel clicks = new JLabel("Clicks remaining: " + Integer.toString(gameBoard.getClicks()) + " ");
+		clicks.setFont(new Font("Arial", Font.PLAIN, 40));
+		boardPanel.add(clicks, constraints);
+		
+		constraints.gridx = 1;
+		constraints.gridy = 1;
+		constraints.anchor = GridBagConstraints.EAST;
+		
+		JLabel score = new JLabel("Score: " + Integer.toString(player.getScore()) + " ");
+		score.setFont(new Font("Arial", Font.PLAIN, 40));
+		boardPanel.add(score, constraints);
+		
+		constraints.gridx = 1;
+		constraints.gridy = 2;
+		constraints.anchor = GridBagConstraints.EAST;
+		
+		JButton chestButton = new JButton();
+		chestButton.setPreferredSize(new Dimension(200, 200));
+		chestButton.setVisible(true);
+		chestButton.setEnabled(false);
+		boardPanel.add(chestButton, constraints);
+		
+		chestButton.addActionListener(new ActionListener(){
+	        public void actionPerformed(ActionEvent e){
+	        		
+	        	//Zeke, powerUpPanel call can go here I guess
+	        	//make sure to add it in the second chestButton declaration below as well
+	        	
+	        	System.out.println("Chest Button Clicked");
+	        	
+	        }
+	    });
+		
+		frame.add(boardPanel);
+		frame.validate();
+		
 		Iterator<AniObject> boardItr = animation.getImages().iterator();
 		while (boardItr.hasNext()) {
 			AniObject next = boardItr.next();
@@ -203,10 +281,102 @@ public class Controller{
 		        	return;
 		        }
 		        else {
-		        	player.checkSpace(xIndex, yIndex, gameBoard);
-		        }
-		        if (gameBoard.getClicks() == 0) {
-		        	endScreen();
+		        	Item item = player.checkSpace(xIndex, yIndex, gameBoard);
+		        	animation.addHole(gridIndex[2], gridIndex[3], gridIndex[4], gridIndex[5]);
+		        	
+		        	boardPanel.removeAll();
+		        	frame.validate();
+		        	frame.repaint();
+	                
+		        	constraints.gridx = 1;
+		        	constraints.gridy = 0;
+		        	constraints.anchor = GridBagConstraints.EAST;
+		        	
+	                JLabel newClicks = new JLabel("Clicks remaining: " + Integer.toString(gameBoard.getClicks()) + " ");
+	        		newClicks.setFont(new Font("Arial", Font.PLAIN, 40));
+	        		newClicks.setOpaque(false);
+	        		boardPanel.add(newClicks, constraints);
+	                
+	        		constraints.gridx = 1;
+	        		constraints.gridy = 1;
+	        		constraints.anchor = GridBagConstraints.EAST;
+	        		
+	        		JLabel newScore = new JLabel("Score: " + Integer.toString(player.getScore()) + " ");
+	        		newScore.setFont(new Font("Arial", Font.PLAIN, 40));
+	        		newScore.setOpaque(false);
+	        		boardPanel.add(newScore, constraints);
+	        		
+	        		constraints.gridx = 1;
+	        		constraints.gridy = 2;
+	        		constraints.anchor = GridBagConstraints.EAST;
+	        		
+	        		JButton chestButton = new JButton();
+	        		chestButton.setPreferredSize(new Dimension(200, 200));
+	        		chestButton.setVisible(true);
+	        		
+	        		chestButton.addActionListener(new ActionListener(){
+	        	        public void actionPerformed(ActionEvent e){
+	        	        		
+	        	        	//Zeke, powerUpPanel call can go here I guess
+	        	        	//make sure to add it in the second chestButton declaration below as well
+	        	        	
+	        	        	System.out.println("Chest Button Clicked");
+	        	        	
+	        	        }
+	        	    });
+	        		
+	        		boardPanel.add(chestButton, constraints);
+	        		
+	        		
+	        		constraints.gridx = 0;
+		        	constraints.gridy = 0;
+		        	constraints.anchor = GridBagConstraints.EAST;
+		        	
+	        		if (item == Item.TRASH) {
+		        		JLabel ateSome = new JLabel("Ate Some Trash :(");
+		        		ateSome.setFont(new Font("Arial", Font.PLAIN, 40));
+		        		ateSome.setOpaque(false);
+		        		boardPanel.add(ateSome, constraints);
+	        		}
+	        		else if (item == Item.EGG) {
+		        		JLabel ateSome = new JLabel("You Found and egg!!!");
+		        		ateSome.setFont(new Font("Arial", Font.PLAIN, 40));
+		        		ateSome.setOpaque(true);
+		        		frame.getContentPane().add(ateSome, 0);
+		        		boardPanel.add(ateSome, constraints);
+	        		}
+	        		else if (item == Item.EMPTY) {
+		        		JLabel ateSome = new JLabel("Nothing there...");
+		        		ateSome.setFont(new Font("Arial", Font.PLAIN, 40));
+		        		ateSome.setOpaque(false);
+		        		boardPanel.add(ateSome, constraints);
+	        		}
+	        		else if (item == Item.ALREADYCHECKED) {
+		        		JLabel ateSome = new JLabel("Already checked there.");
+		        		ateSome.setFont(new Font("Arial", Font.PLAIN, 40));
+		        		ateSome.setOpaque(false);
+		        		boardPanel.add(ateSome, constraints);
+	        		}
+	        		
+	        		frame.add(boardPanel);
+	        		frame.validate();
+	        		
+	                if (gameBoard.getClicks() == 0){
+	                	endScreen();
+	                }
+	                if ((gameBoard.getClicks() % 3 == 0) && gameBoard.getClicks() != 0) {
+	                	ImageIcon chest = new ImageIcon("images/chest.png");
+	            		Image chestImage = chest.getImage();
+	            		Image resizedChest = chestImage.getScaledInstance( 200, 200,  java.awt.Image.SCALE_SMOOTH ) ;  
+	            		chest = new ImageIcon(resizedChest);
+	                	chestButton.setIcon(chest);
+	                	chestButton.setEnabled(true);
+	                	
+	                }
+	                if ((gameBoard.getClicks() % 3 == 2) || (gameBoard.getClicks() % 3 == 1)) {
+	                	chestButton.setIcon(null);
+	                	chestButton.setEnabled(false);
+	                }
 		        }
 		        
 		    }
@@ -247,7 +417,7 @@ public class Controller{
 		while (boardItr.hasNext()) {
 			boardImage = boardItr.next();
 			if (boardImage.toString() == "board") {
-				boardImage.setVisible(true);
+				break;
 			}	
 		}
 		
@@ -303,7 +473,6 @@ public class Controller{
 			yIndex = -1;
 		}
 		
-		
 		if (xLoc < LineTopX[0] + LineSlopes[0] * yLoc){
 			xIndex = -1;
 		}
@@ -341,134 +510,25 @@ public class Controller{
 			xIndex = -1;
 		}
 		
-		int[] gridIndex = {xIndex, yIndex};
+		int holeX = 1;
+		int holeY = 1;
+		int holeXSize = 1;
+		int holeYSize = 1;
+		
+		if ((xIndex != -1) && (yIndex != -1)){
+			double boxRatio = ((double) LineHeights[9] - (double) LineHeights[8])/((double) LineHeights[10] - (double) LineHeights[9]);
+			double gridSizeRatio = 1/Math.pow(boxRatio, yIndex);
+			holeYSize = (int) Math.round(gridSizeRatio * (gridImageWidth/1000)*(LineHeights[1] - LineHeights[0]));
+			holeY = (int) Math.round(imageYloc + LineHeights[yIndex] + ((gridImageWidth/1000.)*(LineHeights[yIndex+1] - LineHeights[yIndex])/2.) - (holeYSize/2.) );
+			
+			holeX = (int) Math.round(imageXloc + (gridImageWidth/1000)*(LineTopX[xIndex] + LineSlopes[xIndex] * (LineHeights[yIndex] + LineHeights[yIndex+1])/2.));
+			holeXSize = (int) ((gridImageWidth/1000)*((LineTopX[xIndex + 1]  + (LineSlopes[xIndex + 1] * (LineHeights[yIndex] + LineHeights[yIndex+1])/2.)) - (LineTopX[xIndex]  + (LineSlopes[xIndex] * (LineHeights[yIndex] + LineHeights[yIndex+1])/2.))));
+		}
+		
+		int[] gridIndex = {xIndex, yIndex, holeX, holeY, holeXSize, holeYSize};
 		
 		return gridIndex;
 	}
-	
-	// add the buttons representing each GridSpace
-//	public void buildBoard() {
-//		JLabel clicks = new JLabel("Clicks remaining: " + Integer.toString(gameBoard.getClicks()));
-//		clicks.setFont(new Font("Arial", Font.PLAIN, 40));
-//		// bounds must be set for label to display
-//		clicks.setBounds(animation.contentPaneSize/10, 0, 500, animation.buffer);
-//		frame.getContentPane().add(clicks);
-//		
-//		JLabel score = new JLabel("Score: " + Integer.toString(player.getScore()));
-//		score.setFont(new Font("Arial", Font.PLAIN, 40));
-//		// bounds must be set for label to display
-//		score.setBounds(animation.contentPaneSize/2, 0, 500, animation.buffer);
-//		frame.getContentPane().add(score);
-//		
-//		JButton chestButton = new JButton();
-//		chestButton.setLocation(animation.contentPaneSize - (3*animation.buffer), animation.contentPaneSize - (3*animation.buffer));
-//		chestButton.setSize(animation.buffer * 2, animation.buffer * 2);
-//		chestButton.setContentAreaFilled(false);
-//		chestButton.setVisible(true);
-//		
-//		for (int i = 0; i < Board.boardSize; i++) {
-//			for (int j = 0; j < Board.boardSize; j++) {
-//				addButton(i, j, chestButton);
-//			}
-//		}
-//		
-//		animation.getImages().get(0).setVisible(true);
-//	}
-//
-//	// adds a button at corresponding to an index not a location on the board
-//	public void addButton(int xIndex, int yIndex, JButton powerChestButton) {
-//		
-//		int xLocation = animation.buffer + xIndex*(animation.gridButtonSize);
-//		int yLocation = animation.buffer + yIndex*(animation.gridButtonSize);
-//		// create the button
-//		JButton gridButton = new JButton();
-//		gridButton.setLocation(xLocation, yLocation);
-//		gridButton.setSize(animation.gridButtonSize, animation.gridButtonSize);
-//		//gridButton.setOpaque(true);
-//		gridButton.setContentAreaFilled(false);
-//		gridButton.setBorderPainted(true);
-//		gridButton.setVisible(true);
-//		// adding the click listener
-//		gridButton.addActionListener(new ActionListener(){
-//	        public void actionPerformed(ActionEvent e){
-//	        		
-//	        		// clicking a button will call the checkSpace method for that GridSpace
-//	                Item item = player.checkSpace(xIndex, yIndex, gameBoard);
-//	                animation.addHole(xIndex, yIndex);
-//	                
-//	                JLabel newClicks = new JLabel("Clicks remaining: " + Integer.toString(gameBoard.getClicks()));
-//	        		newClicks.setFont(new Font("Arial", Font.PLAIN, 40));
-//	        		// bounds must be set for label to display
-//	        		newClicks.setBounds(animation.contentPaneSize/10, 0, 500, animation.buffer);
-//	        		newClicks.setOpaque(true);
-//	        		frame.getContentPane().add(newClicks, 0);
-//	                //clickLabel.setText("Clicks remaining: " + Integer.toString(gameBoard.getClicks()));
-//	        		
-//	        		JLabel newScore = new JLabel("Score: " + Integer.toString(player.getScore()));
-//	        		newScore.setFont(new Font("Arial", Font.PLAIN, 40));
-//	        		// bounds must be set for label to display
-//	        		newScore.setBounds(animation.contentPaneSize/2, 0, 500, animation.buffer);
-//	        		newScore.setOpaque(true);
-//	        		frame.getContentPane().add(newScore, 0);
-//	        		
-//	        		if (item == Item.TRASH) {
-//		        		JLabel ateSome = new JLabel("Ate Some Trash :(");
-//		        		ateSome.setFont(new Font("Arial", Font.PLAIN, 40));
-//		        		// bounds must be set for label to display
-//		        		ateSome.setBounds(animation.contentPaneSize/10, animation.contentPaneSize - animation.buffer, 500, animation.buffer);
-//		        		ateSome.setOpaque(true);
-//		        		frame.getContentPane().add(ateSome, 0);
-//	        		}
-//	        		else if (item == Item.EGG) {
-//		        		JLabel ateSome = new JLabel("You Found and egg!!!");
-//		        		ateSome.setFont(new Font("Arial", Font.PLAIN, 40));
-//		        		// bounds must be set for label to display
-//		        		ateSome.setBounds(animation.contentPaneSize/10, animation.contentPaneSize - animation.buffer, 500, animation.buffer);
-//		        		ateSome.setOpaque(true);
-//		        		frame.getContentPane().add(ateSome, 0);
-//	        		}
-//	        		else if (item == Item.EMPTY) {
-//		        		JLabel ateSome = new JLabel("Nothing there...");
-//		        		ateSome.setFont(new Font("Arial", Font.PLAIN, 40));
-//		        		// bounds must be set for label to display
-//		        		ateSome.setBounds(animation.contentPaneSize/10, animation.contentPaneSize - animation.buffer, 500, animation.buffer);
-//		        		ateSome.setOpaque(true);
-//		        		frame.getContentPane().add(ateSome, 0);
-//	        		}
-//	        		else if (item == Item.ALREADYCHECKED) {
-//		        		JLabel ateSome = new JLabel("Already checked there.");
-//		        		ateSome.setFont(new Font("Arial", Font.PLAIN, 40));
-//		        		// bounds must be set for label to display
-//		        		ateSome.setBounds(animation.contentPaneSize/10, animation.contentPaneSize - animation.buffer, 500, animation.buffer);
-//		        		ateSome.setOpaque(true);
-//		        		frame.getContentPane().add(ateSome, 0);
-//	        		}
-//	        		
-//	                if (gameBoard.getClicks() == 0){
-//	                	endScreen();
-//	                }
-//	                if ((gameBoard.getClicks() % 3 == 0) && gameBoard.getClicks() != 0) {
-//	                	frame.getContentPane().add(powerChestButton, 1);
-//	                	animation.addChest();
-//	                	frame.getContentPane().repaint();
-//	                }
-//	                if (gameBoard.getClicks() % 3 == 2) {
-//	                	frame.getContentPane().remove(powerChestButton);
-//	                	animation.addChest();
-//	                	Iterator<AniObject> chestItr = animation.getImages().iterator();
-//	                	while (chestItr.hasNext() == true) {
-//	                		if (chestItr.next().toString() == "chest") {
-//	                			chestItr.remove();
-//	                		}
-//	                	}
-//	                	frame.getContentPane().repaint();
-//	                }
-//	                
-//	        }
-//	    });
-//		// add the button to the contentPane
-//		frame.getContentPane().add(gridButton, 0);
-//	}
 	
 	// displays score, and a quit button
 	public void endScreen() {
