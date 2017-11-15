@@ -20,7 +20,9 @@ public class Animation extends JPanel{
 	public int buffer = 50;
 	public int gridButtonSize = 45;
 	public int generalButtonSize = 200;
-	public int contentPaneSize = 1000;
+	public int contentPaneSize = 900;
+	public int ratioW = 1600;
+	public int ratioH = 900;
 	
 	public List<AniObject> getImages() {
 		return images;
@@ -29,7 +31,7 @@ public class Animation extends JPanel{
 	// constructor, takes a Game object to link GUI to controller
 	Animation(){
 		images = new ArrayList<AniObject>();
-		this.setPreferredSize(new Dimension(contentPaneSize, contentPaneSize));
+		this.setPreferredSize(new Dimension(ratioW, ratioH));
 		try {
 			BufferedImage beach = ImageIO.read(new File("images/beach.png"));
 			images.add(new AniObject("beach", buffer, buffer, contentPaneSize - (2*buffer), contentPaneSize - (2*buffer), beach));
@@ -45,14 +47,14 @@ public class Animation extends JPanel{
 
 		try {
 			BufferedImage board = ImageIO.read(new File("images/board.png"));
-			images.add(new AniObject("board", (contentPaneSize - 848)/2, 350, 848, 548, board));
+			images.add(new AniObject("board", 100,254, 1000, 646, board));
 		} catch (IOException e) {
 			System.out.println("Failed to load board, trying bin folder");
 		}
 		
 		try {
 			BufferedImage board = ImageIO.read(new File("board.png"));
-			images.add(new AniObject("board", (contentPaneSize - 848)/2, 350, 848, 548, board));
+			images.add(new AniObject("board", 100, 254, 1000, 646, board));
 		} catch (IOException e) {
 			System.out.println("Failed to load board");
 		}
@@ -72,17 +74,10 @@ public class Animation extends JPanel{
     	
 	}
 
-	/**
-	 * Populates the board with a hole at the given coordinate. An image of a hole is added to
-	 * an AniObject. If image is not loaded from src folder, bin folder is tried.
-	 * @param xIndex the x-coordinate for the grid space in which the hole is added
-	 * @param yIndex the y-coordinate for the grid space in which the hole is being added
-	 * @see AniObject
-	 */
-	public void addHole(int xIndex, int yIndex) {
+	public void addHole(int xLoc, int yLoc, int sizeX, int sizeY) {
 		AniObject hole;
 		try {
-			hole = new AniObject("hole", buffer + (xIndex*gridButtonSize), buffer + (yIndex*gridButtonSize), gridButtonSize, gridButtonSize, ImageIO.read(new File("images/hole.png")));
+			hole = new AniObject("hole", xLoc, yLoc, sizeX, sizeY, ImageIO.read(new File("images/hole.png")));
 			hole.setVisible(true);
             images.add(hole);
             return;
@@ -91,7 +86,7 @@ public class Animation extends JPanel{
 		}
 		
 		try {
-			hole = new AniObject("hole", buffer + (xIndex*gridButtonSize), buffer + (yIndex*gridButtonSize), gridButtonSize, gridButtonSize, ImageIO.read(new File("hole.png")));
+			hole = new AniObject("hole", xLoc, yLoc, sizeX, sizeY, ImageIO.read(new File("hole.png")));
 			hole.setVisible(true);
             images.add(hole);
 		} catch (IOException e1) {
@@ -101,10 +96,7 @@ public class Animation extends JPanel{
 		
 	}
 
-	/**
-	 * Creates and Configures the Chest which holds powerups in the game.
-	 * src and bin are checked for image of chest. If no image is found, exception is thrown
-	 */
+
 	public void addChest() {
 		AniObject chest;
 		try {
@@ -132,10 +124,10 @@ public class Animation extends JPanel{
 		AniObject bird;
 		AniObject US;
 		try {
-			US = new AniObject("US", 100, 100, 600, 800, ImageIO.read(new File("images/US.png")));
+			US = new AniObject("US", 100, 100, 450, 600, ImageIO.read(new File("images/US.png")));
             US.setVisible(true);
             images.add(US);
-			bird = new AniObject("bird", (int) Math.round(contentPaneSize*(3./5.)), (int) Math.round(contentPaneSize*(4./5.)), 100, 150, ImageIO.read(new File("images/bird.png")));
+			bird = new AniObject("bird", (int) Math.round(contentPaneSize*(2./5.)), (int) Math.round(contentPaneSize*(3./5.)), 100, 150, ImageIO.read(new File("images/bird.png")));
 			bird.setVisible(true);
             images.add(bird);
             return;
@@ -143,10 +135,10 @@ public class Animation extends JPanel{
 			System.out.println("failed to load US or Bird, trying bin folder");
 		}
 		try {
-			US = new AniObject("US", 100, 100, 600, 800, ImageIO.read(new File("US.png")));
+			US = new AniObject("US", 100, 100, 450, 600, ImageIO.read(new File("US.png")));
             US.setVisible(true);
             images.add(US);
-			bird = new AniObject("bird", (int) Math.round(contentPaneSize*(3./5.)), (int) Math.round(contentPaneSize*(4./5.)), 100, 150, ImageIO.read(new File("bird.png")));
+			bird = new AniObject("bird", (int) Math.round(contentPaneSize*(2./5.)), (int) Math.round(contentPaneSize*(3./5.)), 100, 150, ImageIO.read(new File("bird.png")));
 			bird.setVisible(true);
             images.add(bird);
 		} catch (IOException e1) {

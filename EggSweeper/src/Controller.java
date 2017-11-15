@@ -185,6 +185,7 @@ public class Controller{
 		        }
 		        else {
 		        	player.checkSpace(xIndex, yIndex, gameBoard);
+		        	animation.addHole(gridIndex[2], gridIndex[3], gridIndex[4], gridIndex[5]);
 		        }
 		        if (gameBoard.getClicks() == 0) {
 		        	endScreen();
@@ -228,7 +229,7 @@ public class Controller{
 		while (boardItr.hasNext()) {
 			boardImage = boardItr.next();
 			if (boardImage.toString() == "board") {
-				boardImage.setVisible(true);
+				break;
 			}	
 		}
 		
@@ -284,6 +285,11 @@ public class Controller{
 			yIndex = -1;
 		}
 		
+		double boxRatio = ((double) LineHeights[9] - (double) LineHeights[8])/((double) LineHeights[10] - (double) LineHeights[9]);
+		double gridSizeRatio = 1/Math.pow(boxRatio, yIndex);
+		int holeYSize = (int) Math.round(gridSizeRatio * (gridImageWidth/1000)*(LineHeights[1] - LineHeights[0]));
+		int holeY = (int) Math.round(imageYloc + LineHeights[yIndex] + ((gridImageWidth/1000.)*(LineHeights[yIndex+1] - LineHeights[yIndex])/2.) - (holeYSize/2.) );
+		System.out.println(LineHeights[yIndex]);
 		
 		if (xLoc < LineTopX[0] + LineSlopes[0] * yLoc){
 			xIndex = -1;
@@ -322,7 +328,12 @@ public class Controller{
 			xIndex = -1;
 		}
 		
-		int[] gridIndex = {xIndex, yIndex};
+		int holeX = (int) Math.round(imageXloc + (gridImageWidth/1000)*(LineTopX[xIndex] + LineSlopes[xIndex] * (LineHeights[yIndex] + LineHeights[yIndex+1])/2.));
+		int holeXSize = (int) ((gridImageWidth/1000)*((LineTopX[xIndex + 1]  + (LineSlopes[xIndex + 1] * (LineHeights[yIndex] + LineHeights[yIndex+1])/2.)) - (LineTopX[xIndex]  + (LineSlopes[xIndex] * (LineHeights[yIndex] + LineHeights[yIndex+1])/2.))));
+		
+		System.out.println(holeXSize);
+		
+		int[] gridIndex = {xIndex, yIndex, holeX, holeY, holeXSize, holeYSize};
 		
 		return gridIndex;
 	}
