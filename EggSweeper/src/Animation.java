@@ -100,8 +100,8 @@ public class Animation extends JPanel{
 	public void addChest() {
 		AniObject chest;
 		try {
-			chest = new AniObject("chest", contentPaneSize - (3*buffer), contentPaneSize - (3*buffer), 2 * buffer, 2 * buffer, ImageIO.read(new File("images/chest.png")));
-			chest.setVisible(true);
+			chest = new AniObject("chest", 1410, 600, 200, 200, ImageIO.read(new File("images/chest.png")));
+			chest.setVisible(false);
             images.add(chest);
             return;
 		} catch (IOException e1) {
@@ -109,7 +109,7 @@ public class Animation extends JPanel{
 		}
 		
 		try {
-			chest = new AniObject("chest", contentPaneSize - (3*buffer), contentPaneSize - (3*buffer), 2 * buffer, 2 * buffer, ImageIO.read(new File("chest.png")));
+			chest = new AniObject("chest", 1410, 600, 200, 200, ImageIO.read(new File("chest.png")));
 			chest.setVisible(true);
             images.add(chest);
             
