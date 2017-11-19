@@ -109,7 +109,7 @@ public class Animation extends JPanel{
 	public void addHole(int xLoc, int yLoc, int sizeX, int sizeY) {
 		AniObject hole;
 		try {
-			hole = new AniObject("hole", xLoc, yLoc, sizeX, sizeY, ImageIO.read(new File("images/hole.png")));
+			hole = new AniObject("hole", xLoc, yLoc, sizeX, sizeY, ImageIO.read(new File("images/hole2.png")));
 			hole.setVisible(true);
             images.add(hole);
             return;
@@ -118,7 +118,7 @@ public class Animation extends JPanel{
 		}
 		
 		try {
-			hole = new AniObject("hole", xLoc, yLoc, sizeX, sizeY, ImageIO.read(new File("hole.png")));
+			hole = new AniObject("hole", xLoc, yLoc, sizeX, sizeY, ImageIO.read(new File("hole2.png")));
 			hole.setVisible(true);
             images.add(hole);
 		} catch (IOException e1) {
