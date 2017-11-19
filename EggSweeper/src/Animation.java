@@ -34,13 +34,13 @@ public class Animation extends JPanel{
 		this.setPreferredSize(new Dimension(ratioW, ratioH));
 		try {
 			BufferedImage beach = ImageIO.read(new File("images/beach.png"));
-			images.add(new AniObject("beach", buffer, buffer, contentPaneSize - (2*buffer), contentPaneSize - (2*buffer), beach));
+			images.add(new AniObject("beach", 0, 0, 1200, 900, beach));
 		} catch (IOException e) {
 			System.out.println("Failed to load beach, trying bin folder");
 		}
 		try {
 			BufferedImage beach = ImageIO.read(new File("beach.png"));
-			images.add(new AniObject("beach", buffer, buffer, contentPaneSize - (2*buffer), contentPaneSize - (2*buffer), beach));
+			images.add(new AniObject("beach", 0, 0, 1200, 900, beach));
 		} catch (IOException e) {
 			System.out.println("Failed to load beach");
 		}
@@ -57,6 +57,38 @@ public class Animation extends JPanel{
 			images.add(new AniObject("board", 100, 254, 1000, 646, board));
 		} catch (IOException e) {
 			System.out.println("Failed to load board");
+		}
+		
+		try {
+			BufferedImage grass = ImageIO.read(new File("images/grass.png"));
+			images.add(new AniObject("grass1", 150,120, 150, 240, grass));
+			images.add(new AniObject("grass2", 0,150, 150, 240, grass));
+			images.add(new AniObject("grass3", 130,200, 150, 240, grass));
+			images.add(new AniObject("grass4", - 25,250, 150, 240, grass));
+			images.add(new AniObject("grass5", 70,300, 150, 240, grass));
+			images.add(new AniObject("grass6", -15,380, 150, 240, grass));
+			images.add(new AniObject("grass7", 100,400, 150, 240, grass));
+			images.add(new AniObject("grass8", 75,480, 150, 240, grass));
+			images.add(new AniObject("grass9", -20,520, 150, 240, grass));
+			images.add(new AniObject("grass10", 30,600, 150, 240, grass));
+		} catch (IOException e) {
+			System.out.println("Failed to load grass, trying bin folder");
+		}
+		
+		try {
+			BufferedImage grass = ImageIO.read(new File("grass.png"));
+			images.add(new AniObject("grass1", 150,120, 150, 240, grass));
+			images.add(new AniObject("grass2", 0,150, 150, 240, grass));
+			images.add(new AniObject("grass3", 130,200, 150, 240, grass));
+			images.add(new AniObject("grass4", - 25,250, 150, 240, grass));
+			images.add(new AniObject("grass5", 70,300, 150, 240, grass));
+			images.add(new AniObject("grass6", -15,380, 150, 240, grass));
+			images.add(new AniObject("grass7", 100,400, 150, 240, grass));
+			images.add(new AniObject("grass8", 75,480, 150, 240, grass));
+			images.add(new AniObject("grass9", -20,520, 150, 240, grass));
+			images.add(new AniObject("grass10", 30,600, 150, 240, grass));
+		} catch (IOException e) {
+			System.out.println("Failed to load grass");
 		}
 		
 		return;
