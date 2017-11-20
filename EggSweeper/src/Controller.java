@@ -264,7 +264,10 @@ public class Controller{
 		Iterator<AniObject> boardItr = animation.getImages().iterator();
 		while (boardItr.hasNext()) {
 			AniObject next = boardItr.next();
-			if (next.toString() == "board") { //|| next.toString() == "beach") {
+			if (next.toString() == "board"  || next.toString() == "beach" || next.toString() == "grass1"
+					|| next.toString() == "grass2" || next.toString() == "grass3" || next.toString() == "grass4" || next.toString() == "grass5"
+					 || next.toString() == "grass6" || next.toString() == "grass7" || next.toString() == "grass8" || next.toString() == "grass9" 
+					 || next.toString() == "grass10") { 
 				next.setVisible(true);
 			}	
 		}

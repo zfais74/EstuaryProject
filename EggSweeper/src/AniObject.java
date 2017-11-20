@@ -1,4 +1,5 @@
 import java.awt.image.BufferedImage;
+import java.util.List;
 
 public class AniObject {
 	
@@ -7,16 +8,16 @@ public class AniObject {
 	private int Y;
 	private int xSize;
 	private int ySize;
-	private BufferedImage image;
+	private List<BufferedImage> images;
 	private boolean visible;
 	
-	AniObject(String objName, int xLoc, int yLoc, int sizeX, int sizeY, BufferedImage objImage){
+	AniObject(String objName, int xLoc, int yLoc, int sizeX, int sizeY, List<BufferedImage> objImage){
 		name = objName;
 		X = xLoc;
 		Y = yLoc;
 		xSize = sizeX;
 		ySize = sizeY;
-		image = objImage;
+		images = objImage;
 		visible = false;
 	}
 	
@@ -56,7 +57,8 @@ public class AniObject {
 		Y = y;
 	}
 	
-	public BufferedImage getImage() {
-		return image;
+	public BufferedImage getImage(int frame) {
+		int imageNum = frame % images.size();
+		return images.get(imageNum);
 	}
 }

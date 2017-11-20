@@ -1,5 +1,8 @@
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 import javax.imageio.ImageIO;
@@ -16,10 +19,13 @@ public class CommandController{
 		gameBoard = new Board(difficulty);
     	player = new Player(Bird.SANDPIPER); 
     	try {
-            AniObject bird = new AniObject("bird", (int) Math.round(1000*(3./5.)), (int) Math.round(1000*(4./5.)), 100, 150, ImageIO.read(new File("bird.png")));
+    		BufferedImage bird = ImageIO.read(new File("images/bird.png"));
+			List<BufferedImage> birdList = new ArrayList<BufferedImage>();
+			birdList.add(bird);
+            AniObject birdObject = new AniObject("bird", (int) Math.round(1000*(3./5.)), (int) Math.round(1000*(4./5.)), 100, 150, birdList);
             for (int step = 0; step < 50; step ++) {
-        		bird.setY(bird.getY() - 10);
-        		System.out.println("Bird Image Location = " + Integer.toString(bird.getY()));
+        		birdObject.setY(birdObject.getY() - 10);
+        		System.out.println("Bird Image Location = " + Integer.toString(birdObject.getY()));
         		Thread.sleep(40);
         	}
     	} catch (IOException e1) {
