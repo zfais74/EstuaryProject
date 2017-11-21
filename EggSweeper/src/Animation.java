@@ -158,4 +158,15 @@ public class Animation extends JPanel{
 
 	}
 
+	public void InstructionAnimation(){
+		AniObject directions;
+		try{
+			directions = new AniObject("dir", 100, 100, 600, 800, ImageIO.read(new File("EggSweeper/images/biirrdd.png")));
+			directions.setVisible(true);
+		}
+		catch (IOException e1){
+			System.out.print("Failure for instructions");
+		}
+	}
+
 }

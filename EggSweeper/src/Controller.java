@@ -103,8 +103,10 @@ public class Controller{
 		frame.validate();
 	}
 	public void DisplayInstructions(){
-		JPanel instructionPanal = new JPanel();
-		instructionPanal.setLayout(new GridBagLayout());
+		JPanel instructionPanel = new JPanel();
+		instructionPanel.setLayout(new GridBagLayout());
+		animation.InstructionAnimation();
+
 
 
 	}
