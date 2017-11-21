@@ -1,6 +1,8 @@
 import enums.Bird;
 import enums.Item;
 
+import java.io.Serializable;
+
 // The Model
 
 /**
@@ -11,7 +13,7 @@ import enums.Item;
  * @author ThisMac
  *
  */
-public class Player{
+public class Player implements Serializable {
 	
 	// Player data
 	private Bird bird;

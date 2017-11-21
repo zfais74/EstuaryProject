@@ -1,12 +1,14 @@
 import enums.Item;
 
+import java.io.Serializable;
+
 // The Model
 
 /**
  * @author Will Ransom
  *
  */
-public class GridSpace{
+public class GridSpace implements Serializable {
 	
 	// GridSpace data
 	private Item contents;
