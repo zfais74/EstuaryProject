@@ -130,6 +130,31 @@ public class Board{
 	}
 	
 	/**
+	 * gets the number of items surrounding a space
+	 * @param xIndex x index of the grid space to be set
+	 * @param yIndex y index of the grid space to be set
+	 * @return items surrounding
+	 */
+	public int countAdjacentItems(int xIndex, int yIndex) {
+		int count = 0;
+		int radius = 1;
+		for(int i = -radius; i <= radius; i++) {
+			for(int j = -radius; j <= radius; j++) {
+				if(i == 0 && j == 0)
+					continue;
+				if(xIndex + i < 0 || xIndex + i >= boardSize)
+					continue;
+				if(yIndex + j < 0 || yIndex + j >= boardSize)
+					continue;
+				GridSpace space = getSpace(xIndex + i, yIndex + j);
+				if(space.getItem() != Item.EMPTY)
+					count++;
+			}
+		}
+		return count;
+	}
+	
+	/**
 	 * getter for number of clicks left
 	 * @return clicks left
 	 */
