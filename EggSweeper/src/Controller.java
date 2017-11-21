@@ -370,7 +370,8 @@ public class Controller implements Serializable {
 	                if (gameBoard.getClicks() == 0){
 	                	endScreen();
 	                }
-	                if ((gameBoard.getClicks() % 3 == 0) && gameBoard.getClicks() != 0) {
+	                //Established getClicks() != 0
+	                else if (gameBoard.getClicks() % 3 == 0) {
 	                	ImageIcon chest = new ImageIcon("images/chest.png");
 	            		Image chestImage = chest.getImage();
 	            		Image resizedChest = chestImage.getScaledInstance( 200, 200,  java.awt.Image.SCALE_SMOOTH ) ;  
@@ -379,7 +380,8 @@ public class Controller implements Serializable {
 	                	chestButton.setEnabled(true);
 	                	
 	                }
-	                if ((gameBoard.getClicks() % 3 == 2) || (gameBoard.getClicks() % 3 == 1)) {
+	                //Established getClicks() % 3 != 0
+	                else {
 	                	chestButton.setIcon(null);
 	                	chestButton.setEnabled(false);
 	                }
