@@ -48,6 +48,7 @@ public class Player{
 	public Item checkSpace(int xIndex, int yIndex, Board board) {
 		System.out.println(" ");
 		System.out.println("Clicked (" + Integer.toString(xIndex) + "," + Integer.toString(yIndex) + ")");
+		System.out.println(String.format("Found %d items", board.countAdjacentItems(xIndex, yIndex)));
 		GridSpace space = board.getSpace(xIndex, yIndex);
 		// if space has already been checked do not continue
 		if (space.getIsCovered() == false) {
