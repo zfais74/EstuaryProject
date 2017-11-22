@@ -6,6 +6,7 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Insets;
+import java.io.Serializable;
 
 import javax.swing.Box;
 import javax.swing.JButton;
@@ -14,7 +15,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-public class ProofOfConcept extends JFrame{
+public class ProofOfConcept extends JFrame implements Serializable {
 	
 	JButton button0, button1, button2, button3, button4, button5, button6, button7, button8, button9;
 	JButton butPlus, butMinus, clearAll;

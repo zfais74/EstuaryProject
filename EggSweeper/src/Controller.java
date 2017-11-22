@@ -8,6 +8,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.File;
+import java.io.Serializable;
 import java.util.Iterator;
 
 import javax.swing.JButton;
@@ -20,7 +21,7 @@ import enums.Item;
 
 // The Controller
 
-public class Controller{
+public class Controller implements Serializable {
 	
 	// The Model
 	Player player;
@@ -66,8 +67,8 @@ public class Controller{
 		//Add components to the start panel instead of the frame's contentPane directly
 		startPanel.add(title, constraints);
 		
-		JButton startButton = new JButton("Start Game");JButton instButton = new JButton("Instructions");
-		startButton.setFont(new Font("Arial", Font.PLAIN, 30));instButton.setFont(new Font("Arial", Font.PLAIN, 30));
+		JButton startButton = new JButton("Start Game");JButton instButton = new JButton("Instructions");JButton loadButton = new JButton("Load");
+		startButton.setFont(new Font("Arial", Font.PLAIN, 30));instButton.setFont(new Font("Arial", Font.PLAIN, 30));loadButton.setFont(new Font("Arial", Font.PLAIN, 30));
 		startButton.setVisible(true);instButton.setVisible(true);
 		
 		//This component will be in the same column, just 3 rows below
@@ -76,6 +77,8 @@ public class Controller{
 		startPanel.add(startButton,constraints);
 		constraints.gridy = 4;
 		startPanel.add(instButton,constraints);
+		constraints.gridy = 5;
+		startPanel.add(loadButton,constraints);
 		
 		startButton.addActionListener(new ActionListener(){
 	        public void actionPerformed(ActionEvent e){

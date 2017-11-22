@@ -4,6 +4,7 @@ import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -14,7 +15,7 @@ import javax.swing.JPanel;
 
 // The View
 
-public class Animation extends JPanel{
+public class Animation extends JPanel implements Serializable{
 	
 	private List<AniObject> images;
 	
