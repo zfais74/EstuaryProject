@@ -105,6 +105,7 @@ public class Controller implements Serializable {
 
 		loadButton.addActionListener((ActionEvent e)-> {
 				Load.LoadGame();
+				//find correct method so that it keeps ticking
 
 			}
 		);
