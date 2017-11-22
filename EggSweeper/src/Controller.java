@@ -3,10 +3,13 @@ import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Image;
+import java.awt.MouseInfo;
+import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
 import java.io.File;
 import java.io.Serializable;
 import java.util.Iterator;
@@ -30,6 +33,9 @@ public class Controller implements Serializable {
 	// The View
 	JFrame frame;
 	Animation animation;
+	
+	// Constant for tick method
+	private int boardBuilt = 0;
 	
 	private GridBagConstraints constraintFactory() {
 		GridBagConstraints constraints = new GridBagConstraints();
@@ -262,6 +268,8 @@ public class Controller implements Serializable {
 		frame.add(boardPanel);
 		frame.validate();
 		
+		AniObject bird = null;
+		AniObject board = null;
 		Iterator<AniObject> boardItr = animation.getImages().iterator();
 		while (boardItr.hasNext()) {
 			AniObject next = boardItr.next();
@@ -270,8 +278,23 @@ public class Controller implements Serializable {
 					 || next.toString() == "grass6" || next.toString() == "grass7" || next.toString() == "grass8" || next.toString() == "grass9" 
 					 || next.toString() == "grass10") { 
 				next.setVisible(true);
-			}	
+			}
+			if (next.toString() == "bird") {
+				bird = next;
+			}
+			if (next.toString() == "board") {
+				board = next;
+			}
 		}
+		
+		double birdRatio = getSizeRatio(bird.getY(), board);
+		bird.setSize(birdRatio);
+		Point mouseLoc = MouseInfo.getPointerInfo().getLocation();
+		bird.setX((int) Math.round(mouseLoc.getX() + 3 - bird.getYSize()/5.));
+		bird.setY((int) Math.round(mouseLoc.getY() - 31 - bird.getYSize()/1.8));
+		
+		final AniObject birdMouse = bird;
+		final AniObject boardMouse = board;
 		
 		frame.getContentPane().addMouseListener(new MouseListener() {
 		    @Override
@@ -408,6 +431,46 @@ public class Controller implements Serializable {
 			}
 		});
 		
+		frame.getContentPane().addMouseMotionListener(new MouseMotionListener() {
+
+			@Override
+			public void mouseDragged(MouseEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void mouseMoved(MouseEvent e) {
+				birdMouse.setX( (int) Math.round(e.getX() - birdMouse.getYSize()/8.));
+				birdMouse.setY((int) Math.round(e.getY() - birdMouse.getYSize()/1.8));
+				double newBirdRatio = getSizeRatio(birdMouse.getY(), boardMouse);
+				birdMouse.setSize(newBirdRatio);
+				frame.repaint();
+				
+			}
+			
+		});
+		
+	}
+	
+	static double getSizeRatio(int yLoc, AniObject boardImage) {
+		double ratio;
+		double[] LineSlopes = {-0.3115, -0.2492, -0.1869, -0.1246, -0.0623, 0, 0.0623, 0.1246, 0.1869, 0.2492, 0.3115};
+		int[] LineTopX = {201, 261, 320, 380, 440, 500, 560, 620, 680, 739, 799};
+		
+		if (yLoc <= boardImage.getY()) {
+			yLoc = boardImage.getY();
+		}
+		
+		yLoc = yLoc - boardImage.getY();
+		yLoc = (int) Math.round(yLoc*(1000./boardImage.getXSize()));
+		
+		double bottomXWidth = (LineTopX[1] + (LineSlopes[1] * boardImage.getYSize())) - (LineTopX[0] + (LineSlopes[0] * boardImage.getYSize()));
+		double locXWidth = (LineTopX[1] + (LineSlopes[1] * yLoc)) - (LineTopX[0] + (LineSlopes[0] * yLoc));
+		
+		ratio = locXWidth/bottomXWidth;
+		
+		return ratio;
 	}
 	
 	private int[] windowToGrid(int xLoc, int yLoc) {
@@ -591,28 +654,32 @@ public class Controller implements Serializable {
 	}
 	
 	public static void tick(Animation animation, Controller controller) {
-		Iterator<AniObject> itrMigration = animation.getImages().iterator();
-		boolean buildBoard = false;
-		while (itrMigration.hasNext()) {
-			AniObject aniObject = itrMigration.next();
-			if (aniObject.toString() == "bird") {
-				aniObject.setY(aniObject.getY() - 10);
-				if (aniObject.getY() == animation.contentPaneSize/5) {
-					buildBoard = true;
-					break;
+		if (controller.boardBuilt == 0) {
+			Iterator<AniObject> itrMigration = animation.getImages().iterator();
+			while (itrMigration.hasNext()) {
+				AniObject aniObject = itrMigration.next();
+				if (aniObject.toString() == "bird") {
+					aniObject.setY(aniObject.getY() - 10);
+					if (aniObject.getY() == animation.contentPaneSize/5) {
+						controller.boardBuilt = 1;
+						break;
+					}
 				}
 			}
 		}
-		if (buildBoard == true) {
-			buildBoard = false;
+		else if (controller.boardBuilt == 1) {
+			controller.boardBuilt = 2;
 			Iterator<AniObject> itrRemove = animation.getImages().iterator();
 			while (itrRemove.hasNext()) {
 				AniObject aniObjectRemove = itrRemove.next();
-				if ((aniObjectRemove.toString() == "US") || (aniObjectRemove.toString() == "bird")) {
+				if (aniObjectRemove.toString() == "US") {
 					itrRemove.remove();
 				}
 			}
 			controller.buildBoard();
+		}
+		else {
+			return;
 		}
 	}
 	
