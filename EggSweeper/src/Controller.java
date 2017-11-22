@@ -273,16 +273,18 @@ public class Controller implements Serializable {
 		Iterator<AniObject> boardItr = animation.getImages().iterator();
 		while (boardItr.hasNext()) {
 			AniObject next = boardItr.next();
-			if (next.toString() == "board"  || next.toString() == "beach" || next.toString() == "grass1"
-					|| next.toString() == "grass2" || next.toString() == "grass3" || next.toString() == "grass4" || next.toString() == "grass5"
-					 || next.toString() == "grass6" || next.toString() == "grass7" || next.toString() == "grass8" || next.toString() == "grass9" 
-					 || next.toString() == "grass10") { 
+			if (next.toString().compareToIgnoreCase("board") == 0  || next.toString().compareToIgnoreCase("beach") == 0 || 
+					next.toString().compareToIgnoreCase("grass1") == 0 || next.toString().compareToIgnoreCase("grass2") == 0 ||
+					next.toString().compareToIgnoreCase("grass3") == 0 || next.toString().compareToIgnoreCase("grass4") == 0 || 
+					next.toString().compareToIgnoreCase("grass5") == 0 || next.toString().compareToIgnoreCase("grass6") == 0 || 
+					next.toString().compareToIgnoreCase("grass7") == 0 || next.toString().compareToIgnoreCase("grass8") == 0 || 
+					next.toString().compareToIgnoreCase("grass9") == 0 || next.toString().compareToIgnoreCase("grass10") == 0) { 
 				next.setVisible(true);
 			}
-			if (next.toString() == "bird") {
+			if (next.toString().compareToIgnoreCase("bird") == 0) {
 				bird = next;
 			}
-			if (next.toString() == "board") {
+			if (next.toString().compareToIgnoreCase("board") == 0) {
 				board = next;
 			}
 		}
@@ -481,7 +483,7 @@ public class Controller implements Serializable {
 		AniObject boardImage = null;
 		while (boardItr.hasNext()) {
 			boardImage = boardItr.next();
-			if (boardImage.toString() == "board") {
+			if (boardImage.toString().compareToIgnoreCase("board") == 0) {
 				break;
 			}	
 		}
@@ -658,7 +660,7 @@ public class Controller implements Serializable {
 			Iterator<AniObject> itrMigration = animation.getImages().iterator();
 			while (itrMigration.hasNext()) {
 				AniObject aniObject = itrMigration.next();
-				if (aniObject.toString() == "bird") {
+				if (aniObject.toString().compareToIgnoreCase("bird") == 0) {
 					aniObject.setY(aniObject.getY() - 10);
 					if (aniObject.getY() == animation.contentPaneSize/5) {
 						controller.boardBuilt = 1;
@@ -672,7 +674,7 @@ public class Controller implements Serializable {
 			Iterator<AniObject> itrRemove = animation.getImages().iterator();
 			while (itrRemove.hasNext()) {
 				AniObject aniObjectRemove = itrRemove.next();
-				if (aniObjectRemove.toString() == "US") {
+				if (aniObjectRemove.toString().compareToIgnoreCase("US") == 0) {
 					itrRemove.remove();
 				}
 			}

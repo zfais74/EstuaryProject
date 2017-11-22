@@ -147,7 +147,7 @@ public class Animation extends JPanel implements Serializable{
 			Iterator<AniObject> holeBirdItr = images.iterator();
 			while (holeBirdItr.hasNext()) {
 				AniObject next = holeBirdItr.next();
-				if (next.toString() == "bird") {
+				if (next.toString().compareToIgnoreCase("bird") == 0) {
 					break;
 				}
 				j++;
@@ -170,7 +170,7 @@ public class Animation extends JPanel implements Serializable{
 			Iterator<AniObject> holeBirdItr = images.iterator();
 			while (holeBirdItr.hasNext()) {
 				AniObject next = holeBirdItr.next();
-				if (next.toString() == "bird") {
+				if (next.toString().compareToIgnoreCase("bird") == 0) {
 					break;
 				}
 				j++;
