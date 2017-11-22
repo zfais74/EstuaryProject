@@ -1,6 +1,7 @@
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -9,7 +10,7 @@ import javax.imageio.ImageIO;
 
 import enums.Bird;
 
-public class CommandController{
+public class CommandController implements Serializable {
 	
 	// The Model
 	Player player;

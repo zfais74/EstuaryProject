@@ -1,5 +1,6 @@
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -16,7 +17,7 @@ import enums.Item;
  */
 
 
-public class Board{
+public class Board implements Serializable {
 	
 	// the GameBoard is an empty 2D array of GridSpace pointers
 	private GridSpace[][] board = new GridSpace[boardSize][boardSize];
