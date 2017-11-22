@@ -10,8 +10,6 @@ import java.awt.event.MouseListener;
 import java.io.File;
 import java.util.Iterator;
 
-import javax.imageio.ImageIO;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -369,11 +367,7 @@ public class Controller{
 	                }
 	                //Established getClicks() != 0
 	                else if (gameBoard.getClicks() % 3 == 0) {
-	                	ImageIcon chest = new ImageIcon("images/chest.png");
-	            		Image chestImage = chest.getImage();
-	            		Image resizedChest = chestImage.getScaledInstance( 200, 200,  java.awt.Image.SCALE_SMOOTH ) ;  
-	            		chest = new ImageIcon(resizedChest);
-	                	chestButton.setIcon(chest);
+	                	chestButton.setIcon(animation.getChestIcon());
 	                	chestButton.setEnabled(true);
 	                	
 	                }

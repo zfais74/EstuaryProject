@@ -1,5 +1,6 @@
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -8,6 +9,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 
 // The View
@@ -222,7 +224,13 @@ public class Animation extends JPanel{
 			System.out.println("failed to load US or Bird");
 		}
 		return;
-		
+	}
+	
+	public ImageIcon getChestIcon(){
+		ImageIcon chest = new ImageIcon("images/chest.png");
+		Image chestImage = chest.getImage();
+		Image resizedChest = chestImage.getScaledInstance( 200, 200,  java.awt.Image.SCALE_SMOOTH ) ;  
+		return new ImageIcon(resizedChest);
 	}
 	
 }
