@@ -7,6 +7,8 @@ public class AniObject implements Serializable {
 	private String name;
 	private int X;
 	private int Y;
+	private int origXSize;
+	private int origYSize;
 	private int xSize;
 	private int ySize;
 	private List<BufferedImage> images;
@@ -16,6 +18,8 @@ public class AniObject implements Serializable {
 		name = objName;
 		X = xLoc;
 		Y = yLoc;
+		origXSize = sizeX;
+		origYSize = sizeY;
 		xSize = sizeX;
 		ySize = sizeY;
 		images = objImage;
@@ -40,6 +44,19 @@ public class AniObject implements Serializable {
 	
 	public int getYSize() {
 		return ySize;
+	}
+	
+	public void setSize(double newRatio) {
+		xSize = (int) (origXSize * newRatio);
+		ySize = (int) (origYSize * newRatio);
+	}
+	
+	public int getOrigXSize() {
+		return origXSize;
+	}
+	
+	public int getOrigYSize() {
+		return origYSize;
 	}
 	
 	public int getX() {
