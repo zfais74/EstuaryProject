@@ -16,7 +16,10 @@ public enum Item {
 	/**
 	 * Trash indicates a grid space is holding trash
 	 */
-	TRASH, 
+	//TRASH,
+	TWIG,
+	BOTTLE,
+	PESTICIDE,
 	/**
 	 * Already checked indicates the player has already checked the grid space
 	 */

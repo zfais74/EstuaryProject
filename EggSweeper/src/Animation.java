@@ -25,11 +25,11 @@ public class Animation extends JPanel implements Serializable{
 	
 	// constants for placing buttons
 	public int buffer = 50;
-	public int gridButtonSize = 45;
+	public int gridButtonSize = 50;
 	public int generalButtonSize = 200;
 	public int contentPaneSize = 900;
-	public int ratioW = 1600;
-	public int ratioH = 900;
+	public int ratioW = 1920;
+	public int ratioH = 1080;
 	
 	private int frame = 0;
 	
@@ -42,18 +42,20 @@ public class Animation extends JPanel implements Serializable{
 		images = new ArrayList<AniObject>();
 		this.setPreferredSize(new Dimension(ratioW, ratioH));
 		try {
-			BufferedImage beach = ImageIO.read(new File("images/beach.png"));
+			BufferedImage beach = ImageIO.read(new File("images/beach-Yat.png"));
 			List<BufferedImage> beachList = new ArrayList<BufferedImage>();
 			beachList.add(beach);
-			images.add(new AniObject("beach", 0, 0, 1200, 900, beachList));
+			images.add(new AniObject("beach", 0, 0, 1920, 1080, beachList)); //for 1920x1080 beach-Yat
+			//images.add(new AniObject("beach", 0, 0, 1200, 900, beachList));
 		} catch (IOException e) {
 			System.out.println("Failed to load beach, trying bin folder");
 		}
 		try {
-			BufferedImage beach = ImageIO.read(new File("beach.png"));
+			BufferedImage beach = ImageIO.read(new File("beach-Yat.png"));
 			List<BufferedImage> beachList = new ArrayList<BufferedImage>();
 			beachList.add(beach);
-			images.add(new AniObject("beach", 0, 0, 1200, 900, beachList));
+			images.add(new AniObject("beach", 0, 0, 1920, 1080, beachList)); //for 1920x1080 beach-Yat
+			//images.add(new AniObject("beach", 0, 0, 1200, 900, beachList));
 		} catch (IOException e) {
 			System.out.println("Failed to load beach");
 		}
@@ -62,7 +64,8 @@ public class Animation extends JPanel implements Serializable{
 			BufferedImage board = ImageIO.read(new File("images/board.png"));
 			List<BufferedImage> boardList = new ArrayList<BufferedImage>();
 			boardList.add(board);
-			AniObject boardImg = new AniObject("board", 100,254, 1000, 646, boardList);
+			//AniObject boardImg = new AniObject("board", 100,254, 1000, 646, boardList);
+			AniObject boardImg = new AniObject("board", 155,254, 1200, 820, boardList); //for 1920x1080 beach-Yat
 			images.add(boardImg);
 			boardImage = boardImg;
 		} catch (IOException e) {
@@ -73,7 +76,8 @@ public class Animation extends JPanel implements Serializable{
 			BufferedImage board = ImageIO.read(new File("board.png"));
 			List<BufferedImage> boardList = new ArrayList<BufferedImage>();
 			boardList.add(board);
-			AniObject boardImg = new AniObject("board", 100,254, 1000, 646, boardList);
+			//AniObject boardImg = new AniObject("board", 100,254, 1000, 646, boardList);
+			AniObject boardImg = new AniObject("board", 155,254, 1200, 820, boardList); //for 1920x1080 beach-Yat
 			images.add(boardImg);
 			boardImage = boardImg;
 		} catch (IOException e) {
@@ -85,16 +89,26 @@ public class Animation extends JPanel implements Serializable{
 			List<BufferedImage> grassList = new ArrayList<BufferedImage>();
 			grassList.add(grass);
 			int size0 = 250;
-			images.add(new AniObject("grass1", 180, 150, (int) (size0*Controller.getSizeRatio(150, boardImage)), (int) (size0*Controller.getSizeRatio(150, boardImage)), grassList));
-			images.add(new AniObject("grass2", 0, 150, (int) (size0*Controller.getSizeRatio(150, boardImage)), (int) (size0*Controller.getSizeRatio(150, boardImage)), grassList));
-			images.add(new AniObject("grass3", 130, 220, (int) (size0*Controller.getSizeRatio(220, boardImage)), (int) (size0*Controller.getSizeRatio(220, boardImage)), grassList));
-			images.add(new AniObject("grass4", - 25, 250, (int) (size0*Controller.getSizeRatio(250, boardImage)), (int) (size0*Controller.getSizeRatio(250, boardImage)), grassList));
-			images.add(new AniObject("grass5", 70, 300, (int) (size0*Controller.getSizeRatio(300, boardImage)), (int) (size0*Controller.getSizeRatio(300, boardImage)), grassList));
-			images.add(new AniObject("grass6", -15, 380, (int) (size0*Controller.getSizeRatio(380, boardImage)), (int) (size0*Controller.getSizeRatio(380, boardImage)), grassList));
-			images.add(new AniObject("grass7", 70, 400, (int) (size0*Controller.getSizeRatio(400, boardImage)), (int) (size0*Controller.getSizeRatio(400, boardImage)), grassList));
-			images.add(new AniObject("grass8", 45, 480, (int) (size0*Controller.getSizeRatio(480, boardImage)), (int) (size0*Controller.getSizeRatio(480, boardImage)), grassList));
-			images.add(new AniObject("grass9", -40, 520, (int) (size0*Controller.getSizeRatio(520, boardImage)), (int) (size0*Controller.getSizeRatio(520, boardImage)), grassList));
-			images.add(new AniObject("grass10", 0, 600, (int) (size0*Controller.getSizeRatio(600, boardImage)), (int) (size0*Controller.getSizeRatio(600, boardImage)), grassList));
+			images.add(new AniObject("grass1", 1150, 200, (int) (size0*Controller.getSizeRatio(150, boardImage)), (int) (size0*Controller.getSizeRatio(150, boardImage)), grassList));
+			images.add(new AniObject("grass1", 1300, 400, (int) (size0*Controller.getSizeRatio(150, boardImage)), (int) (size0*Controller.getSizeRatio(150, boardImage)), grassList));
+			images.add(new AniObject("grass1", 1220, 260, (int) (size0*Controller.getSizeRatio(150, boardImage)), (int) (size0*Controller.getSizeRatio(150, boardImage)), grassList));
+			images.add(new AniObject("grass1", 1270, 500, (int) (size0*Controller.getSizeRatio(150, boardImage)), (int) (size0*Controller.getSizeRatio(150, boardImage)), grassList));
+			images.add(new AniObject("grass1", 1400, 600, (int) (size0*Controller.getSizeRatio(150, boardImage)), (int) (size0*Controller.getSizeRatio(150, boardImage)), grassList));
+			images.add(new AniObject("grass1", 1400, 300, (int) (size0*Controller.getSizeRatio(150, boardImage)), (int) (size0*Controller.getSizeRatio(150, boardImage)), grassList));
+			images.add(new AniObject("grass1", 1370, 900, (int) (size0*Controller.getSizeRatio(150, boardImage)), (int) (size0*Controller.getSizeRatio(150, boardImage)), grassList));
+			images.add(new AniObject("grass1", 1400, 210, (int) (size0*Controller.getSizeRatio(150, boardImage)), (int) (size0*Controller.getSizeRatio(150, boardImage)), grassList));
+			images.add(new AniObject("grass1", 1390, 700, (int) (size0*Controller.getSizeRatio(150, boardImage)), (int) (size0*Controller.getSizeRatio(150, boardImage)), grassList));
+			
+//			images.add(new AniObject("grass1", 180, 150, (int) (size0*Controller.getSizeRatio(150, boardImage)), (int) (size0*Controller.getSizeRatio(150, boardImage)), grassList));
+//			images.add(new AniObject("grass2", 0, 150, (int) (size0*Controller.getSizeRatio(150, boardImage)), (int) (size0*Controller.getSizeRatio(150, boardImage)), grassList));
+//			images.add(new AniObject("grass3", 130, 220, (int) (size0*Controller.getSizeRatio(220, boardImage)), (int) (size0*Controller.getSizeRatio(220, boardImage)), grassList));
+//			images.add(new AniObject("grass4", - 25, 250, (int) (size0*Controller.getSizeRatio(250, boardImage)), (int) (size0*Controller.getSizeRatio(250, boardImage)), grassList));
+//			images.add(new AniObject("grass5", 70, 300, (int) (size0*Controller.getSizeRatio(300, boardImage)), (int) (size0*Controller.getSizeRatio(300, boardImage)), grassList));
+//			images.add(new AniObject("grass6", -15, 380, (int) (size0*Controller.getSizeRatio(380, boardImage)), (int) (size0*Controller.getSizeRatio(380, boardImage)), grassList));
+//			images.add(new AniObject("grass7", 70, 400, (int) (size0*Controller.getSizeRatio(400, boardImage)), (int) (size0*Controller.getSizeRatio(400, boardImage)), grassList));
+//			images.add(new AniObject("grass8", 45, 480, (int) (size0*Controller.getSizeRatio(480, boardImage)), (int) (size0*Controller.getSizeRatio(480, boardImage)), grassList));
+//			images.add(new AniObject("grass9", -40, 520, (int) (size0*Controller.getSizeRatio(520, boardImage)), (int) (size0*Controller.getSizeRatio(520, boardImage)), grassList));
+//			images.add(new AniObject("grass10", 0, 600, (int) (size0*Controller.getSizeRatio(600, boardImage)), (int) (size0*Controller.getSizeRatio(600, boardImage)), grassList));
 		} catch (IOException e) {
 			System.out.println("Failed to load grass, trying bin folder");
 		}
@@ -104,16 +118,26 @@ public class Animation extends JPanel implements Serializable{
 			List<BufferedImage> grassList = new ArrayList<BufferedImage>();
 			grassList.add(grass);
 			int size0 = 250;
-			images.add(new AniObject("grass1", 180, 150, (int) (size0*Controller.getSizeRatio(150, boardImage)), (int) (size0*Controller.getSizeRatio(150, boardImage)), grassList));
-			images.add(new AniObject("grass2", 0, 150, (int) (size0*Controller.getSizeRatio(150, boardImage)), (int) (size0*Controller.getSizeRatio(150, boardImage)), grassList));
-			images.add(new AniObject("grass3", 130, 220, (int) (size0*Controller.getSizeRatio(220, boardImage)), (int) (size0*Controller.getSizeRatio(220, boardImage)), grassList));
-			images.add(new AniObject("grass4", - 25, 250, (int) (size0*Controller.getSizeRatio(250, boardImage)), (int) (size0*Controller.getSizeRatio(250, boardImage)), grassList));
-			images.add(new AniObject("grass5", 70, 300, (int) (size0*Controller.getSizeRatio(300, boardImage)), (int) (size0*Controller.getSizeRatio(300, boardImage)), grassList));
-			images.add(new AniObject("grass6", -15, 380, (int) (size0*Controller.getSizeRatio(380, boardImage)), (int) (size0*Controller.getSizeRatio(380, boardImage)), grassList));
-			images.add(new AniObject("grass7", 70, 400, (int) (size0*Controller.getSizeRatio(400, boardImage)), (int) (size0*Controller.getSizeRatio(400, boardImage)), grassList));
-			images.add(new AniObject("grass8", 45, 480, (int) (size0*Controller.getSizeRatio(480, boardImage)), (int) (size0*Controller.getSizeRatio(480, boardImage)), grassList));
-			images.add(new AniObject("grass9", -40, 520, (int) (size0*Controller.getSizeRatio(520, boardImage)), (int) (size0*Controller.getSizeRatio(520, boardImage)), grassList));
-			images.add(new AniObject("grass10", 0, 600, (int) (size0*Controller.getSizeRatio(600, boardImage)), (int) (size0*Controller.getSizeRatio(600, boardImage)), grassList));
+			images.add(new AniObject("grass1", 1150, 200, (int) (size0*Controller.getSizeRatio(150, boardImage)), (int) (size0*Controller.getSizeRatio(150, boardImage)), grassList));
+			images.add(new AniObject("grass1", 1300, 400, (int) (size0*Controller.getSizeRatio(150, boardImage)), (int) (size0*Controller.getSizeRatio(150, boardImage)), grassList));
+			images.add(new AniObject("grass1", 1220, 260, (int) (size0*Controller.getSizeRatio(150, boardImage)), (int) (size0*Controller.getSizeRatio(150, boardImage)), grassList));
+			images.add(new AniObject("grass1", 1270, 500, (int) (size0*Controller.getSizeRatio(150, boardImage)), (int) (size0*Controller.getSizeRatio(150, boardImage)), grassList));
+			images.add(new AniObject("grass1", 1400, 600, (int) (size0*Controller.getSizeRatio(150, boardImage)), (int) (size0*Controller.getSizeRatio(150, boardImage)), grassList));
+			images.add(new AniObject("grass1", 1400, 300, (int) (size0*Controller.getSizeRatio(150, boardImage)), (int) (size0*Controller.getSizeRatio(150, boardImage)), grassList));
+			images.add(new AniObject("grass1", 1370, 900, (int) (size0*Controller.getSizeRatio(150, boardImage)), (int) (size0*Controller.getSizeRatio(150, boardImage)), grassList));
+			images.add(new AniObject("grass1", 1400, 210, (int) (size0*Controller.getSizeRatio(150, boardImage)), (int) (size0*Controller.getSizeRatio(150, boardImage)), grassList));
+			images.add(new AniObject("grass1", 1390, 700, (int) (size0*Controller.getSizeRatio(150, boardImage)), (int) (size0*Controller.getSizeRatio(150, boardImage)), grassList));
+			
+//			images.add(new AniObject("grass1", 180, 150, (int) (size0*Controller.getSizeRatio(150, boardImage)), (int) (size0*Controller.getSizeRatio(150, boardImage)), grassList));
+//			images.add(new AniObject("grass2", 0, 150, (int) (size0*Controller.getSizeRatio(150, boardImage)), (int) (size0*Controller.getSizeRatio(150, boardImage)), grassList));
+//			images.add(new AniObject("grass3", 130, 220, (int) (size0*Controller.getSizeRatio(220, boardImage)), (int) (size0*Controller.getSizeRatio(220, boardImage)), grassList));
+//			images.add(new AniObject("grass4", - 25, 250, (int) (size0*Controller.getSizeRatio(250, boardImage)), (int) (size0*Controller.getSizeRatio(250, boardImage)), grassList));
+//			images.add(new AniObject("grass5", 70, 300, (int) (size0*Controller.getSizeRatio(300, boardImage)), (int) (size0*Controller.getSizeRatio(300, boardImage)), grassList));
+//			images.add(new AniObject("grass6", -15, 380, (int) (size0*Controller.getSizeRatio(380, boardImage)), (int) (size0*Controller.getSizeRatio(380, boardImage)), grassList));
+//			images.add(new AniObject("grass7", 70, 400, (int) (size0*Controller.getSizeRatio(400, boardImage)), (int) (size0*Controller.getSizeRatio(400, boardImage)), grassList));
+//			images.add(new AniObject("grass8", 45, 480, (int) (size0*Controller.getSizeRatio(480, boardImage)), (int) (size0*Controller.getSizeRatio(480, boardImage)), grassList));
+//			images.add(new AniObject("grass9", -40, 520, (int) (size0*Controller.getSizeRatio(520, boardImage)), (int) (size0*Controller.getSizeRatio(520, boardImage)), grassList));
+//			images.add(new AniObject("grass10", 0, 600, (int) (size0*Controller.getSizeRatio(600, boardImage)), (int) (size0*Controller.getSizeRatio(600, boardImage)), grassList));
 		} catch (IOException e) {
 			System.out.println("Failed to load grass");
 		}
@@ -214,10 +238,19 @@ public class Animation extends JPanel implements Serializable{
 
 	public void migrationAnimation() {
 		try {			
-			BufferedImage US = ImageIO.read(new File("images/US.png"));
+			BufferedImage ocean = ImageIO.read(new File("images/water.png"));
+			List<BufferedImage> oceanList = new ArrayList<BufferedImage>();
+			oceanList.add(ocean);
+			AniObject oceanObject = new AniObject("ocean", 0, 0, 1920, 1080, oceanList);
+			oceanObject.setVisible(true);
+			images.add(oceanObject);
+			
+			//BufferedImage US = ImageIO.read(new File("images/US.png"));
+			BufferedImage US = ImageIO.read(new File("images/map.png"));
 			List<BufferedImage> USList = new ArrayList<BufferedImage>();
 			USList.add(US);
-			AniObject USObject = new AniObject("US", 100, 100, 450, 600, USList);
+			//AniObject USObject = new AniObject("US", 100, 100, 450, 600, USList);
+			AniObject USObject = new AniObject("US", 400, 200, 450, 600, USList);
 			USObject.setVisible(true);
 			images.add(USObject);
 			

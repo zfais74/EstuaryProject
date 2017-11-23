@@ -68,7 +68,7 @@ public class Player implements Serializable {
 		switch (item) {
 			case EGG:
 				// up player score
-				score++;;
+				score = score + 100;;
 				eggs++;
 				if (board.getClicks() == 0) {
 					System.out.println("Out of clicks!");
@@ -81,7 +81,7 @@ public class Player implements Serializable {
 					System.out.println("Remaining clicks: " + Integer.toString(board.getClicks()));
 				}
 				return Item.EGG;
-			case TRASH:
+			/*case TRASH:
 				// reduce player score
 				score--;
 				trash++;
@@ -96,7 +96,55 @@ public class Player implements Serializable {
 					System.out.println("Score: " + Integer.toString(score));
 					System.out.println("Remaining clicks: " + Integer.toString(board.getClicks()));
 				}
-				return Item.TRASH;
+				return Item.TRASH;*/
+			case TWIG:
+				// reduce player score
+				score = score - 10;
+				trash++;
+				if (board.getClicks() == 0) {
+					System.out.println(" ");
+					System.out.println("Out of clicks!");
+					System.out.println("Your score is: " + Integer.toString(score));
+					
+				}
+				else {
+					System.out.println("Ate some twig :(");
+					System.out.println("Score: " + Integer.toString(score));
+					System.out.println("Remaining clicks: " + Integer.toString(board.getClicks()));
+				}
+				return Item.TWIG;
+			case BOTTLE:
+				// reduce player score
+				score = score - 25;
+				trash++;
+				if (board.getClicks() == 0) {
+					System.out.println(" ");
+					System.out.println("Out of clicks!");
+					System.out.println("Your score is: " + Integer.toString(score));
+					
+				}
+				else {
+					System.out.println("Ate some bottle :(");
+					System.out.println("Score: " + Integer.toString(score));
+					System.out.println("Remaining clicks: " + Integer.toString(board.getClicks()));
+				}
+				return Item.BOTTLE;
+			case PESTICIDE:
+				// reduce player score
+				score = score - 50;;
+				trash++;
+				if (board.getClicks() == 0) {
+					System.out.println(" ");
+					System.out.println("Out of clicks!");
+					System.out.println("Your score is: " + Integer.toString(score));
+					
+				}
+				else {
+					System.out.println("Ate some pesticide :(");
+					System.out.println("Score: " + Integer.toString(score));
+					System.out.println("Remaining clicks: " + Integer.toString(board.getClicks()));
+				}
+				return Item.PESTICIDE;
 			case EMPTY:
 				if (board.getClicks() == 0) {
 					System.out.println("Out of clicks!");
