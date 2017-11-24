@@ -214,4 +214,8 @@ public class Player implements Serializable {
 		return this.yLoc;
 	}
 	
+	public void setPowerupStatus(boolean playerHasPowerup) {
+		this.hasPowerUp = playerHasPowerup;
+	}
+	
 }
