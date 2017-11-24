@@ -361,7 +361,7 @@ public class Controller implements Serializable {
 		        	constraints.gridy = 0;
 		        	constraints.anchor = GridBagConstraints.EAST;
 		        	
-	        		if (item == Item.TRASH) {
+	        		if (item == Item.TWIG || item == Item.BOTTLE || item == Item.PESTICIDE) { //(item == Item.TRASH) {
 		        		JLabel ateSome = new JLabel("Ate Some Trash :(");
 		        		ateSome.setFont(new Font("Arial", Font.PLAIN, 40));
 		        		ateSome.setOpaque(false);
@@ -496,6 +496,9 @@ public class Controller implements Serializable {
 		double[] LineSlopes = {-0.3115, -0.2492, -0.1869, -0.1246, -0.0623, 0, 0.0623, 0.1246, 0.1869, 0.2492, 0.3115};
 		int[] LineTopX = {201, 261, 320, 380, 440, 500, 560, 620, 680, 739, 799};
 		int[] LineHeights = {0, 51, 104, 160, 219, 281, 346, 415, 488, 564, 644};
+		//double[] LineSlopes = {}; //1920x1080 beach-Yat
+		//int[] LineTopX = {240, 300, 320, 380, 440, 500, 560, 620, 680, 739, 799}; //1920x1080 beach-Yat
+		//int[] LineHeights = {0, 82, 164, 246, 328, 410, 492, 574, 656, 738, 820}; //1920x1080 beach-Yat
 		
 		xLoc = xLoc - imageXloc;
 		yLoc = yLoc - imageYloc;
@@ -629,9 +632,19 @@ public class Controller implements Serializable {
 		JLabel scoreLabel = new JLabel("so your score is " + Integer.toString(player.getScore()) + "!!!");
 		scoreLabel.setFont(new Font("Arial", Font.PLAIN, 60));
 		
+		JButton againButton = new JButton("Play Again");
+		againButton.setFont(new Font("Arial", Font.PLAIN, 30));
+		
 		JButton quitButton = new JButton("Quit");
 		quitButton.setFont(new Font("Arial", Font.PLAIN, 30));
 
+		againButton.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e) {
+				//startScreen();
+				
+			}
+		});
+		
 		quitButton.addActionListener(new ActionListener(){
 	        public void actionPerformed(ActionEvent e){
 	        	
@@ -647,6 +660,8 @@ public class Controller implements Serializable {
 		constraints.gridy = 2*width;
 		endPanel.add(scoreLabel, constraints);
 		constraints.gridy = 3*width;
+		endPanel.add(againButton, constraints);
+		constraints.gridy = 4* width;
 		endPanel.add(quitButton, constraints);
 		
 		//Add and repaint
@@ -675,6 +690,8 @@ public class Controller implements Serializable {
 			while (itrRemove.hasNext()) {
 				AniObject aniObjectRemove = itrRemove.next();
 				if (aniObjectRemove.toString().compareToIgnoreCase("US") == 0) {
+					itrRemove.remove();
+				}else if (aniObjectRemove.toString().compareToIgnoreCase("ocean") == 0) {
 					itrRemove.remove();
 				}
 			}

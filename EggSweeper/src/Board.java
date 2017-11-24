@@ -41,6 +41,17 @@ public class Board implements Serializable {
 	private double easyEggRatio = randConst * (9./10.);
 	private double mediumEggRatio = randConst * (8.5/10.);
 	private double hardEggRatio = randConst * (8./10.);
+	
+	private double easyTwigRatio = (randConst - easyEggRatio) * (5./10.);
+	private double easyBottleRatio = (randConst - easyEggRatio) * (3./10.);
+	private double easyPesticideRatio = (randConst - easyEggRatio) * (2./10.);
+	private double mediumTwigRatio = (randConst - easyEggRatio) * (4./10.);
+	private double mediumBottleRatio = (randConst - easyEggRatio) * (4./10.);
+	private double mediumPesticideRatio = (randConst - easyEggRatio) * (2./10.);
+	private double hardTwigRatio = (randConst - easyEggRatio) * (2./10.);
+	private double hardBottleRatio = (randConst - easyEggRatio) * (3./10.);
+	private double hardPesticideRatio = (randConst - easyEggRatio) * (5./10.);
+	
 	private List<String> questionsAsked = new ArrayList<String>();
 	private String answer;
 	
@@ -72,37 +83,64 @@ public class Board implements Serializable {
 				switch (difficulty) {
 					// on EASY Difficulty, 30% EMPTY, 60% EGGs, 10% TRASH
 					case EASY:
-						if (randomInt < (emptyRatio)) {
+						if (randomInt < (easyPesticideRatio)) {
+							spaceItem = Item.PESTICIDE;
+						}
+						else if (randomInt < (easyBottleRatio)) {
+							spaceItem = Item.BOTTLE;
+						}
+						else if (randomInt < (easyTwigRatio)) {
+							spaceItem = Item.TWIG;
+						}
+						else if (randomInt < (emptyRatio)) {
 							spaceItem = Item.EMPTY;
 						}
 						else if (randomInt < (easyEggRatio)) {
 							spaceItem = Item.EGG;
-						}
+						}/*
 						else {
-							spaceItem = Item.TRASH;
-						}
+							spaceItem = Item.TWIG;
+						}*/
 						break;
 					case MEDIUM:
-						if (randomInt < (emptyRatio)) {
+						if (randomInt < (mediumPesticideRatio)) {
+							spaceItem = Item.PESTICIDE;
+						}
+						else if (randomInt < (mediumBottleRatio)) {
+							spaceItem = Item.BOTTLE;
+						}
+						else if (randomInt < (mediumTwigRatio)) {
+							spaceItem = Item.TWIG;
+						}
+						else if (randomInt < (emptyRatio)) {
 							spaceItem = Item.EMPTY;
 						}
 						else if (randomInt < (mediumEggRatio)) {
 							spaceItem = Item.EGG;
 						}
-						else {
-							spaceItem = Item.TRASH;
-						}
+//						else {
+//							spaceItem = Item.TWIG;
+//						}
 						break;
 					case HARD:
-						if (randomInt < (emptyRatio)) {
+						if (randomInt < (hardTwigRatio)) {
+							spaceItem = Item.TWIG;
+						}
+						else if (randomInt < (hardBottleRatio)) {
+							spaceItem = Item.BOTTLE;
+						}
+						else if (randomInt < (hardPesticideRatio)) {
+							spaceItem = Item.PESTICIDE;
+						}
+						else if (randomInt < (emptyRatio)) {
 							spaceItem = Item.EMPTY;
 						}
 						else if (randomInt < (hardEggRatio)) {
 							spaceItem = Item.EGG;
 						}
-						else {
-							spaceItem = Item.TRASH;
-						}
+//						else {
+//							spaceItem = Item.TWIG;
+//						}
 						break;
 				}
 				board[i][j] = new GridSpace(spaceItem);
