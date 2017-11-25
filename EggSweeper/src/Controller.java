@@ -1,7 +1,10 @@
+import java.awt.CardLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.MouseInfo;
 import java.awt.Point;
@@ -11,8 +14,11 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.Serializable;
+import java.util.Collections;
 import java.util.Iterator;
+import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -33,6 +39,8 @@ public class Controller implements Serializable {
 	// The View
 	JFrame frame;
 	Animation animation;
+	CardLayout screens;
+	JPanel cardPanel;
 	
 	// Constant for tick method
 	private int boardBuilt = 0;
@@ -89,9 +97,6 @@ public class Controller implements Serializable {
 		startButton.addActionListener(new ActionListener(){
 	        public void actionPerformed(ActionEvent e){
 	        		
-	        		frame.getContentPane().remove(startPanel);
-	        		frame.validate();
-	        		frame.getContentPane().repaint();
 	        		// when clicked calls method to generate difficulty selection screen
 	        		pickDifficulty();
 	                
@@ -110,8 +115,21 @@ public class Controller implements Serializable {
 			}
 		});
 		//When built add the component to the frame
-		frame.add(startPanel);
+		cardPanel = new JPanel();
+		cardPanel.setVisible(true);
+		screens = new CardLayout();
+		cardPanel.setLayout(screens);
+		//Adds the start screen to the deck
+		cardPanel.add(startPanel, "Start");
+		screens.show(cardPanel, "Start");
+		//adds a blank screen to the deck
+		JPanel blankScreen = new JPanel();
+    	cardPanel.add(blankScreen, "Blank");
+		
+		frame.add(cardPanel);
 		frame.validate();
+		frame.repaint();
+		
 	}
 	
 	public void DisplayInstructions(){
@@ -181,13 +199,14 @@ public class Controller implements Serializable {
 		constraints.gridy = 2*width;
 		difficultyPanel.add(hardButton,constraints);
 		
-		frame.add(difficultyPanel);
+		cardPanel.add(difficultyPanel, "Difficulty");
+		screens.show(cardPanel, "Difficulty");
 		frame.validate();
 		frame.repaint();
 		easyButton.addActionListener(new ActionListener(){
 	        public void actionPerformed(ActionEvent e){
-	        		
-	        	frame.getContentPane().remove(difficultyPanel);
+	        	//Switches to the blank screen in the deck
+	        	screens.show(cardPanel, "Blank");
 	        	frame.getContentPane().revalidate();
 	        	frame.getContentPane().repaint();
         		// when clicked picks character and difficulty
@@ -200,7 +219,7 @@ public class Controller implements Serializable {
 		mediumButton.addActionListener(new ActionListener(){
 	        public void actionPerformed(ActionEvent e){
 	        		
-	        	frame.getContentPane().remove(difficultyPanel);
+	        	screens.show(cardPanel, "Blank");
 	        	frame.getContentPane().revalidate();
 	        	frame.getContentPane().repaint();
 	        	gameBoard = new Board(Board.Difficulty.MEDIUM);
@@ -212,7 +231,7 @@ public class Controller implements Serializable {
 		hardButton.addActionListener(new ActionListener(){
 	        public void actionPerformed(ActionEvent e){
 	        		
-	        	frame.getContentPane().remove(difficultyPanel);
+	        	screens.show(cardPanel, "Blank");
 	        	frame.getContentPane().revalidate();
 	        	frame.getContentPane().repaint();
 	        	gameBoard = new Board(Board.Difficulty.HARD);
@@ -254,19 +273,12 @@ public class Controller implements Serializable {
 		chestButton.setEnabled(false);
 		boardPanel.add(chestButton, constraints);
 		
-		chestButton.addActionListener(new ActionListener(){
-	        public void actionPerformed(ActionEvent e){
-	        		
-	        	//Zeke, powerUpPanel call can go here I guess
-	        	//make sure to add it in the second chestButton declaration below as well
-	        	
-	        	System.out.println("Chest Button Clicked");
-	        	
-	        }
-	    });
 		
-		frame.add(boardPanel);
+		
+		cardPanel.add(boardPanel, "Board");
+		screens.show(cardPanel, "Board");
 		frame.validate();
+		frame.repaint();
 		
 		AniObject bird = null;
 		AniObject board = null;
@@ -348,6 +360,24 @@ public class Controller implements Serializable {
 	        	        		
 	        	        	//Zeke, powerUpPanel call can go here I guess
 	        	        	//make sure to add it in the second chestButton declaration below as well
+	        	        	StringBuilder question = new StringBuilder();
+	        	        	try {
+								question.append(gameBoard.getPowerupQuestion());
+								List<String> possibleAns = gameBoard.getPossibleAnswers();
+								System.out.println("---------------------------------");
+								System.out.println(possibleAns);
+								Collections.shuffle(possibleAns);
+								System.out.println(possibleAns);
+								chestButton.setEnabled(false);
+								questionScreen(question, possibleAns);
+								
+							} catch (FileNotFoundException e1) {
+								// TODO Auto-generated catch block
+								question.append("Error loading a queston");
+								System.out.println(question);
+								e1.printStackTrace();
+								
+							}
 	        	        	
 	        	        	System.out.println("Chest Button Clicked");
 	        	        	
@@ -387,7 +417,7 @@ public class Controller implements Serializable {
 		        		boardPanel.add(ateSome, constraints);
 	        		}
 	        		
-	        		frame.add(boardPanel);
+	        		
 	        		frame.validate();
 	        		
 	                if (gameBoard.getClicks() == 0){
@@ -599,9 +629,6 @@ public class Controller implements Serializable {
 	
 	// displays score, and a quit button
 	public void endScreen() {
-		frame.getContentPane().removeAll();
-		// need to repaint the contentPane to get rid of buttons
-		frame.getContentPane().repaint();
 		
 		//Declare a new JPanel
 		JPanel endPanel = new JPanel();
@@ -614,9 +641,7 @@ public class Controller implements Serializable {
 		constraints.weightx = 1.0;
 		constraints.weighty = 1.0;
 		int width = 2;
-		for(AniObject object: animation.getImages()) {
-			object.setVisible(false);
-		}
+		hideImages();
 		
 		// create a label
 		JLabel eggLabel = new JLabel("You found " + Integer.toString(player.getEggs()) + " eggs,");
@@ -648,11 +673,43 @@ public class Controller implements Serializable {
 		endPanel.add(scoreLabel, constraints);
 		constraints.gridy = 3*width;
 		endPanel.add(quitButton, constraints);
+		cardPanel.add(endPanel, "End");
+		screens.show(cardPanel, "End");
 		
 		//Add and repaint
-		frame.getContentPane().add(endPanel);
 		frame.validate();
 		frame.repaint();
+	}
+	
+	private void questionScreen(StringBuilder question, List<String> possibleAns) {
+		JPanel questionPanel = new JPanel();
+		JLabel questionLabel = new JLabel(question.toString());
+		questionPanel.add(questionLabel);
+		for(String answer: possibleAns) {
+			JButton possibleAnswerButton = createAnswerButton(answer);
+			questionPanel.add(possibleAnswerButton);
+		}
+		JButton answerButton = new JButton("Rest");
+		answerButton.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				showImages();
+				screens.show(cardPanel, "Board");
+				frame.revalidate();
+				frame.repaint();
+			}
+			
+		});
+		questionPanel.setLayout(new GridLayout(6,0));
+		questionPanel.add(answerButton);
+		cardPanel.add(questionPanel, "PowerUp");
+		screens.show(cardPanel, "PowerUp");
+		hideImages();
+		frame.validate();
+		frame.repaint();
+
 	}
 	
 	public static void tick(Animation animation, Controller controller) {
@@ -683,6 +740,39 @@ public class Controller implements Serializable {
 		else {
 			return;
 		}
+	}
+	
+	private void showImages() {
+		for(AniObject object: animation.getImages()) {
+			object.setVisible(true);
+		}
+	}
+	
+	private void hideImages() {
+		for(AniObject object: animation.getImages()) {
+			object.setVisible(false);
+		}
+	}
+	
+	private JButton createAnswerButton(String answer) {
+		JButton possibleAnswer = new JButton(answer);
+		possibleAnswer.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				JButton selectedButton = (JButton)e.getSource();
+				String userAnswer = selectedButton.getText();
+				boolean playerWasCorrect = gameBoard.checkAnswer(userAnswer);
+				player.setPowerupStatus(playerWasCorrect);
+				screens.show(cardPanel, "Board");
+				showImages();
+				frame.validate();
+				frame.repaint();
+			}
+			
+		});
+		return possibleAnswer;
 	}
 	
 	// Game with GUI
