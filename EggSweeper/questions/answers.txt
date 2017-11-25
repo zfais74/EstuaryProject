@@ -1,5 +1,59 @@
-A1: test1
-A2: test2
-A3: test3
-A4: test4
-A5: test5
+CA1: testing for bacteria on medical instruments and in vacines
+A1: flavoring in stews
+A1: making dyes
+A1: iron supplements
+A1: feeding vampire bats
+
+CA2: Red Knot
+A2: Canadian Goose
+A2: American Robin
+A2: Grasshopper Sparrow
+A2: Sandhill Crane
+
+CA3: Salt Marsh
+A3: Rain Forest
+A3: Coral Reef
+A3: Savanna
+A3: Desert
+
+CA4: Horseshoe Crab
+A4: Trilobite
+A4: Copperhead Snake
+A4: Sea Turtle
+A4: Wolf Spider
+
+CA5: a coastal body where rivers meet the sea mixing salt and fresh water
+A5: a man made fish farm
+A5: a stagnant body of water larger than pond but smaller than a lake
+A5: where two rivers meet
+A5: a creek
+
+CA6: fire wood
+A6: food production
+A6: pollution filtering
+A6: shelter and breeding sites for local animals
+A6: erosion prevention
+
+CA7: to provide spawning grounds for fish, crabs, and oysters which we then eat
+A7: as places for us to build homes
+A7: as places to build power plants
+A7: for farming trees
+A7: for dumping waste to be taken out to sea
+
+CA8: by filtering pesticides and other agricultural pollutants from run off water
+A8: they prevent humans from walking into the estuary
+A8: providing shade and prevent ultraviolet light from poisoning fish
+A8: providing a source of fiber for local animals
+A8: prevent the spread of infectious diseases by limiting movement of animals
+
+CA9: fertilizer and pesticides in run off water from agriculture
+A9: nuclear waste from local power plants
+A9: carbon monoxide from fossil fuel burning cars
+A9: oil leaks from pipelines
+A9: plastic bags which take millions of years to break down
+
+CA10: Sand Piper
+A10: Wood Duck
+A10: Red Tailed Hawk
+A10: Blue Jay
+A10: Peregrine Falcon
