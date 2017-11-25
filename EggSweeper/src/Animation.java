@@ -259,6 +259,22 @@ public class Animation extends JPanel implements Serializable{
 		return;
 	}
 	
+	private void maggieImages(int xLoc, int yLoc, int sizeX, int sizeY) {
+		try {
+            BufferedImage maggie = ImageIO.read(new File("images/maggie1.png"));
+			List<BufferedImage> maggieList = new ArrayList<BufferedImage>();
+			maggieList.add(maggie);
+			AniObject maggieObject = new AniObject("maggie", xLoc, yLoc, sizeX, sizeY, maggieList);
+			maggieObject.setVisible(true);
+			images.add(maggieObject);
+            return;
+		} catch (IOException e1) {
+			System.out.println("failed to load hole, trying bin folder");
+		}
+		
+		
+	}
+	
 	public ImageIcon getChestIcon(){
 		ImageIcon chest = new ImageIcon("images/chest.png");
 		Image chestImage = chest.getImage();

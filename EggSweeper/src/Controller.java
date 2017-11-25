@@ -1,11 +1,9 @@
 import java.awt.CardLayout;
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
-import java.awt.Image;
 import java.awt.MouseInfo;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
@@ -13,7 +11,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.Serializable;
 import java.util.Collections;
@@ -24,7 +21,9 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.Timer;
 
+import TimeManagement.GameTimeActionListener;
 import enums.Bird;
 import enums.Item;
 
@@ -41,6 +40,9 @@ public class Controller implements Serializable {
 	Animation animation;
 	CardLayout screens;
 	JPanel cardPanel;
+	Timer gameTimer;
+	Timer powerUptimer;
+	int timeLeftGame = 20;
 	
 	// Constant for tick method
 	private int boardBuilt = 0;
@@ -309,7 +311,6 @@ public class Controller implements Serializable {
 		
 		final AniObject birdMouse = bird;
 		final AniObject boardMouse = board;
-		
 		frame.getContentPane().addMouseListener(new MouseListener() {
 		    @Override
 		    public void mouseClicked(MouseEvent e) {
@@ -385,6 +386,12 @@ public class Controller implements Serializable {
 	        	    });
 	        		
 	        		boardPanel.add(chestButton, constraints);
+	        		
+//	        		constraints.gridx = 1;
+//	        		constraints.gridy = 3;
+//	        		constraints.anchor = GridBagConstraints.EAST;
+	        		//StringBuilder timeLeft = new StringBuilder();
+	        		
 	        		
 	        		
 	        		constraints.gridx = 0;
