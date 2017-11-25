@@ -1,4 +1,5 @@
 import java.awt.CardLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
@@ -40,7 +41,7 @@ public class Controller implements Serializable {
 	Animation animation;
 	CardLayout screens;
 	JPanel cardPanel;
-
+	
 	// Constant for tick method
 	private int boardBuilt = 0;
 	
@@ -283,22 +284,13 @@ public class Controller implements Serializable {
 		chestButton.setEnabled(false);
 		boardPanel.add(chestButton, constraints);
 		
-		chestButton.addActionListener((ActionEvent e)->{
-
-	        	//Zeke, powerUpPanel call can go here I guess
-	        	//make sure to add it in the second chestButton declaration below as well
-
-	        	System.out.println("Chest Button Clicked");
-
-	        }
-	    );
-
-
+		
+		
 		cardPanel.add(boardPanel, "Board");
 		screens.show(cardPanel, "Board");
 		frame.validate();
 		frame.repaint();
-
+		
 		AniObject bird = null;
 		AniObject board = null;
 		Iterator<AniObject> boardItr = animation.getImages().iterator();
@@ -376,27 +368,22 @@ public class Controller implements Serializable {
 	        		
 	        		chestButton.addActionListener((ActionEvent a)->{
 	        	        		
-	        	        	//Zeke, powerUpPanel call can go here I guess
-	        	        	//make sure to add it in the second chestButton declaration below as well
-	        	        	StringBuilder question = new StringBuilder();
+	        	        	String question;
 	        	        	try {
-								question.append(gameBoard.getPowerupQuestion());
+								question = gameBoard.getPowerupQuestion();
 								List<String> possibleAns = gameBoard.getPossibleAnswers();
 								System.out.println("---------------------------------");
-								System.out.println(possibleAns);
 								Collections.shuffle(possibleAns);
 								System.out.println(possibleAns);
 								chestButton.setEnabled(false);
 								questionScreen(question, possibleAns);
-
+								
 							} catch (FileNotFoundException e1) {
 								// TODO Auto-generated catch block
-								question.append("Error loading a queston");
-								System.out.println(question);
 								e1.printStackTrace();
-
+								
 							}
-
+	        	        	
 	        	        	System.out.println("Chest Button Clicked");
 	        	        	
 	        	        }
@@ -675,13 +662,14 @@ public class Controller implements Serializable {
 		JButton quitButton = new JButton("Quit");
 		quitButton.setFont(new Font("Arial", Font.PLAIN, 30));
 
-		quitButton.addActionListener((ActionEvent e)->{
+		quitButton.addActionListener(new ActionListener(){
+	        public void actionPerformed(ActionEvent e){
 	        	
 	        	// when clicked, exits
 		        System.exit(0);
 	                
 	        }
-	    );
+	    });
 		
 		endPanel.add(eggLabel, constraints);
 		constraints.gridy = width;
@@ -692,35 +680,26 @@ public class Controller implements Serializable {
 		endPanel.add(quitButton, constraints);
 		cardPanel.add(endPanel, "End");
 		screens.show(cardPanel, "End");
-
+		
 		//Add and repaint
 		frame.validate();
 		frame.repaint();
 	}
 	
-	private void questionScreen(StringBuilder question, List<String> possibleAns) {
+	private void questionScreen(String question, List<String> possibleAns) {
 		JPanel questionPanel = new JPanel();
-		JLabel questionLabel = new JLabel(question.toString());
+		questionPanel.setLayout(new GridLayout(6,0));
+		
+		JLabel questionLabel = new JLabel(question);
+		questionLabel.setFont(new Font("Arial", Font.PLAIN, 40));
+		questionLabel.setHorizontalAlignment(JLabel.CENTER);
+		
 		questionPanel.add(questionLabel);
 		for(String answer: possibleAns) {
 			JButton possibleAnswerButton = createAnswerButton(answer);
+			possibleAnswerButton.setFont(new Font("Arial", Font.PLAIN, 30));
 			questionPanel.add(possibleAnswerButton);
 		}
-		JButton answerButton = new JButton("Rest");
-		answerButton.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
-				showImages();
-				screens.show(cardPanel, "Board");
-				frame.revalidate();
-				frame.repaint();
-			}
-
-		});
-		questionPanel.setLayout(new GridLayout(6,0));
-		questionPanel.add(answerButton);
 		cardPanel.add(questionPanel, "PowerUp");
 		screens.show(cardPanel, "PowerUp");
 		hideImages();
@@ -764,13 +743,13 @@ public class Controller implements Serializable {
 			object.setVisible(true);
 		}
 	}
-
+	
 	private void hideImages() {
 		for(AniObject object: animation.getImages()) {
 			object.setVisible(false);
 		}
 	}
-
+	
 	private JButton createAnswerButton(String answer) {
 		JButton possibleAnswer = new JButton(answer);
 		possibleAnswer.addActionListener(new ActionListener() {
@@ -787,11 +766,11 @@ public class Controller implements Serializable {
 				frame.validate();
 				frame.repaint();
 			}
-
+			
 		});
 		return possibleAnswer;
 	}
-
+	
 	// Game with GUI
 	public static void main(String[] args) {
 		Controller cont = new Controller();
@@ -804,7 +783,6 @@ public class Controller implements Serializable {
 	  	cont.frame.pack();
 	  	cont.frame.setVisible(true);
 	  	cont.startScreen();
-	  	//cont.animation.migrationAnimation();
 	  	while (true) {
 	    		cont.frame.repaint();
 	    		tick(cont.animation, cont);
