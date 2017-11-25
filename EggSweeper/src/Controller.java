@@ -1,5 +1,4 @@
 import java.awt.CardLayout;
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
@@ -41,7 +40,7 @@ public class Controller implements Serializable {
 	Animation animation;
 	CardLayout screens;
 	JPanel cardPanel;
-	
+
 	// Constant for tick method
 	private int boardBuilt = 0;
 	
@@ -94,18 +93,15 @@ public class Controller implements Serializable {
 		constraints.gridy = 5;
 		startPanel.add(loadButton,constraints);
 		
-		startButton.addActionListener(new ActionListener(){
-	        public void actionPerformed(ActionEvent e){
-	        		
+		startButton.addActionListener((ActionEvent e)->{
+
 	        		// when clicked calls method to generate difficulty selection screen
 	        		pickDifficulty();
 	                
 	        }
-	    });
+	    );
 
-		instButton.addActionListener(new ActionListener() {
-
-			public void actionPerformed(ActionEvent e) {
+		instButton.addActionListener((ActionEvent e)-> {
 				frame.getContentPane().remove(startPanel);
 				frame.validate();
 				frame.getContentPane().repaint();
@@ -113,7 +109,14 @@ public class Controller implements Serializable {
 				DisplayInstructions();
 
 			}
-		});
+		);
+
+		loadButton.addActionListener((ActionEvent e)-> {
+				Load.LoadGame();
+				//find correct method so that it keeps ticking
+
+			}
+		);
 		//When built add the component to the frame
 		cardPanel = new JPanel();
 		cardPanel.setVisible(true);
@@ -125,11 +128,11 @@ public class Controller implements Serializable {
 		//adds a blank screen to the deck
 		JPanel blankScreen = new JPanel();
     	cardPanel.add(blankScreen, "Blank");
-		
+
 		frame.add(cardPanel);
 		frame.validate();
 		frame.repaint();
-		
+
 	}
 	
 	public void DisplayInstructions(){
@@ -140,8 +143,7 @@ public class Controller implements Serializable {
 		JButton startButton = new JButton("Start Game");
 		startButton.setFont(new Font("Arial", Font.PLAIN, 30));
 		startButton.setVisible(true);
-		startButton.addActionListener(new ActionListener(){
-	        public void actionPerformed(ActionEvent e){
+		startButton.addActionListener((ActionEvent e)->{
 	        		
 	        		frame.getContentPane().remove(instructionPanel);
 	        		frame.validate();
@@ -150,7 +152,7 @@ public class Controller implements Serializable {
 	        		pickDifficulty();
 	                
 	        }
-	    });
+	    );
 		
 		JLabel instructions = new JLabel("Instructions will \n go \n right here");
 		instructions.setFont(new Font("Arial", Font.PLAIN, 40));
@@ -203,8 +205,8 @@ public class Controller implements Serializable {
 		screens.show(cardPanel, "Difficulty");
 		frame.validate();
 		frame.repaint();
-		easyButton.addActionListener(new ActionListener(){
-	        public void actionPerformed(ActionEvent e){
+		easyButton.addActionListener((ActionEvent e)->{
+
 	        	//Switches to the blank screen in the deck
 	        	screens.show(cardPanel, "Blank");
 	        	frame.getContentPane().revalidate();
@@ -214,11 +216,9 @@ public class Controller implements Serializable {
         		player = new Player(Bird.DUNLIN);
         		animation.migrationAnimation();
 	        }
-	    });
+	    );
 		
-		mediumButton.addActionListener(new ActionListener(){
-	        public void actionPerformed(ActionEvent e){
-	        		
+		mediumButton.addActionListener((ActionEvent e)->{
 	        	screens.show(cardPanel, "Blank");
 	        	frame.getContentPane().revalidate();
 	        	frame.getContentPane().repaint();
@@ -226,10 +226,9 @@ public class Controller implements Serializable {
 	        	player = new Player(Bird.SANDPIPER); 
 	        	animation.migrationAnimation();
 	        }
-	    });
+	    );
 		
-		hardButton.addActionListener(new ActionListener(){
-	        public void actionPerformed(ActionEvent e){
+		hardButton.addActionListener((ActionEvent e)->{
 	        		
 	        	screens.show(cardPanel, "Blank");
 	        	frame.getContentPane().revalidate();
@@ -238,7 +237,7 @@ public class Controller implements Serializable {
 	        	player = new Player(Bird.REDKNOT);
 	        	animation.migrationAnimation();
 	        }
-	    });
+	    );
 	}
 	
 	public void buildBoard() {
@@ -266,20 +265,40 @@ public class Controller implements Serializable {
 		constraints.gridx = 1;
 		constraints.gridy = 2;
 		constraints.anchor = GridBagConstraints.EAST;
-		
+
+		JButton save = new JButton("Save");
+		save.setFont(new Font("Arial", Font.PLAIN, 30));
+		save.setVisible(true);
+		boardPanel.add(save,constraints);
+		save.addActionListener((ActionEvent e)->{
+			Load.SaveGame(this);
+		});
+
+		constraints.gridx = 1;
+		constraints.gridy = 3;
+		constraints.anchor = GridBagConstraints.EAST;
 		JButton chestButton = new JButton();
 		chestButton.setPreferredSize(new Dimension(200, 200));
 		chestButton.setVisible(true);
 		chestButton.setEnabled(false);
 		boardPanel.add(chestButton, constraints);
 		
-		
-		
+		chestButton.addActionListener((ActionEvent e)->{
+
+	        	//Zeke, powerUpPanel call can go here I guess
+	        	//make sure to add it in the second chestButton declaration below as well
+
+	        	System.out.println("Chest Button Clicked");
+
+	        }
+	    );
+
+
 		cardPanel.add(boardPanel, "Board");
 		screens.show(cardPanel, "Board");
 		frame.validate();
 		frame.repaint();
-		
+
 		AniObject bird = null;
 		AniObject board = null;
 		Iterator<AniObject> boardItr = animation.getImages().iterator();
@@ -355,8 +374,7 @@ public class Controller implements Serializable {
 	        		chestButton.setPreferredSize(new Dimension(200, 200));
 	        		chestButton.setVisible(true);
 	        		
-	        		chestButton.addActionListener(new ActionListener(){
-	        	        public void actionPerformed(ActionEvent e){
+	        		chestButton.addActionListener((ActionEvent a)->{
 	        	        		
 	        	        	//Zeke, powerUpPanel call can go here I guess
 	        	        	//make sure to add it in the second chestButton declaration below as well
@@ -370,19 +388,19 @@ public class Controller implements Serializable {
 								System.out.println(possibleAns);
 								chestButton.setEnabled(false);
 								questionScreen(question, possibleAns);
-								
+
 							} catch (FileNotFoundException e1) {
 								// TODO Auto-generated catch block
 								question.append("Error loading a queston");
 								System.out.println(question);
 								e1.printStackTrace();
-								
+
 							}
-	        	        	
+
 	        	        	System.out.println("Chest Button Clicked");
 	        	        	
 	        	        }
-	        	    });
+	        	    );
 	        		
 	        		boardPanel.add(chestButton, constraints);
 	        		
@@ -417,7 +435,7 @@ public class Controller implements Serializable {
 		        		boardPanel.add(ateSome, constraints);
 	        		}
 	        		
-	        		
+
 	        		frame.validate();
 	        		
 	                if (gameBoard.getClicks() == 0){
@@ -657,14 +675,13 @@ public class Controller implements Serializable {
 		JButton quitButton = new JButton("Quit");
 		quitButton.setFont(new Font("Arial", Font.PLAIN, 30));
 
-		quitButton.addActionListener(new ActionListener(){
-	        public void actionPerformed(ActionEvent e){
+		quitButton.addActionListener((ActionEvent e)->{
 	        	
 	        	// when clicked, exits
 		        System.exit(0);
 	                
 	        }
-	    });
+	    );
 		
 		endPanel.add(eggLabel, constraints);
 		constraints.gridy = width;
@@ -675,7 +692,7 @@ public class Controller implements Serializable {
 		endPanel.add(quitButton, constraints);
 		cardPanel.add(endPanel, "End");
 		screens.show(cardPanel, "End");
-		
+
 		//Add and repaint
 		frame.validate();
 		frame.repaint();
@@ -700,7 +717,7 @@ public class Controller implements Serializable {
 				frame.revalidate();
 				frame.repaint();
 			}
-			
+
 		});
 		questionPanel.setLayout(new GridLayout(6,0));
 		questionPanel.add(answerButton);
@@ -711,7 +728,7 @@ public class Controller implements Serializable {
 		frame.repaint();
 
 	}
-	
+
 	public static void tick(Animation animation, Controller controller) {
 		if (controller.boardBuilt == 0) {
 			Iterator<AniObject> itrMigration = animation.getImages().iterator();
@@ -747,13 +764,13 @@ public class Controller implements Serializable {
 			object.setVisible(true);
 		}
 	}
-	
+
 	private void hideImages() {
 		for(AniObject object: animation.getImages()) {
 			object.setVisible(false);
 		}
 	}
-	
+
 	private JButton createAnswerButton(String answer) {
 		JButton possibleAnswer = new JButton(answer);
 		possibleAnswer.addActionListener(new ActionListener() {
@@ -770,11 +787,11 @@ public class Controller implements Serializable {
 				frame.validate();
 				frame.repaint();
 			}
-			
+
 		});
 		return possibleAnswer;
 	}
-	
+
 	// Game with GUI
 	public static void main(String[] args) {
 		Controller cont = new Controller();
@@ -787,6 +804,7 @@ public class Controller implements Serializable {
 	  	cont.frame.pack();
 	  	cont.frame.setVisible(true);
 	  	cont.startScreen();
+	  	//cont.animation.migrationAnimation();
 	  	while (true) {
 	    		cont.frame.repaint();
 	    		tick(cont.animation, cont);
