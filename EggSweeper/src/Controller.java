@@ -21,9 +21,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.Timer;
 
-import TimeManagement.GameTimeActionListener;
 import enums.Bird;
 import enums.Item;
 
@@ -40,9 +38,6 @@ public class Controller implements Serializable {
 	Animation animation;
 	CardLayout screens;
 	JPanel cardPanel;
-	Timer gameTimer;
-	Timer powerUptimer;
-	int timeLeftGame = 20;
 	
 	// Constant for tick method
 	private int boardBuilt = 0;
@@ -386,12 +381,6 @@ public class Controller implements Serializable {
 	        	    });
 	        		
 	        		boardPanel.add(chestButton, constraints);
-	        		
-//	        		constraints.gridx = 1;
-//	        		constraints.gridy = 3;
-//	        		constraints.anchor = GridBagConstraints.EAST;
-	        		//StringBuilder timeLeft = new StringBuilder();
-	        		
 	        		
 	        		
 	        		constraints.gridx = 0;
