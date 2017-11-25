@@ -11,7 +11,7 @@ public class AniObject implements Serializable {
 	private int origYSize;
 	private int xSize;
 	private int ySize;
-	private List<BufferedImage> images;
+	private transient List<BufferedImage> images;
 	private boolean visible;
 	
 	AniObject(String objName, int xLoc, int yLoc, int sizeX, int sizeY, List<BufferedImage> objImage){

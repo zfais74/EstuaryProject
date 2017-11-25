@@ -10,7 +10,7 @@ import javax.imageio.ImageIO;
 
 import enums.Bird;
 
-public class CommandController implements Serializable {
+public class CommandController {
 	
 	// The Model
 	Player player;
