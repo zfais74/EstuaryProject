@@ -20,252 +20,312 @@ import enums.Item;
 public class Board implements Serializable {
 	
 	// the GameBoard is an empty 2D array of GridSpace pointers
-	private GridSpace[][] board = new GridSpace[boardSize][boardSize];
-	
-	// the Difficulty affects distribution of EGGs and TRASH
-	public static enum Difficulty {EASY, MEDIUM, HARD};
-	
-	// Board data
-	private int timer;
-	private int clicks;
-	private Difficulty difficulty;
-	
-	// size of the board
-	public static int boardSize = 10;
-	
-	// randConst is used in setting Items in GridSpaces
-	private static final int randConst = 100;
-	// ratio for determining distribution of EMPTY spaces in all Difficulties
-	private double emptyRatio = randConst * (3./10.);
-	// ratios for determining distribution of EGGs and TRASH based on Difficulty
-	private double easyEggRatio = randConst * (9./10.);
-	private double mediumEggRatio = randConst * (8.5/10.);
-	private double hardEggRatio = randConst * (8./10.);
-	private List<String> questionsAsked = new ArrayList<String>();
-	private String answer;
-	
-	
-	/**
-	 * Constructor
-	 * @param newDifficulty difficulty to play the game at
-	 * @return a new Board object
-	 * 
-	 */
-	// sets EMPTY, TRASH and EGG spaces in the board
-	Board(Difficulty newDifficulty) {
-		System.out.println(" ");
-		System.out.println("Difficulty selected: " + newDifficulty);
-		System.out.println("Score: 0");
-		difficulty = newDifficulty;
-		//timer is currently unused
-		timer = 100;
-		// max number of clicks
-		clicks = 10;
+		private GridSpace[][] board = new GridSpace[boardSize][boardSize];
 		
-		Random rand = new Random();
-		// cycle through each GridSpace pointer
-		for (int i = 0; i < boardSize; i++) {
-			for (int j = 0; j < boardSize; j++) {
-				// generate random integer to use for determining contents of GridSpace
-				int randomInt = rand.nextInt(randConst);
-				Item spaceItem = Item.EMPTY;
-				switch (difficulty) {
-					// on EASY Difficulty, 30% EMPTY, 60% EGGs, 10% TRASH
-					case EASY:
-						if (randomInt < (emptyRatio)) {
-							spaceItem = Item.EMPTY;
-						}
-						else if (randomInt < (easyEggRatio)) {
-							spaceItem = Item.EGG;
-						}
-						else {
-							spaceItem = Item.TRASH;
-						}
-						break;
-					case MEDIUM:
-						if (randomInt < (emptyRatio)) {
-							spaceItem = Item.EMPTY;
-						}
-						else if (randomInt < (mediumEggRatio)) {
-							spaceItem = Item.EGG;
-						}
-						else {
-							spaceItem = Item.TRASH;
-						}
-						break;
-					case HARD:
-						if (randomInt < (emptyRatio)) {
-							spaceItem = Item.EMPTY;
-						}
-						else if (randomInt < (hardEggRatio)) {
-							spaceItem = Item.EGG;
-						}
-						else {
-							spaceItem = Item.TRASH;
-						}
-						break;
-				}
-				board[i][j] = new GridSpace(spaceItem);
-			}
-		}
-	}
-	
-	/**
-	 * getter for a GridSpace in the the board at index (x, y)
-	 * @param xIndex x index of the grid space to be checked
-	 * @param yIndex y index of the grid space to be checked
-	 * @return GridSpace at board[x][y]
-	 */
-	public GridSpace getSpace(int xIndex, int yIndex) {
-		return board[xIndex][yIndex];
-	}
-	
-	/**
-	 * Set a GridSpace at a location (x, y) in the board
-	 * @param xIndex x index of the grid space to be set
-	 * @param yIndex y index of the grid space to be set
-	 * @param space a GridSpace object to be set at location (x, y)
-	 */
-	public void setSpace(int xIndex, int yIndex, GridSpace space) {
-		board[xIndex][yIndex] = space;
-	}
-	
-	/**
-	 * gets the number of items surrounding a space
-	 * @param xIndex x index of the grid space to be set
-	 * @param yIndex y index of the grid space to be set
-	 * @return items surrounding
-	 */
-	public int countAdjacentItems(int xIndex, int yIndex) {
-		int count = 0;
-		int radius = 1;
-		for(int i = -radius; i <= radius; i++) {
-			for(int j = -radius; j <= radius; j++) {
-				if(i == 0 && j == 0)
-					continue;
-				if(xIndex + i < 0 || xIndex + i >= boardSize)
-					continue;
-				if(yIndex + j < 0 || yIndex + j >= boardSize)
-					continue;
-				GridSpace space = getSpace(xIndex + i, yIndex + j);
-				if(space.getItem() != Item.EMPTY)
-					count++;
-			}
-		}
-		return count;
-	}
-	
-	/**
-	 * getter for number of clicks left
-	 * @return clicks left
-	 */
-	public int getClicks() {
-		return clicks;
-	}
-	
-	/**
-	 * setter for number of clicks left
-	 * @param newClicks number of clicks to be set
-	 */
-	public void setClicks(int newClicks) {
-		clicks = newClicks;
-	}
-	
-	/**
-	 * decrement clicks by one
-	 */
-	public void decClicks() {
-		clicks--;
-	}
-	
-	/**
-	 * getter for time left in game
-	 * @return time left
-	 */
-	public int getTime() {
-		return timer;
-	}
-	
-	/**
-	 * setter for time left in game
-	 * @param newTime new amount of time to be set
-	 */
-	public void setTime(int newTime) {
-		timer = newTime;
-	}
-	
-	/**
-	 * read estuary question from text file
-	 * @return string form of question
-	 * @throws FileNotFoundException
-	 */
-	public String getPowerupQuestion() throws FileNotFoundException {
-		StringBuilder question = new StringBuilder(); // question string builder
-		StringBuilder qNum = new StringBuilder(); // string builder for the question number
-		qNum.append("Q"); //marker for questions
-		File questionsFile = new File("questions/powerQuestions.txt");
-		int questionNum = generateQuestionNum(5);
-		qNum.append(questionNum);
-		qNum.append(":"); // another marker for questions
-		try {
-			Scanner fn = new Scanner (questionsFile);
-			while(fn.hasNextLine()) {
-				String line = fn.nextLine();
-				if(line.contains(qNum.toString())){ // if the line contains the Q(number):, then add it to the question string builder 
-					question.append(line);
-					System.out.println("Selected Question:" + question.toString());
-					break;
-				}
-			}
-			fn.close();
-			this.answer = this.getPowerupAnswer(questionNum);
+		// the Difficulty affects distribution of EGGs and TRASH
+		public static enum Difficulty {EASY, MEDIUM, HARD};
+		
+		// Board data
+		private int timer;
+		private int clicks;
+		private Difficulty difficulty;
+		private List<String>possibleAnswers = new ArrayList<>();
+		private List<Integer>possibleAnswerNums = new ArrayList<>();
+		
+		// size of the board
+		public static int boardSize = 10;
+		
+		// randConst is used in setting Items in GridSpaces
+		private static final int randConst = 100;
+		// ratio for determining distribution of EMPTY spaces in all Difficulties
+		private double emptyRatio = randConst * (3./10.);
+		// ratios for determining distribution of EGGs and TRASH based on Difficulty
+		private double easyEggRatio = randConst * (9./10.);
+		private double mediumEggRatio = randConst * (8.5/10.);
+		private double hardEggRatio = randConst * (8./10.);
+		private List<String> questionsAsked = new ArrayList<String>();
+		private String correctAnswer;
+		private int totalQuestions = 5;
+		
+		
+		/**
+		 * Constructor
+		 * @param newDifficulty difficulty to play the game at
+		 * @return a new Board object
+		 * 
+		 */
+		// sets EMPTY, TRASH and EGG spaces in the board
+		Board(Difficulty newDifficulty) {
+			System.out.println(" ");
+			System.out.println("Difficulty selected: " + newDifficulty);
+			System.out.println("Score: 0");
+			difficulty = newDifficulty;
+			//timer is currently unused
+			timer = 100;
+			// max number of clicks
+			clicks = 10;
 			
-		} catch (FileNotFoundException e){
-			System.out.println(e.getMessage());
-			System.exit(0);
-		}
-		
-		return question.toString();
-	}
-	
-	/**
-	 * Generates random number to select which question to ask user during power up opportunity
-	 * @param range a upper limit for the random number
-	 * @return random number to pick which question to ask
-	 */
-	private int generateQuestionNum(int range) {
-		return (int)(Math.random() * ((range - 1) + 1)) + 1;
-	}
-	
-	/**
-	 * read question answer from text file
-	 * @param questionNum
-	 * @return string form of answer
-	 * @throws FileNotFoundException
-	 */
-	private String getPowerupAnswer(int questionNum) throws FileNotFoundException{
-		StringBuilder answer = new StringBuilder(); 
-		StringBuilder aNum = new StringBuilder(); 
-		aNum.append("A"); //marker for questions
-		File questionsFile = new File("questions/answers.txt");
-		aNum.append(questionNum);
-		aNum.append(":");
-		try {
-			Scanner fn = new Scanner (questionsFile);
-			while(fn.hasNextLine()) {
-				String line = fn.nextLine();
-				if(line.contains(aNum.toString())){ 
-					answer.append(line);
-					break;
+			Random rand = new Random();
+			// cycle through each GridSpace pointer
+			for (int i = 0; i < boardSize; i++) {
+				for (int j = 0; j < boardSize; j++) {
+					// generate random integer to use for determining contents of GridSpace
+					int randomInt = rand.nextInt(randConst);
+					Item spaceItem = Item.EMPTY;
+					switch (difficulty) {
+						// on EASY Difficulty, 30% EMPTY, 60% EGGs, 10% TRASH
+						case EASY:
+							if (randomInt < (emptyRatio)) {
+								spaceItem = Item.EMPTY;
+							}
+							else if (randomInt < (easyEggRatio)) {
+								spaceItem = Item.EGG;
+							}
+							else {
+								spaceItem = Item.TRASH;
+							}
+							break;
+						case MEDIUM:
+							if (randomInt < (emptyRatio)) {
+								spaceItem = Item.EMPTY;
+							}
+							else if (randomInt < (mediumEggRatio)) {
+								spaceItem = Item.EGG;
+							}
+							else {
+								spaceItem = Item.TRASH;
+							}
+							break;
+						case HARD:
+							if (randomInt < (emptyRatio)) {
+								spaceItem = Item.EMPTY;
+							}
+							else if (randomInt < (hardEggRatio)) {
+								spaceItem = Item.EGG;
+							}
+							else {
+								spaceItem = Item.TRASH;
+							}
+							break;
+					}
+					board[i][j] = new GridSpace(spaceItem);
 				}
 			}
-			fn.close();
-		} catch (FileNotFoundException e){
-			System.out.println(e.getMessage());
-			System.exit(0);
 		}
 		
-		return answer.toString();
-	}
+		/**
+		 * getter for a GridSpace in the the board at index (x, y)
+		 * @param xIndex x index of the grid space to be checked
+		 * @param yIndex y index of the grid space to be checked
+		 * @return GridSpace at board[x][y]
+		 */
+		public GridSpace getSpace(int xIndex, int yIndex) {
+			return board[xIndex][yIndex];
+		}
+		
+		/**
+		 * Set a GridSpace at a location (x, y) in the board
+		 * @param xIndex x index of the grid space to be set
+		 * @param yIndex y index of the grid space to be set
+		 * @param space a GridSpace object to be set at location (x, y)
+		 */
+		public void setSpace(int xIndex, int yIndex, GridSpace space) {
+			board[xIndex][yIndex] = space;
+		}
+		
+		/**
+		 * gets the number of items surrounding a space
+		 * @param xIndex x index of the grid space to be set
+		 * @param yIndex y index of the grid space to be set
+		 * @return items surrounding
+		 */
+		public int countAdjacentItems(int xIndex, int yIndex) {
+			int count = 0;
+			int radius = 1;
+			for(int i = -radius; i <= radius; i++) {
+				for(int j = -radius; j <= radius; j++) {
+					if(i == 0 && j == 0)
+						continue;
+					if(xIndex + i < 0 || xIndex + i >= boardSize)
+						continue;
+					if(yIndex + j < 0 || yIndex + j >= boardSize)
+						continue;
+					GridSpace space = getSpace(xIndex + i, yIndex + j);
+					if(space.getItem() != Item.EMPTY)
+						count++;
+				}
+			}
+			return count;
+		}
+		
+		/**
+		 * getter for number of clicks left
+		 * @return clicks left
+		 */
+		public int getClicks() {
+			return clicks;
+		}
+		
+		/**
+		 * setter for number of clicks left
+		 * @param newClicks number of clicks to be set
+		 */
+		public void setClicks(int newClicks) {
+			clicks = newClicks;
+		}
+		
+		/**
+		 * decrement clicks by one
+		 */
+		public void decClicks() {
+			clicks--;
+		}
+		
+		/**
+		 * getter for time left in game
+		 * @return time left
+		 */
+		public int getTime() {
+			return timer;
+		}
+		
+		/**
+		 * setter for time left in game
+		 * @param newTime new amount of time to be set
+		 */
+		public void setTime(int newTime) {
+			timer = newTime;
+		}
+		
+		/**
+		 * read estuary question from text file
+		 * @return string form of question
+		 * @throws FileNotFoundException
+		 */
+		public String getPowerupQuestion() throws FileNotFoundException {
+			possibleAnswers.clear();
+			possibleAnswerNums.clear();
+			StringBuilder question = new StringBuilder(); // question string builder
+			StringBuilder qNum = new StringBuilder(); // string builder for the question number
+			qNum.append("Q"); //marker for questions
+			File questionsFile = new File("questions/powerQuestions.txt");
+			int questionNum = generateQuestionNum(totalQuestions);
+			qNum.append(questionNum);
+			qNum.append(":"); // another marker for questions
+			try {
+				Scanner fn = new Scanner (questionsFile);
+				while(fn.hasNextLine()) {
+					String line = fn.nextLine();
+					if(line.contains(qNum.toString())){ // if the line contains the Q(number):, then add it to the question string builder 
+						question.append(line);
+						System.out.println("Selected Question:" + question.toString());
+						break;
+					}
+				}
+				fn.close();
+				this.correctAnswer = this.getPowerupAnswer(questionNum);
+				this.possibleAnswers.add(correctAnswer);
+				int questionCounter = 3;
+				boolean foundAnswers = false;
+				while (questionCounter != 0  && foundAnswers == false ) {
+					foundAnswers = this.setPossibleAnswers(questionNum);
+					if (foundAnswers) {
+						questionCounter--;
+						foundAnswers = false;
+					}
+				}
+				
+			} catch (FileNotFoundException e){
+				System.out.println(e.getMessage());
+				System.exit(0);
+			}
+			
+			return question.toString();
+		}
+		
+		/**
+		 * Generates random number to select which question to ask user during power up opportunity
+		 * @param range a upper limit for the random number
+		 * @return random number to pick which question to ask
+		 */
+		private int generateQuestionNum(int range) {
+			return (int)(Math.random() * ((range - 1) + 1)) + 1;
+		}
+		
+		/**
+		 * read question answer from text file
+		 * @param questionNum
+		 * @return string form of answer
+		 * @throws FileNotFoundException
+		 */
+		private String getPowerupAnswer(int questionNum) throws FileNotFoundException{
+			StringBuilder answer = new StringBuilder(); 
+			StringBuilder aNum = new StringBuilder(); 
+			aNum.append("A"); //marker for questions
+			File questionsFile = new File("questions/answers.txt");
+			aNum.append(questionNum);
+			aNum.append(":");
+			try {
+				Scanner fn = new Scanner (questionsFile);
+				while(fn.hasNextLine()) {
+					String line = fn.nextLine();
+					if(line.contains(aNum.toString())){ 
+						answer.append(line);
+						answer = removeColon(answer);
+						possibleAnswerNums.add(questionNum);
+						break;
+					}
+				}
+				fn.close();
+			} catch (FileNotFoundException e){
+				System.out.println(e.getMessage());
+				System.exit(0);
+			}
+			return answer.toString();
+		}
+		
+		
+		private boolean setPossibleAnswers(int questionNum) throws FileNotFoundException {
+			StringBuilder answer = new StringBuilder();
+			int possibleAnswerNum = generateQuestionNum(totalQuestions);
+			boolean wasAnswerUsed = possibleAnswerNums.contains(possibleAnswerNum);
+			if (!wasAnswerUsed) {
+				answer.append(getPowerupAnswer(possibleAnswerNum));
+				answer = removeColon(answer);
+				possibleAnswers.add(answer.toString());
+				possibleAnswerNums.add(possibleAnswerNum);
+				return true;
+			} else {
+				return false;
+			}
+		}
+		
+		public List<String> getQuestionsAsked(){
+			return this.questionsAsked;
+		}
+		
+		public List<String> getPossibleAnswers() {
+			return this.possibleAnswers;
+		}
+		
+		public List<Integer> getPossibleAnswerNums() {
+			return this.possibleAnswerNums;
+		}
+		/**
+		 * Removes question and answer identifiers ex: A1: & Q1: from the string
+		 * @param possibleAnswer
+		 * @return
+		 */
+		private StringBuilder removeColon(StringBuilder possibleAnswer) {
+			StringBuilder filteredAnswer = new StringBuilder();
+			int colonPosition = possibleAnswer.indexOf(":") + 1;
+			String questionWithoutColon = possibleAnswer.substring(colonPosition);
+			filteredAnswer.append(questionWithoutColon);
+			return filteredAnswer;
+		}
+		
+		boolean checkAnswer(String playerAnswer) {
+			return playerAnswer.equalsIgnoreCase(correctAnswer);
+		}
 }
 	
