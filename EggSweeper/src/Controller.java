@@ -1,11 +1,9 @@
 import java.awt.CardLayout;
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
-import java.awt.Image;
 import java.awt.MouseInfo;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
@@ -13,7 +11,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.Serializable;
 import java.util.Collections;
@@ -320,7 +317,6 @@ public class Controller implements Serializable {
 		
 		final AniObject birdMouse = bird;
 		final AniObject boardMouse = board;
-		
 		frame.getContentPane().addMouseListener(new MouseListener() {
 		    @Override
 		    public void mouseClicked(MouseEvent e) {
