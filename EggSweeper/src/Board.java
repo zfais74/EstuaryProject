@@ -246,7 +246,9 @@ public class Board implements Serializable {
 		 * @return random number to pick which question to ask
 		 */
 		private int generateQuestionNum(int range) {
-			return (int)(Math.random() * ((range - 1) + 1)) + 1;
+			int rand = (int)(Math.random() * ((range - 1) + 1)) + 1;
+			System.out.println("rand = " + Integer.toString(rand));
+			return rand;
 		}
 		
 		/**
