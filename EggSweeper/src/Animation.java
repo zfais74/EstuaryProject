@@ -20,7 +20,7 @@ import javax.swing.JPanel;
 
 public class Animation extends JPanel implements Serializable{
 	
-	private List<AniObject> images;
+	private transient List<AniObject> images;
 	private AniObject boardImage;
 	
 	// constants for placing buttons

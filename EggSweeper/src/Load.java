@@ -1,7 +1,7 @@
 import java.io.*;
 
 public class Load {
-    public static void SaveGame(Controller cont){
+    public static void SaveGame(Controller cont){//everything but buffered image
         try
         {
 
