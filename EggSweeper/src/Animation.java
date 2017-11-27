@@ -269,10 +269,16 @@ public class Animation extends JPanel implements Serializable{
 			BufferedImage maggie6 = ImageIO.read(new File("images/maggie6.png"));
 			List<BufferedImage> maggieList = new ArrayList<BufferedImage>();
 			maggieList.add(maggie1);
+			maggieList.add(maggie1);
+			maggieList.add(maggie2);
 			maggieList.add(maggie2);
 			maggieList.add(maggie3);
+			maggieList.add(maggie3);
+			maggieList.add(maggie4);
 			maggieList.add(maggie4);
 			maggieList.add(maggie5);
+			maggieList.add(maggie5);
+			maggieList.add(maggie6);
 			maggieList.add(maggie6);
 			AniObject maggieObject = new AniObject("maggie", xLoc, yLoc, sizeX, sizeY, maggieList);
 			maggieObject.setVisible(true);
