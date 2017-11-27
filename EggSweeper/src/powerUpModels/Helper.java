@@ -1,4 +1,4 @@
-package PowerUpModels;
+package powerUpModels;
 
 public class Helper {
 	private String name;

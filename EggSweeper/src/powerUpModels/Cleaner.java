@@ -1,4 +1,4 @@
-package PowerUpModels;
+package powerUpModels;
 
 public class Cleaner {
 	private int xPos;
