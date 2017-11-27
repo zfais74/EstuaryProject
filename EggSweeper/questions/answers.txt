@@ -1,4 +1,4 @@
-CA1: testing for bacteria on medical instruments and in vacines
+CA1: testing for bacteria on medical instruments and in vaccines
 A1: flavoring in stews
 A1: making dyes
 A1: iron supplements

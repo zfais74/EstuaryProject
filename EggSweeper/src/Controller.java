@@ -876,10 +876,7 @@ public class Controller implements Serializable, ActionListener {
 		System.out.println("Power up is gone");
 		PowerUps currentPowerUp = player.getCurrentPowerUp();
 		player.setPowerupStatus(false);
-		if(currentPowerUp == PowerUps.CLEANER) {
-			cleaners.clear();
-		}
-		
+		player.setPointsPerEgg(1);
 		if(currentPowerUp == PowerUps.HELPER) {
 			helpers.clear();
 			for (AniObject ani: animation.getImages()) {
@@ -908,22 +905,21 @@ public class Controller implements Serializable, ActionListener {
 			System.out.println("Looks like you have some more time");
 			pauseGameBoardTimer();
 		}
+		if (currentPowerUp == PowerUps.BONUS) {
+			System.out.println("Eggs are worth double points!");
+			player.setPointsPerEgg(2);
+		}
 	}
 	
 	private void addHelpers() {
-		int count = 5;
 		int boardX = 0;
 		helpers = new ArrayList<>();
 		for(GridSpace[] row: gameBoard.getBoard()) {
-			if(count == 0) {
-				return;
-			}
 			int boardY = 0;
 			for(GridSpace gridSpace: row) {
 				if(gridSpace.getItem() == Item.EGG) {
 					Helper helper = new Helper(boardX, boardY);
 					helpers.add(helper);
-					count--;
 				}
 				boardY++;
 			}
@@ -936,24 +932,29 @@ public class Controller implements Serializable, ActionListener {
 	}
 	
 	private void addCleaners() {
-		int count = 5;
-		int boardX = 0;
-		for(GridSpace[] row: gameBoard.getBoard()) {
-			if(count == 0) {
-				return;
-			}
-			int boardY = 0;
-			for(GridSpace gridSpace: row) {
-				if(gridSpace.getItem() == Item.EGG) {
-					Cleaner cleaner = new Cleaner(boardX, boardY);
-					cleaners = new ArrayList<>();
-					cleaners.add(cleaner);
-					count--;
-					System.out.println(cleaner);
+		int count = 0;
+		int totTrash = 0;
+		for (int i = 0; i < 10; i++) {
+			for (int j = 0; j < 10; j++) {
+				GridSpace trySpace = gameBoard.getSpace(i,  j);
+				if (trySpace.getIsCovered() == true && trySpace.getItem() == Item.TRASH) {
+					totTrash++;
 				}
-				boardY++;
 			}
-			boardX++;
+		}
+		while (count < 10 && count < totTrash) {
+			int X = NumberManipulation.generateNum(10);
+			int Y = NumberManipulation.generateNum(10);
+			X = X - 1;
+			Y = Y - 1;	
+			GridSpace trySpace = gameBoard.getSpace(X,  Y);
+			if (trySpace.getIsCovered() == true && trySpace.getItem() == Item.TRASH) {
+				trySpace.setIsCovered(false);
+				trySpace.setItem(Item.ALREADYCHECKED);
+				int[] gridIndex = maggieSizePos(X, Y);
+				animation.addHole(gridIndex[0], gridIndex[1], gridIndex[2], gridIndex[3]);
+				count++;
+			}
 		}
 	}
 	
