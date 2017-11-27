@@ -308,6 +308,10 @@ public class Board implements Serializable {
 			return this.possibleAnswers;
 		}
 		
+		public GridSpace[][] getBoard() {
+			return this.board;
+		}
+		
 		/**
 		 * Removes question and answer identifiers ex: A1: & Q1: from the string
 		 * @param possibleAnswer

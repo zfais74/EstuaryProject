@@ -26,6 +26,8 @@ import TimeManagement.GameBoardTimer;
 import TimeManagement.PowerUpTimer;
 import enums.Bird;
 import enums.Item;
+import enums.PowerUps;
+import powerUpModels.Helper;
 
 // The Controller
 
@@ -456,7 +458,7 @@ public class Controller implements Serializable {
 	        		chestButton.addActionListener((ActionEvent a)->{
 	        	        		
 	        	        	String question;
-	        	        	try {
+	        	        	try {		
 								question = gameBoard.getPowerupQuestion();
 								List<String> possibleAns = gameBoard.getPossibleAnswers();
 								System.out.println("---------------------------------");
@@ -790,7 +792,82 @@ public class Controller implements Serializable {
 	}
 	
 	private void checkTimers() {
+		if(powerUpTimer != null) {
+			boolean timeElapsed = powerUpTimer.isTimesUp();
+			if(timeElapsed) {
+				this.powerUpTimer.getTimer().stop();
+				removePowerUp();
+			}
+		}
 		
+	}
+	
+	private void removePowerUp() {
+		player.setPowerupStatus(false);
+		
+	}
+	
+	private void implementPowerUp() {
+		PowerUps currentPowerUp = player.getCurrentPowerUp();
+		System.out.println("current power up: " + currentPowerUp);
+		if(currentPowerUp == PowerUps.HELPER) {
+			System.out.println("Maggie went out to find some eggs");
+			addHelpers();
+		}
+		
+		if (currentPowerUp == PowerUps.CLEANER) {
+			System.out.println("The DNRE sent out some cleaners");
+			addCleaners();
+		}
+		
+		if (currentPowerUp == PowerUps.FREEZE) {
+			System.out.println("Looks like you have some more time");
+			pauseGameBoardTimer();
+		}
+	}
+	
+	private void addHelpers() {
+		int count = 5;
+		int boardX = 0;
+		for(GridSpace[] row: gameBoard.getBoard()) {
+			if(count == 0) {
+				return;
+			}
+			int boardY = 0;
+			for(GridSpace gridSpace: row) {
+				if(gridSpace.getItem() == Item.EGG) {
+					Helper helper = new Helper(boardX, boardY);
+					count--;
+					System.out.println(helper);
+				}
+				boardY++;
+			}
+			boardX++;
+		}
+	}
+	
+	private void addCleaners() {
+		int count = 5;
+		int boardX = 0;
+		for(GridSpace[] row: gameBoard.getBoard()) {
+			if(count == 0) {
+				return;
+			}
+			int boardY = 0;
+			for(GridSpace gridSpace: row) {
+				if(gridSpace.getItem() == Item.EGG) {
+					Helper helper = new Helper(boardX, boardY);
+					count--;
+					System.out.println(helper);
+				}
+				boardY++;
+			}
+			boardX++;
+		}
+	}
+	
+	private void pauseGameBoardTimer() {
+		gameBoardTimer.getTimer().setDelay(5000);
 	}
 
 	public static void tick(Animation animation, Controller controller) {
@@ -850,6 +927,9 @@ public class Controller implements Serializable {
 				answerLabel.setText("Incorrect.");
 			}
 			player.setPowerupStatus(playerWasCorrect);
+			if (playerWasCorrect) {
+				implementPowerUp();
+			}
 			screens.show(cardPanel, "Board");
 			showImages();
 			frame.validate();
