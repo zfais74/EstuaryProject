@@ -27,6 +27,7 @@ import javax.swing.Timer;
 import TimeManagement.GameBoardTimer;
 import TimeManagement.PowerUpTimer;
 import enums.Bird;
+import enums.Direction;
 import enums.Item;
 import enums.PowerUps;
 import powerUpModels.Cleaner;
@@ -371,7 +372,7 @@ public class Controller implements Serializable, ActionListener {
 		frame.getContentPane().addMouseListener(new MouseListener() {
 		    @Override
 		    public void mouseClicked(MouseEvent e) {
-		    	int xLoc = e.getX();
+		    		int xLoc = e.getX();
 		        int yLoc = e.getY();
 		        int[] gridIndex = windowToGrid(xLoc, yLoc);
 		        int xIndex = gridIndex[0];
@@ -428,28 +429,46 @@ public class Controller implements Serializable, ActionListener {
 	        		constraints.anchor = GridBagConstraints.EAST;
 	        		
 	        		JLabel ateSome = null;
+	        		Font ateFont = new Font("Arial", Font.PLAIN, 40);
 	        		
-	        		if (item == Item.TRASH) {
-		        		ateSome = new JLabel("Ate Some Trash :(");
-		        		ateSome.setFont(new Font("Arial", Font.PLAIN, 40));
-		        		boardPanel.add(ateSome, constraints);
-	        		}
-	        		else if (item == Item.EGG) {
+	        		if (item == Item.EGG) {
 		        		ateSome = new JLabel("You Found and egg!!!");
-		        		ateSome.setFont(new Font("Arial", Font.PLAIN, 40));
+		        		ateSome.setFont(ateFont);
 		        		frame.getContentPane().add(ateSome, 0);
-		        		boardPanel.add(ateSome, constraints);
-	        		}
-	        		else if (item == Item.EMPTY) {
-		        		ateSome = new JLabel("Nothing there...");
-		        		ateSome.setFont(new Font("Arial", Font.PLAIN, 40));
 		        		boardPanel.add(ateSome, constraints);
 	        		}
 	        		else if (item == Item.ALREADYCHECKED) {
 		        		ateSome = new JLabel("Already checked there.");
-		        		ateSome.setFont(new Font("Arial", Font.PLAIN, 40));
+		        		ateSome.setFont(ateFont);
 		        		boardPanel.add(ateSome, constraints);
 	        		}
+	        		else {
+	        			if (item == Item.TRASH) {
+			        		ateSome = new JLabel("Ate Some Trash :(");
+			        		ateSome.setFont(ateFont);
+			        		boardPanel.add(ateSome, constraints);
+		        		}
+		        		
+	        			else if (item == Item.EMPTY) {
+			        		ateSome = new JLabel("Nothing there...");
+			        		ateSome.setFont(ateFont);
+			        		boardPanel.add(ateSome, constraints);
+		        		}
+	        			
+	        			List<Direction> dirList = gameBoard.getAdjacentItemGridDirections(xIndex, yIndex);
+	        			for(Direction d : dirList) {
+	        				System.out.println(String.format("Item at Direction:%s", d.name()));
+	        			}
+	        			
+	        			Collections.shuffle(dirList);
+	        			for(int count = 0; count < dirList.size() && count < 3; count++) {
+	        				//Highlight square
+	        				
+	        			}
+	        			//Logic to get adjacent squares and highlight them
+	        			
+	        		}
+	        		
 	        		
 	        		final JLabel ateSomeRef = ateSome;
 	        		
