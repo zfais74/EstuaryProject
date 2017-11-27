@@ -7,7 +7,7 @@ import java.util.Random;
 import java.util.Scanner;
 
 import enums.Item;
-
+import enums.Direction;
 // The Model
 
 /**
@@ -141,20 +141,156 @@ public class Board implements Serializable {
 		public int countAdjacentItems(int xIndex, int yIndex) {
 			int count = 0;
 			int radius = 1;
-			for(int i = -radius; i <= radius; i++) {
-				for(int j = -radius; j <= radius; j++) {
-					if(i == 0 && j == 0)
-						continue;
-					if(xIndex + i < 0 || xIndex + i >= boardSize)
-						continue;
-					if(yIndex + j < 0 || yIndex + j >= boardSize)
-						continue;
-					GridSpace space = getSpace(xIndex + i, yIndex + j);
-					if(space.getItem() != Item.EMPTY)
-						count++;
+			if(xIndex < 0 || yIndex < 0 || xIndex >= boardSize || yIndex >= boardSize) {
+				System.out.println(String.format("Called countAdjacentItems with incorrect arguments (%d,%d)", xIndex, yIndex));
+			}
+			else {
+				for(int i = -radius; i <= radius; i++) {
+					for(int j = -radius; j <= radius; j++) {
+						if(i == 0 && j == 0)
+							continue;
+						if(xIndex + i < 0 || xIndex + i >= boardSize)
+							continue;
+						if(yIndex + j < 0 || yIndex + j >= boardSize)
+							continue;
+						GridSpace space = getSpace(xIndex + i, yIndex + j);
+						Item thisItem = space.getItem();
+						if( thisItem != Item.EMPTY && thisItem != Item.ALREADYCHECKED)
+							count++;
+					}
 				}
 			}
 			return count;
+		}
+		
+		private Direction calculateDirection(int xIndex, int yIndex, int targetX, int targetY) {
+			Direction retDirection = Direction.UNDEFINED;
+			int xDelta = targetX - xIndex;
+			int yDelta = targetY - yIndex;
+			//If the given arguments are greater than 1 gridspace away return 
+			if(Math.abs(xDelta) > 1 || Math.abs(yDelta) > 1) {
+				System.out.println(String.format("Target Arguments out of range current Loc: (%d,%d) to end Loc (%d, %d)",  xIndex,  yIndex,  targetX,  targetY));
+			}
+			//Otherwise calculate the direction
+			else {
+				//Northern
+				if(yDelta == -1) {
+					if(xDelta == 1) {
+						retDirection = Direction.NORTHEAST;
+					}
+					else if(xDelta == -1) {
+						retDirection = Direction.NORTHWEST;
+					}
+					else if(xDelta == 0){
+						retDirection = Direction.NORTH;
+					}
+				}
+				//Southern
+				else if(yDelta == 1) {
+					if(xDelta == 1) {
+						retDirection = Direction.SOUTHEAST;
+					}
+					else if(xDelta == -1) {
+						retDirection = Direction.SOUTHWEST;
+					}
+					else if(xDelta == 0){
+						retDirection = Direction.SOUTH;
+					}
+				}
+				//East or West
+				else if(yDelta == 0){
+					if(xDelta == 1) {
+						retDirection = Direction.EAST;
+					}
+					else if(xDelta == -1 ) {
+						retDirection = Direction.WEST;
+					}
+					else if(xDelta == 0) {
+						retDirection = Direction.UNDEFINED;
+						System.out.println(String.format("Target Arguments are identical current Loc: (%d,%d) to end Loc (%d, %d)",  xIndex,  yIndex,  targetX,  targetY));
+					}
+				}
+			}
+			return retDirection;
+		}
+		
+		public int convertYDim(Direction dir) {
+			if (dir.name().contains("NORTH")) {
+				return -1;
+			}
+			else if(dir.name().contains("SOUTH")) {
+				return 1;
+			}
+			else {
+				return 0;
+			}
+		}
+		
+		public int convertXDim(Direction dir) {
+			if (dir.name().contains("WEST")) {
+				return -1;
+			}
+			else if(dir.name().contains("EAST")) {
+				return 1;
+			}
+			else {
+				return 0;
+			}
+		}
+		
+		public List<Direction> getAdjacentItemGridDirections(int xIndex, int yIndex) {
+			List<Direction> adjDirections = new ArrayList<Direction>();
+			int radius = 1;
+			if(xIndex < 0 || yIndex < 0 || xIndex >= boardSize || yIndex >= boardSize) {
+				System.out.println(String.format("Called countAdjacentItems with incorrect arguments (%d,%d)", xIndex, yIndex));
+			}
+			else {
+				for(int i = -radius; i <= radius; i++) {
+					for(int j = -radius; j <= radius; j++) {
+						if(i == 0 && j == 0)
+							continue;
+						int targetX = xIndex + i;
+						int targetY = yIndex + j;
+						if( targetX < 0 || targetX >= boardSize)
+							continue;
+						if(targetY < 0 ||targetY  >= boardSize)
+							continue;
+						GridSpace space = getSpace(targetX, targetY);
+						Item thisItem = space.getItem();
+						if( thisItem != Item.EMPTY && thisItem != Item.ALREADYCHECKED && space.getIsCovered())
+							adjDirections.add(calculateDirection(xIndex, yIndex, targetX, targetY));
+					}
+				}
+			}
+			return adjDirections;
+		}
+		
+		
+		public List<Direction> getAdjacentItemGridDirections(int xIndex, int yIndex, Item targetItem) {
+			List<Direction> adjDirections = new ArrayList<Direction>();
+			int radius = 1;
+			if(xIndex < 0 || yIndex < 0 || xIndex >= boardSize || yIndex >= boardSize) {
+				System.out.println(String.format("Called countAdjacentItems with incorrect arguments (%d,%d)", xIndex, yIndex));
+			}
+			else {
+				for(int i = -radius; i <= radius; i++) {
+					for(int j = -radius; j <= radius; j++) {
+						if(i == 0 && j == 0)
+							continue;
+						int targetX = xIndex + i;
+						int targetY = yIndex + j;
+						if( targetX < 0 || targetX >= boardSize)
+							continue;
+						if(targetY < 0 ||targetY  >= boardSize)
+							continue;
+						GridSpace space = getSpace(targetX, targetY);
+						Item thisItem = space.getItem();
+						if(thisItem == targetItem && space.getIsCovered())
+							adjDirections.add(calculateDirection(xIndex, yIndex, targetX, targetY));
+					}
+				}
+			}
+			return adjDirections;
 		}
 		
 		/**
