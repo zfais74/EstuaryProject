@@ -628,7 +628,6 @@ public class Controller implements Serializable, ActionListener {
 			}	
 		}
 		
-		int gridImageHeight = boardImage.getYSize();
 		int gridImageWidth = boardImage.getXSize();
 		int imageXloc = boardImage.getX();
 		int imageYloc = boardImage.getY();
@@ -735,6 +734,45 @@ public class Controller implements Serializable, ActionListener {
 		int[] gridIndex = {xIndex, yIndex, holeX, holeY, holeXSize, holeYSize};
 		
 		return gridIndex;
+	}
+	
+	public int[] maggieSizePos(int xIndex, int yIndex) {
+		double[] LineSlopes = {-0.3115, -0.2492, -0.1869, -0.1246, -0.0623, 0, 0.0623, 0.1246, 0.1869, 0.2492, 0.3115};
+		int[] LineTopX = {201, 261, 320, 380, 440, 500, 560, 620, 680, 739, 799};
+		int[] LineHeights = {0, 51, 104, 160, 219, 281, 346, 415, 488, 564, 644};
+		
+		Iterator<AniObject> boardItr = animation.getImages().iterator();
+		AniObject boardImage = null;
+		while (boardItr.hasNext()) {
+			boardImage = boardItr.next();
+			if (boardImage.toString().compareToIgnoreCase("board") == 0) {
+				break;
+			}	
+		}
+		
+		int gridImageWidth = boardImage.getXSize();
+		int imageXloc = boardImage.getX();
+		int imageYloc = boardImage.getY();
+		
+		int maggieX = 1;
+		int maggieY = 1;
+		int maggieXSize = 1;
+		int maggieYSize = 1;
+		
+		if ((xIndex != -1) && (yIndex != -1)){
+			double boxRatio = ((double) LineHeights[9] - (double) LineHeights[8])/((double) LineHeights[10] - (double) LineHeights[9]);
+			double gridSizeRatio = 1/Math.pow(boxRatio, yIndex);
+			maggieYSize = (int) Math.round(gridSizeRatio * (gridImageWidth/1000)*(LineHeights[1] - LineHeights[0]));
+			maggieY = (int) Math.round(imageYloc + LineHeights[yIndex] + ((gridImageWidth/1000.)*(LineHeights[yIndex+1] - LineHeights[yIndex])/2.) - (maggieYSize/2.) );
+			
+			maggieX = (int) Math.round(imageXloc + (gridImageWidth/1000)*(LineTopX[xIndex] + LineSlopes[xIndex] * (LineHeights[yIndex] + LineHeights[yIndex+1])/2.));
+			maggieXSize = (int) ((gridImageWidth/1000)*((LineTopX[xIndex + 1]  + (LineSlopes[xIndex + 1] * (LineHeights[yIndex] + LineHeights[yIndex+1])/2.)) - (LineTopX[xIndex]  + (LineSlopes[xIndex] * (LineHeights[yIndex] + LineHeights[yIndex+1])/2.))));
+		}
+		
+		int[] gridIndex = {maggieX, maggieY, maggieXSize, maggieYSize};
+		
+		return gridIndex;
+		
 	}
 	
 	// displays score, and a quit button
@@ -845,6 +883,11 @@ public class Controller implements Serializable, ActionListener {
 		
 		if(currentPowerUp == PowerUps.HELPER) {
 			helpers.clear();
+			for (AniObject ani: animation.getImages()) {
+				if (ani.toString().compareToIgnoreCase("maggie") == 0){
+					ani.setVisible(false);
+				}
+			}
 		}
 		
 	}
@@ -871,6 +914,7 @@ public class Controller implements Serializable, ActionListener {
 	private void addHelpers() {
 		int count = 5;
 		int boardX = 0;
+		helpers = new ArrayList<>();
 		for(GridSpace[] row: gameBoard.getBoard()) {
 			if(count == 0) {
 				return;
@@ -879,14 +923,16 @@ public class Controller implements Serializable, ActionListener {
 			for(GridSpace gridSpace: row) {
 				if(gridSpace.getItem() == Item.EGG) {
 					Helper helper = new Helper(boardX, boardY);
-					helpers = new ArrayList<>();
 					helpers.add(helper);
 					count--;
-					System.out.println(helper);
 				}
 				boardY++;
 			}
 			boardX++;
+		}
+		for (Helper helper: helpers) {
+			int[] gridIndex = maggieSizePos(helper.getXPos(), helper.getYPos());
+			animation.addMaggie(gridIndex[0], gridIndex[1], gridIndex[2], gridIndex[3]);
 		}
 	}
 	
