@@ -424,51 +424,8 @@ public class Controller implements Serializable, ActionListener {
 	        			Load.SaveGame(thisController);
 	        		});
 	        		
-	        		constraints.gridx = 1;
-	        		constraints.gridy = 4;
-	        		constraints.anchor = GridBagConstraints.EAST;
-	        		
-	        		JLabel ateSome = null;
+	        		JLabel ateSome = new JLabel(" ");
 	        		Font ateFont = new Font("Arial", Font.PLAIN, 40);
-	        		
-	        		if (item == Item.EGG) {
-		        		ateSome = new JLabel("You Found and egg!!!");
-		        		ateSome.setFont(ateFont);
-		        		frame.getContentPane().add(ateSome, 0);
-		        		boardPanel.add(ateSome, constraints);
-	        		}
-	        		else if (item == Item.ALREADYCHECKED) {
-		        		ateSome = new JLabel("Already checked there.");
-		        		ateSome.setFont(ateFont);
-		        		boardPanel.add(ateSome, constraints);
-	        		}
-	        		else {
-	        			if (item == Item.TRASH) {
-			        		ateSome = new JLabel("Ate Some Trash :(");
-			        		ateSome.setFont(ateFont);
-			        		boardPanel.add(ateSome, constraints);
-		        		}
-		        		
-	        			else if (item == Item.EMPTY) {
-			        		ateSome = new JLabel("Nothing there...");
-			        		ateSome.setFont(ateFont);
-			        		boardPanel.add(ateSome, constraints);
-		        		}
-	        			
-	        			List<Direction> dirList = gameBoard.getAdjacentItemGridDirections(xIndex, yIndex);
-	        			Collections.shuffle(dirList);
-	        			for(int count = 0; count < dirList.size() && count < 3; count++) {
-	        				Direction d = dirList.get(count);
-	        				System.out.println(String.format("Item at Direction:%s", d.name()));
-	        				String loc_disp = String.format("This Location: (%d,%d) That Location: (%d,%d)", xIndex, yIndex, xIndex + gameBoard.convertXDim(d), yIndex + gameBoard.convertYDim(d));
-	        				System.out.println(loc_disp);
-	        				int[] dims = maggieSizePos(xIndex + gameBoard.convertXDim(d),yIndex + gameBoard.convertYDim(d));
-	        				animation.addMaggie(dims[0], dims[1], dims[2], dims[3]);
-	        			}
-	        			
-	        		}
-	        		
-	        		
 	        		final JLabel ateSomeRef = ateSome;
 	        		
 	        		constraints.gridx = 1;
@@ -526,23 +483,57 @@ public class Controller implements Serializable, ActionListener {
 	        		
 	        		boardPanel.add(chestButton, constraints);
 	        		
+	        		if (item == Item.EGG) {
+		        		ateSome.setText("You Found and egg!!!");
+		        		ateSome.setFont(ateFont);
+		        		frame.getContentPane().add(ateSome, 0);
+		        		constraints.gridx = 1;
+		        		constraints.gridy = 4;
+		        		constraints.anchor = GridBagConstraints.EAST;
+		        		boardPanel.add(ateSome, constraints);
+		        		if (NumberManipulation.generateNum(10) < 6) {
+		        			chestButton.setIcon(animation.getChestIcon());
+		                	chestButton.setEnabled(true);
+		        		}
+	        		}
+	        		else if (item == Item.ALREADYCHECKED) {
+		        		ateSome = new JLabel("Already checked there.");
+		        		ateSome.setFont(ateFont);
+		        		boardPanel.add(ateSome, constraints);
+	        		}
+	        		else {
+	        			if (item == Item.TRASH) {
+			        		ateSome.setText("Ate Some Trash :(");
+			        		ateSome.setFont(ateFont);
+			        		constraints.gridx = 1;
+			        		constraints.gridy = 4;
+			        		constraints.anchor = GridBagConstraints.EAST;
+			        		boardPanel.add(ateSome, constraints);
+		        		}
+		        		
+	        			else if (item == Item.EMPTY) {
+			        		ateSome.setText("Nothing there...");
+			        		ateSome.setFont(ateFont);
+			        		constraints.gridx = 1;
+			        		constraints.gridy = 4;
+			        		constraints.anchor = GridBagConstraints.EAST;
+			        		boardPanel.add(ateSome, constraints);
+		        		}
+	        			
+	        			List<Direction> dirList = gameBoard.getAdjacentItemGridDirections(xIndex, yIndex);
+	        			Collections.shuffle(dirList);
+	        			for(int count = 0; count < dirList.size() && count < 3; count++) {
+	        				Direction d = dirList.get(count);
+	        				System.out.println(String.format("Item at Direction:%s", d.name()));
+	        				String loc_disp = String.format("This Location: (%d,%d) That Location: (%d,%d)", xIndex, yIndex, xIndex + gameBoard.convertXDim(d), yIndex + gameBoard.convertYDim(d));
+	        				System.out.println(loc_disp);
+	        				int[] dims = maggieSizePos(xIndex + gameBoard.convertXDim(d),yIndex + gameBoard.convertYDim(d));
+	        				animation.addMaggie(dims[0], dims[1], dims[2], dims[3]);
+	        			}
+	        			
+	        		}      		
 
 	        		frame.validate();
-	        		
-	                if (gameBoard.getClicks() == 0){
-	                	endScreen();
-	                }
-	                //Established getClicks() != 0
-	                else if (gameBoard.getClicks() % 3 == 0) {
-	                	chestButton.setIcon(animation.getChestIcon());
-	                	chestButton.setEnabled(true);
-	                	
-	                }
-	                //Established getClicks() % 3 != 0
-	                else {
-	                	chestButton.setIcon(null);
-	                	chestButton.setEnabled(false);
-	                }
 		        }
 		        
 		    }
@@ -776,6 +767,8 @@ public class Controller implements Serializable, ActionListener {
 	
 	// displays score, and a quit button
 	public void endScreen() {
+		
+		frame.getContentPane().removeMouseListener(frame.getContentPane().getMouseListeners()[0]);
 		
 		this.checkTimersTimer.stop();
 		//Declare a new JPanel
