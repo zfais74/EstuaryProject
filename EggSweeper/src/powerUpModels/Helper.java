@@ -1,6 +1,8 @@
 package powerUpModels;
 
-public class Helper {
+import java.io.Serializable;
+
+public class Helper implements Serializable {
 	private String name;
 	private int xPos;
 	private int yPos;
