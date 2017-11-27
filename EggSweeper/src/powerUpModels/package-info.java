@@ -5,4 +5,4 @@
  * @author zeke
  *
  */
-package PowerUpModels;
+package powerUpModels;

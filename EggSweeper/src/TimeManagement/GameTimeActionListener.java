@@ -18,7 +18,7 @@ public class GameTimeActionListener implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
 		this.time -- ;
-		System.out.println("Called");
+		
 	}
 
 }

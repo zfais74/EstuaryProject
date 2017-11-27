@@ -22,6 +22,8 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import TimeManagement.GameBoardTimer;
+import TimeManagement.PowerUpTimer;
 import enums.Bird;
 import enums.Item;
 
@@ -32,6 +34,8 @@ public class Controller implements Serializable {
 	// The Model
 	Player player;
 	Board gameBoard;
+	PowerUpTimer powerUpTimer;
+	GameBoardTimer gameBoardTimer;
 	
 	// The View
 	JFrame frame;
@@ -238,6 +242,8 @@ public class Controller implements Serializable {
 	
 	public void buildBoard() {
 		
+		gameBoardTimer = new GameBoardTimer();
+		gameBoardTimer.getTimer().start();
 		JPanel boardPanel = new JPanel();
 		boardPanel.setLayout(new GridBagLayout());
 		GridBagConstraints constraints = constraintFactory();
@@ -778,6 +784,14 @@ public class Controller implements Serializable {
 		frame.repaint();
 
 	}
+	
+	private void setGameBoardTimer() {
+		 
+	}
+	
+	private void checkTimers() {
+		
+	}
 
 	public static void tick(Animation animation, Controller controller) {
 		if (controller.boardBuilt == 0) {
@@ -823,27 +837,23 @@ public class Controller implements Serializable {
 	
 	private JButton createAnswerButton(String answer) {
 		JButton possibleAnswer = new JButton(answer);
-		possibleAnswer.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
-				JButton selectedButton = (JButton)e.getSource();
-				String userAnswer = selectedButton.getText();
-				boolean playerWasCorrect = gameBoard.checkAnswer(userAnswer);
-				if (playerWasCorrect){
-					answerLabel.setText("Correct!!!");
-				}
-				else {
-					answerLabel.setText("Incorrect.");
-				}
-				player.setPowerupStatus(playerWasCorrect);
-				screens.show(cardPanel, "Board");
-				showImages();
-				frame.validate();
-				frame.repaint();
+		possibleAnswer.addActionListener((ActionEvent a)->{
+			JButton selectedButton = (JButton)a.getSource();
+			String userAnswer = selectedButton.getText();
+			boolean playerWasCorrect = gameBoard.checkAnswer(userAnswer);
+			if (playerWasCorrect){
+				answerLabel.setText("Correct!!!");
+				powerUpTimer = new PowerUpTimer();
+				powerUpTimer.getTimer().start();
 			}
-			
+			else {
+				answerLabel.setText("Incorrect.");
+			}
+			player.setPowerupStatus(playerWasCorrect);
+			screens.show(cardPanel, "Board");
+			showImages();
+			frame.validate();
+			frame.repaint();	
 		});
 		return possibleAnswer;
 	}

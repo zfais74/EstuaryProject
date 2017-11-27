@@ -3,7 +3,7 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 
-import PowerUpModels.Cleaner;
+import powerUpModels.Cleaner;
 
 public class CleanerTest {
 	
