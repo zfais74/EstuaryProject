@@ -9,6 +9,7 @@ public class PowerUpTimer implements ActionListener {
 	
 	private int timeRemaining;
 	private Timer timer;
+	private boolean timesUp = false;
 	
 	public PowerUpTimer() {
 		this.timeRemaining = 5;
@@ -26,6 +27,9 @@ public class PowerUpTimer implements ActionListener {
 	
 	private void decTime() {
 		timeRemaining--;
+		if(timeRemaining <= 0) {
+			setTimesUp(true);
+		}
 	}
 	
 	public int getTimeRemaining () {
@@ -35,13 +39,20 @@ public class PowerUpTimer implements ActionListener {
 	public Timer getTimer() {
 		return this.timer;
 	}
+	
+	private void setTimesUp(boolean isTimeUp) {
+		this.timesUp = isTimeUp;
+	}
+	
+	public boolean isTimesUp() {
+		return this.timesUp;
+	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
-		System.out.println("Called");
 		this.decTime();
-		System.out.println(this.timeRemaining);
+		System.out.println("Powerup:" + this.timeRemaining);
 	}
 
 }
