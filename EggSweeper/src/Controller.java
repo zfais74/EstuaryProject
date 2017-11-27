@@ -1,10 +1,16 @@
-import java.awt.*;
+import java.awt.CardLayout;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.GridLayout;
+import java.awt.MouseInfo;
+import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.Serializable;
 import java.util.Collections;
@@ -16,6 +22,8 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import TimeManagement.GameBoardTimer;
+import TimeManagement.PowerUpTimer;
 import enums.Bird;
 import enums.Item;
 
@@ -26,15 +34,20 @@ public class Controller implements Serializable {
 	// The Model
 	Player player;
 	Board gameBoard;
+	PowerUpTimer powerUpTimer;
+	GameBoardTimer gameBoardTimer;
 	
 	// The View
 	JFrame frame;
 	Animation animation;
 	CardLayout screens;
 	JPanel cardPanel;
-
+	Controller thisController;
+	
 	// Constant for tick method
 	private int boardBuilt = 0;
+	JLabel answerLabel = new JLabel(" ");
+	
 	
 	private GridBagConstraints constraintFactory() {
 		GridBagConstraints constraints = new GridBagConstraints();
@@ -109,11 +122,6 @@ public class Controller implements Serializable {
 
 			}
 		);
-		//When built add the component to the frame
-		cardPanel = new JPanel();
-		cardPanel.setVisible(true);
-		screens = new CardLayout();
-		cardPanel.setLayout(screens);
 		//Adds the start screen to the deck
 		cardPanel.add(startPanel, "Start");
 		screens.show(cardPanel, "Start");
@@ -234,6 +242,8 @@ public class Controller implements Serializable {
 	
 	public void buildBoard() {
 		
+		gameBoardTimer = new GameBoardTimer();
+		gameBoardTimer.getTimer().start();
 		JPanel boardPanel = new JPanel();
 		boardPanel.setLayout(new GridBagLayout());
 		GridBagConstraints constraints = constraintFactory();
@@ -242,12 +252,19 @@ public class Controller implements Serializable {
 		constraints.gridy = 0;
 		constraints.anchor = GridBagConstraints.EAST;
 		
+		answerLabel.setFont(new Font("Arial", Font.PLAIN, 40));
+		boardPanel.add(answerLabel, constraints, 0);
+		
+		constraints.gridx = 1;
+		constraints.gridy = 1;
+		constraints.anchor = GridBagConstraints.EAST;
+		
 		JLabel clicks = new JLabel("Clicks remaining: " + Integer.toString(gameBoard.getClicks()) + " ");
 		clicks.setFont(new Font("Arial", Font.PLAIN, 40));
 		boardPanel.add(clicks, constraints);
 		
 		constraints.gridx = 1;
-		constraints.gridy = 1;
+		constraints.gridy = 2;
 		constraints.anchor = GridBagConstraints.EAST;
 		
 		JLabel score = new JLabel("Score: " + Integer.toString(player.getScore()) + " ");
@@ -255,42 +272,18 @@ public class Controller implements Serializable {
 		boardPanel.add(score, constraints);
 		
 		constraints.gridx = 1;
-		constraints.gridy = 2;
+		constraints.gridy = 3;
 		constraints.anchor = GridBagConstraints.EAST;
 
 		JButton save = new JButton("Save");
 		save.setFont(new Font("Arial", Font.PLAIN, 30));
+		save.setFocusable(false);
 		save.setVisible(true);
 		boardPanel.add(save,constraints);
-		save.addActionListener((ActionEvent e)->{
+		save.addActionListener((ActionEvent a)->{
 			Load.SaveGame(this);
 		});
-
-		constraints.gridx = 1;
-		constraints.gridy = 3;
-		constraints.anchor = GridBagConstraints.EAST;
-		JButton chestButton = new JButton();
-		chestButton.setPreferredSize(new Dimension(200, 200));
-		chestButton.setVisible(true);
-		chestButton.setEnabled(false);
-		boardPanel.add(chestButton, constraints);
 		
-		chestButton.addActionListener((ActionEvent e)->{
-
-	        	//Zeke, powerUpPanel call can go here I guess
-	        	//make sure to add it in the second chestButton declaration below as well
-
-	        	System.out.println("Chest Button Clicked");
-
-	        }
-	    );
-
-
-		cardPanel.add(boardPanel, "Board");
-		screens.show(cardPanel, "Board");
-		frame.validate();
-		frame.repaint();
-
 		AniObject bird = null;
 		AniObject board = null;
 		Iterator<AniObject> boardItr = animation.getImages().iterator();
@@ -321,6 +314,50 @@ public class Controller implements Serializable {
 		final AniObject birdMouse = bird;
 		final AniObject boardMouse = board;
 		
+		constraints.gridx = 1;
+		constraints.gridy = 4;
+		constraints.anchor = GridBagConstraints.EAST;
+    		
+		JLabel ateSomeHolder = new JLabel(" ");
+		ateSomeHolder.setFont(new Font("Arial", Font.PLAIN, 40));
+    	boardPanel.add(ateSomeHolder, constraints);
+		
+		constraints.gridx = 1;
+		constraints.gridy = 5;
+		constraints.anchor = GridBagConstraints.EAST;
+		JButton chestButton = new JButton();
+		chestButton.setPreferredSize(new Dimension(200, 200));
+		chestButton.setContentAreaFilled(false);
+		chestButton.setVisible(true);
+		chestButton.setBorderPainted(false);
+		chestButton.addMouseMotionListener(new MouseMotionListener() {
+
+			@Override
+			public void mouseDragged(MouseEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void mouseMoved(MouseEvent e) {
+				birdMouse.setX( (int) Math.round(e.getX() - birdMouse.getYSize()/8.) + chestButton.getX());
+				birdMouse.setY((int) Math.round(e.getY() - birdMouse.getYSize()/1.8) + chestButton.getY());
+				double newBirdRatio = getSizeRatio(birdMouse.getY(), boardMouse);
+				birdMouse.setSize(newBirdRatio);
+				frame.repaint();
+				
+			}
+			
+		});
+		chestButton.setEnabled(false);
+		boardPanel.add(chestButton, constraints, 0);
+		
+		cardPanel.add(boardPanel, "Board");
+		screens.show(cardPanel, "Board");
+		frame.validate();
+		frame.repaint();
+		
+		
 		frame.getContentPane().addMouseListener(new MouseListener() {
 		    @Override
 		    public void mouseClicked(MouseEvent e) {
@@ -337,95 +374,129 @@ public class Controller implements Serializable {
 		        	animation.addHole(gridIndex[2], gridIndex[3], gridIndex[4], gridIndex[5]);
 		        	
 		        	boardPanel.removeAll();
+		        	answerLabel.setText(" ");
 		        	frame.validate();
 		        	frame.repaint();
 	                
 		        	constraints.gridx = 1;
-		        	constraints.gridy = 0;
+		    		constraints.gridy = 0;
+		    		constraints.anchor = GridBagConstraints.EAST;
+		    		
+		    		boardPanel.add(answerLabel, constraints);
+		        	
+		        	constraints.gridx = 1;
+		        	constraints.gridy = 1;
 		        	constraints.anchor = GridBagConstraints.EAST;
 		        	
 	                JLabel newClicks = new JLabel("Clicks remaining: " + Integer.toString(gameBoard.getClicks()) + " ");
 	        		newClicks.setFont(new Font("Arial", Font.PLAIN, 40));
-	        		newClicks.setOpaque(false);
 	        		boardPanel.add(newClicks, constraints);
 	                
-	        		constraints.gridx = 1;
-	        		constraints.gridy = 1;
-	        		constraints.anchor = GridBagConstraints.EAST;
-	        		
-	        		JLabel newScore = new JLabel("Score: " + Integer.toString(player.getScore()) + " ");
-	        		newScore.setFont(new Font("Arial", Font.PLAIN, 40));
-	        		newScore.setOpaque(false);
-	        		boardPanel.add(newScore, constraints);
-	        		
 	        		constraints.gridx = 1;
 	        		constraints.gridy = 2;
 	        		constraints.anchor = GridBagConstraints.EAST;
 	        		
-	        		JButton chestButton = new JButton();
-	        		chestButton.setPreferredSize(new Dimension(200, 200));
-	        		chestButton.setVisible(true);
+	        		JLabel newScore = new JLabel("Score: " + Integer.toString(player.getScore()) + " ");
+	        		newScore.setFont(new Font("Arial", Font.PLAIN, 40));
+	        		boardPanel.add(newScore, constraints);
 	        		
-	        		chestButton.addActionListener((ActionEvent a)->{
-	        	        		
-	        	        	//Zeke, powerUpPanel call can go here I guess
-	        	        	//make sure to add it in the second chestButton declaration below as well
-	        	        	StringBuilder question = new StringBuilder();
-	        	        	try {
-								question.append(gameBoard.getPowerupQuestion());
-								List<String> possibleAns = gameBoard.getPossibleAnswers();
-								System.out.println("---------------------------------");
-								System.out.println(possibleAns);
-								Collections.shuffle(possibleAns);
-								System.out.println(possibleAns);
-								chestButton.setEnabled(false);
-								questionScreen(question, possibleAns);
+	        		constraints.gridx = 1;
+	        		constraints.gridy = 3;
+	        		constraints.anchor = GridBagConstraints.EAST;
 
-							} catch (FileNotFoundException e1) {
-								// TODO Auto-generated catch block
-								question.append("Error loading a queston");
-								System.out.println(question);
-								e1.printStackTrace();
-
-							}
-
-	        	        	System.out.println("Chest Button Clicked");
-	        	        	
-	        	        }
-	        	    );
+	        		JButton save = new JButton("Save");
+	        		save.setFocusable(false);
+	        		save.setFont(new Font("Arial", Font.PLAIN, 30));
+	        		save.setVisible(true);
+	        		boardPanel.add(save,constraints);
+	        		save.addActionListener((ActionEvent a)->{
+	        			Load.SaveGame(thisController);
+	        		});
 	        		
-	        		boardPanel.add(chestButton, constraints);
+	        		constraints.gridx = 1;
+	        		constraints.gridy = 4;
+	        		constraints.anchor = GridBagConstraints.EAST;
 	        		
+	        		JLabel ateSome = null;
 	        		
-	        		constraints.gridx = 0;
-		        	constraints.gridy = 0;
-		        	constraints.anchor = GridBagConstraints.EAST;
-		        	
 	        		if (item == Item.TRASH) {
-		        		JLabel ateSome = new JLabel("Ate Some Trash :(");
+		        		ateSome = new JLabel("Ate Some Trash :(");
 		        		ateSome.setFont(new Font("Arial", Font.PLAIN, 40));
-		        		ateSome.setOpaque(false);
 		        		boardPanel.add(ateSome, constraints);
 	        		}
 	        		else if (item == Item.EGG) {
-		        		JLabel ateSome = new JLabel("You Found and egg!!!");
+		        		ateSome = new JLabel("You Found and egg!!!");
 		        		ateSome.setFont(new Font("Arial", Font.PLAIN, 40));
-		        		ateSome.setOpaque(true);
 		        		frame.getContentPane().add(ateSome, 0);
 		        		boardPanel.add(ateSome, constraints);
 	        		}
 	        		else if (item == Item.EMPTY) {
-		        		JLabel ateSome = new JLabel("Nothing there...");
+		        		ateSome = new JLabel("Nothing there...");
 		        		ateSome.setFont(new Font("Arial", Font.PLAIN, 40));
-		        		ateSome.setOpaque(false);
 		        		boardPanel.add(ateSome, constraints);
 	        		}
 	        		else if (item == Item.ALREADYCHECKED) {
-		        		JLabel ateSome = new JLabel("Already checked there.");
+		        		ateSome = new JLabel("Already checked there.");
 		        		ateSome.setFont(new Font("Arial", Font.PLAIN, 40));
-		        		ateSome.setOpaque(false);
 		        		boardPanel.add(ateSome, constraints);
 	        		}
+	        		
+	        		final JLabel ateSomeRef = ateSome;
+	        		
+	        		constraints.gridx = 1;
+	        		constraints.gridy = 5;
+	        		constraints.anchor = GridBagConstraints.EAST;
+	        		
+	        		JButton chestButton = new JButton();
+	        		chestButton.setPreferredSize(new Dimension(200, 200));
+	        		chestButton.setContentAreaFilled(false);
+	        		chestButton.setBorderPainted(false);
+	        		chestButton.setVisible(true);
+	        		
+	        		chestButton.addActionListener((ActionEvent a)->{
+	        	        		
+	        	        	String question;
+	        	        	try {
+								question = gameBoard.getPowerupQuestion();
+								List<String> possibleAns = gameBoard.getPossibleAnswers();
+								System.out.println("---------------------------------");
+								Collections.shuffle(possibleAns);
+								System.out.println(possibleAns);
+								chestButton.setEnabled(false);
+								ateSomeRef.setText(" ");
+								questionScreen(question, possibleAns);
+								
+							} catch (FileNotFoundException e1) {
+								// TODO Auto-generated catch block
+								e1.printStackTrace();
+								
+							}
+	        	        	
+	        	        	System.out.println("Chest Button Clicked");
+	        	        	
+	        	        }
+	        	    );
+	        		chestButton.addMouseMotionListener(new MouseMotionListener() {
+
+	        			@Override
+	        			public void mouseDragged(MouseEvent arg0) {
+	        				// TODO Auto-generated method stub
+	        				
+	        			}
+
+	        			@Override
+	        			public void mouseMoved(MouseEvent e) {
+	        				birdMouse.setX( (int) Math.round(e.getX() - birdMouse.getYSize()/8.) + chestButton.getX());
+	        				birdMouse.setY((int) Math.round(e.getY() - birdMouse.getYSize()/1.8) + chestButton.getY());
+	        				double newBirdRatio = getSizeRatio(birdMouse.getY(), boardMouse);
+	        				birdMouse.setSize(newBirdRatio);
+	        				frame.repaint();
+	        				
+	        			}
+	        			
+	        		});
+	        		
+	        		boardPanel.add(chestButton, constraints);
 	        		
 
 	        		frame.validate();
@@ -667,13 +738,14 @@ public class Controller implements Serializable {
 		JButton quitButton = new JButton("Quit");
 		quitButton.setFont(new Font("Arial", Font.PLAIN, 30));
 
-		quitButton.addActionListener((ActionEvent e)->{
+		quitButton.addActionListener(new ActionListener(){
+	        public void actionPerformed(ActionEvent e){
 	        	
 	        	// when clicked, exits
 		        System.exit(0);
 	                
 	        }
-	    );
+	    });
 		
 		endPanel.add(eggLabel, constraints);
 		constraints.gridy = width;
@@ -684,41 +756,41 @@ public class Controller implements Serializable {
 		endPanel.add(quitButton, constraints);
 		cardPanel.add(endPanel, "End");
 		screens.show(cardPanel, "End");
-
+		
 		//Add and repaint
 		frame.validate();
 		frame.repaint();
 	}
 	
-	private void questionScreen(StringBuilder question, List<String> possibleAns) {
+	private void questionScreen(String question, List<String> possibleAns) {
 		JPanel questionPanel = new JPanel();
-		JLabel questionLabel = new JLabel(question.toString());
+		questionPanel.setLayout(new GridLayout(6,0));
+		
+		JLabel questionLabel = new JLabel(question);
+		questionLabel.setFont(new Font("Arial", Font.PLAIN, 40));
+		questionLabel.setHorizontalAlignment(JLabel.CENTER);
+		
 		questionPanel.add(questionLabel);
 		for(String answer: possibleAns) {
 			JButton possibleAnswerButton = createAnswerButton(answer);
+			possibleAnswerButton.setFont(new Font("Arial", Font.PLAIN, 30));
+			possibleAnswerButton.setFocusable(false);
 			questionPanel.add(possibleAnswerButton);
 		}
-		JButton answerButton = new JButton("Rest");
-		answerButton.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
-				showImages();
-				screens.show(cardPanel, "Board");
-				frame.revalidate();
-				frame.repaint();
-			}
-
-		});
-		questionPanel.setLayout(new GridLayout(6,0));
-		questionPanel.add(answerButton);
 		cardPanel.add(questionPanel, "PowerUp");
 		screens.show(cardPanel, "PowerUp");
 		hideImages();
 		frame.validate();
 		frame.repaint();
 
+	}
+	
+	private void setGameBoardTimer() {
+		 
+	}
+	
+	private void checkTimers() {
+		
 	}
 
 	public static void tick(Animation animation, Controller controller) {
@@ -756,34 +828,36 @@ public class Controller implements Serializable {
 			object.setVisible(true);
 		}
 	}
-
+	
 	private void hideImages() {
 		for(AniObject object: animation.getImages()) {
 			object.setVisible(false);
 		}
 	}
-
+	
 	private JButton createAnswerButton(String answer) {
 		JButton possibleAnswer = new JButton(answer);
-		possibleAnswer.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
-				JButton selectedButton = (JButton)e.getSource();
-				String userAnswer = selectedButton.getText();
-				boolean playerWasCorrect = gameBoard.checkAnswer(userAnswer);
-				player.setPowerupStatus(playerWasCorrect);
-				screens.show(cardPanel, "Board");
-				showImages();
-				frame.validate();
-				frame.repaint();
+		possibleAnswer.addActionListener((ActionEvent a)->{
+			JButton selectedButton = (JButton)a.getSource();
+			String userAnswer = selectedButton.getText();
+			boolean playerWasCorrect = gameBoard.checkAnswer(userAnswer);
+			if (playerWasCorrect){
+				answerLabel.setText("Correct!!!");
+				powerUpTimer = new PowerUpTimer();
+				powerUpTimer.getTimer().start();
 			}
-
+			else {
+				answerLabel.setText("Incorrect.");
+			}
+			player.setPowerupStatus(playerWasCorrect);
+			screens.show(cardPanel, "Board");
+			showImages();
+			frame.validate();
+			frame.repaint();	
 		});
 		return possibleAnswer;
 	}
-
+	
 	// Game with GUI
 	public static void main(String[] args) {
 		Controller cont = new Controller();
@@ -795,8 +869,12 @@ public class Controller implements Serializable {
 	  	cont.frame.getContentPane().add(cont.animation);
 	  	cont.frame.pack();
 	  	cont.frame.setVisible(true);
+	  	cont.cardPanel = new JPanel();
+	  	cont.cardPanel.setVisible(true);
+	  	cont.screens = new CardLayout();
+	  	cont.cardPanel.setLayout(cont.screens);
+	  	cont.thisController = cont;
 	  	cont.startScreen();
-	  	//cont.animation.migrationAnimation();
 	  	while (true) {
 	    		cont.frame.repaint();
 	    		tick(cont.animation, cont);

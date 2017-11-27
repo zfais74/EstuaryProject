@@ -30,7 +30,6 @@ public class Board implements Serializable {
 		private int clicks;
 		private Difficulty difficulty;
 		private List<String>possibleAnswers = new ArrayList<>();
-		private List<Integer>possibleAnswerNums = new ArrayList<>();
 		
 		// size of the board
 		public static int boardSize = 10;
@@ -43,9 +42,9 @@ public class Board implements Serializable {
 		private double easyEggRatio = randConst * (9./10.);
 		private double mediumEggRatio = randConst * (8.5/10.);
 		private double hardEggRatio = randConst * (8./10.);
-		private List<String> questionsAsked = new ArrayList<String>();
+		private List<Integer> questionNumsAsked = new ArrayList<Integer>();
 		private String correctAnswer;
-		private int totalQuestions = 5;
+		private int totalQuestions = 10;
 		
 		
 		/**
@@ -204,12 +203,15 @@ public class Board implements Serializable {
 		 */
 		public String getPowerupQuestion() throws FileNotFoundException {
 			possibleAnswers.clear();
-			possibleAnswerNums.clear();
-			StringBuilder question = new StringBuilder(); // question string builder
+			String question = "";
 			StringBuilder qNum = new StringBuilder(); // string builder for the question number
 			qNum.append("Q"); //marker for questions
 			File questionsFile = new File("questions/powerQuestions.txt");
 			int questionNum = generateQuestionNum(totalQuestions);
+			while (questionNumsAsked.contains(questionNum)) {
+				questionNum = generateQuestionNum(totalQuestions);
+			}
+			this.questionNumsAsked.add(questionNum);
 			qNum.append(questionNum);
 			qNum.append(":"); // another marker for questions
 			try {
@@ -217,30 +219,25 @@ public class Board implements Serializable {
 				while(fn.hasNextLine()) {
 					String line = fn.nextLine();
 					if(line.contains(qNum.toString())){ // if the line contains the Q(number):, then add it to the question string builder 
-						question.append(line);
+						int colonPosition = line.indexOf(":") + 1;
+						line = line.substring(colonPosition);
+						question = "<html>" + line;
+						String nextLine = fn.nextLine();
+						if (nextLine.length() != 0) {
+							question = question + "<br/>" + nextLine + "</html>";
+						}
 						System.out.println("Selected Question:" + question.toString());
 						break;
 					}
 				}
 				fn.close();
-				this.correctAnswer = this.getPowerupAnswer(questionNum);
-				this.possibleAnswers.add(correctAnswer);
-				int questionCounter = 3;
-				boolean foundAnswers = false;
-				while (questionCounter != 0  && foundAnswers == false ) {
-					foundAnswers = this.setPossibleAnswers(questionNum);
-					if (foundAnswers) {
-						questionCounter--;
-						foundAnswers = false;
-					}
-				}
-				
 			} catch (FileNotFoundException e){
 				System.out.println(e.getMessage());
 				System.exit(0);
 			}
-			
-			return question.toString();
+			setAnswers(questionNum);
+			//question = removeColon(question);
+			return question;
 		}
 		
 		/**
@@ -249,7 +246,9 @@ public class Board implements Serializable {
 		 * @return random number to pick which question to ask
 		 */
 		private int generateQuestionNum(int range) {
-			return (int)(Math.random() * ((range - 1) + 1)) + 1;
+			int rand = (int)(Math.random() * ((range - 1) + 1)) + 1;
+			System.out.println("rand = " + Integer.toString(rand));
+			return rand;
 		}
 		
 		/**
@@ -258,59 +257,57 @@ public class Board implements Serializable {
 		 * @return string form of answer
 		 * @throws FileNotFoundException
 		 */
-		private String getPowerupAnswer(int questionNum) throws FileNotFoundException{
+		private void setAnswers(int questionNum) throws FileNotFoundException{
 			StringBuilder answer = new StringBuilder(); 
 			StringBuilder aNum = new StringBuilder(); 
+			StringBuilder caNum = new StringBuilder();
 			aNum.append("A"); //marker for questions
-			File questionsFile = new File("questions/answers.txt");
 			aNum.append(questionNum);
 			aNum.append(":");
+			caNum.append("CA"); //marker for questions
+			caNum.append(questionNum);
+			caNum.append(":");
+			File questionsFile = new File("questions/answers.txt");
 			try {
 				Scanner fn = new Scanner (questionsFile);
 				while(fn.hasNextLine()) {
 					String line = fn.nextLine();
-					if(line.contains(aNum.toString())){ 
+					if(line.contains(caNum.toString())){ 
 						answer.append(line);
 						answer = removeColon(answer);
-						possibleAnswerNums.add(questionNum);
+						this.possibleAnswers.add(answer.toString());
+						this.correctAnswer = answer.toString();
+						answer.setLength(0);
 						break;
 					}
 				}
 				fn.close();
+				Scanner fn2 = new Scanner (questionsFile);
+				while(fn2.hasNextLine()) {
+					String line = fn2.nextLine();
+					if(line.contains(aNum.toString()) && !(line.contains(caNum.toString()))){ 
+						answer.append(line);
+						answer = removeColon(answer);
+						this.possibleAnswers.add(answer.toString());
+						answer.setLength(0);
+						continue;
+					}
+				}
+				fn2.close();
 			} catch (FileNotFoundException e){
 				System.out.println(e.getMessage());
 				System.exit(0);
 			}
-			return answer.toString();
 		}
 		
-		
-		private boolean setPossibleAnswers(int questionNum) throws FileNotFoundException {
-			StringBuilder answer = new StringBuilder();
-			int possibleAnswerNum = generateQuestionNum(totalQuestions);
-			boolean wasAnswerUsed = possibleAnswerNums.contains(possibleAnswerNum);
-			if (!wasAnswerUsed) {
-				answer.append(getPowerupAnswer(possibleAnswerNum));
-				answer = removeColon(answer);
-				possibleAnswers.add(answer.toString());
-				possibleAnswerNums.add(possibleAnswerNum);
-				return true;
-			} else {
-				return false;
-			}
-		}
-		
-		public List<String> getQuestionsAsked(){
-			return this.questionsAsked;
+		public List<Integer> getQuestionsAsked(){
+			return this.questionNumsAsked;
 		}
 		
 		public List<String> getPossibleAnswers() {
 			return this.possibleAnswers;
 		}
 		
-		public List<Integer> getPossibleAnswerNums() {
-			return this.possibleAnswerNums;
-		}
 		/**
 		 * Removes question and answer identifiers ex: A1: & Q1: from the string
 		 * @param possibleAnswer

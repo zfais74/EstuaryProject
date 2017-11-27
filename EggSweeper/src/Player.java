@@ -1,7 +1,11 @@
 import enums.Bird;
 import enums.Item;
+import enums.PowerUps;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 // The Model
 
@@ -23,7 +27,9 @@ public class Player implements Serializable {
 	private boolean hasPowerUp = false;
 	private int xLoc;
 	private int yLoc;
-	
+	private PowerUps currentPowerUp = null;
+	private int multiplier = 1;
+	private int totalCorrectAnswers = 0;
 	
 	// constructor
 	
@@ -133,7 +139,7 @@ public class Player implements Serializable {
 	 * Increments the score
 	 */
 	public void incScore() {
-		score++;
+		score+=multiplier ;
 	}
 	
 	/**
@@ -214,8 +220,57 @@ public class Player implements Serializable {
 		return this.yLoc;
 	}
 	
-	public void setPowerupStatus(boolean playerHasPowerup) {
-		this.hasPowerUp = playerHasPowerup;
+	public void incTotalCorrectAnswers() {
+		this.totalCorrectAnswers++;
 	}
 	
+	public int gettotalCorrectAnswers() {
+		return this.totalCorrectAnswers;
+	}
+	
+	public void setCurrentPowerUp(PowerUps powerUp) {
+		this.currentPowerUp = powerUp;
+		System.out.println("Current powerUp is: " + powerUp);
+		if(powerUp == PowerUps.BONUS) {
+			int newMultiplier = NumberManipulation.generateNum(5);
+			if(newMultiplier == 1) {
+				newMultiplier++;
+			}
+			System.out.println("Bonus!\n" + "You now have a multiplier of " + newMultiplier);
+			this.setMultiplier(newMultiplier);
+		}
+	}
+	
+	public PowerUps getCurrentPowerUp() {
+		return this.currentPowerUp;
+	}
+	
+	public void setPowerupStatus(boolean playerHasPowerup) {
+		this.hasPowerUp = playerHasPowerup;
+		if(playerHasPowerup) {
+			PowerUps obtainedPowerUp = this.generatePowerUp();
+			this.setCurrentPowerUp(obtainedPowerUp);
+		} else {
+			this.currentPowerUp = null;
+			this.setMultiplier(0);
+		}
+	}
+	
+	public void setMultiplier(int adjustment) {
+		this.multiplier = adjustment;
+	}
+	
+	
+	private PowerUps generatePowerUp() {
+		List<PowerUps> powerUps = new ArrayList<>();
+		for(PowerUps choice: PowerUps.values()) {
+			if(choice != PowerUps.DEVEOUR) {
+				powerUps.add(choice);
+			}
+		}
+		Collections.shuffle(powerUps);
+		Collections.shuffle(powerUps);
+		PowerUps selectedPowerUp = powerUps.get(0);
+		return selectedPowerUp;
+	}
 }
