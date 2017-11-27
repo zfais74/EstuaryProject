@@ -1,7 +1,11 @@
 import enums.Bird;
 import enums.Item;
+import enums.PowerUps;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 // The Model
 
@@ -23,7 +27,10 @@ public class Player implements Serializable {
 	private boolean hasPowerUp = false;
 	private int xLoc;
 	private int yLoc;
-	
+	private PowerUps currentPowerUp = null;
+	private int multiplier = 1;
+	private int totalCorrectAnswers = 0;
+	private int pointsPerEgg = 1;
 	
 	// constructor
 	
@@ -68,7 +75,7 @@ public class Player implements Serializable {
 		switch (item) {
 			case EGG:
 				// up player score
-				score = score + 100;;
+				score = score + pointsPerEgg;;
 				eggs++;
 				if (board.getClicks() == 0) {
 					System.out.println("Out of clicks!");
@@ -81,7 +88,7 @@ public class Player implements Serializable {
 					System.out.println("Remaining clicks: " + Integer.toString(board.getClicks()));
 				}
 				return Item.EGG;
-			/*case TRASH:
+			case TRASH:
 				// reduce player score
 				score--;
 				trash++;
@@ -96,55 +103,7 @@ public class Player implements Serializable {
 					System.out.println("Score: " + Integer.toString(score));
 					System.out.println("Remaining clicks: " + Integer.toString(board.getClicks()));
 				}
-				return Item.TRASH;*/
-			case TWIG:
-				// reduce player score
-				score = score - 10;
-				trash++;
-				if (board.getClicks() == 0) {
-					System.out.println(" ");
-					System.out.println("Out of clicks!");
-					System.out.println("Your score is: " + Integer.toString(score));
-					
-				}
-				else {
-					System.out.println("Ate some twig :(");
-					System.out.println("Score: " + Integer.toString(score));
-					System.out.println("Remaining clicks: " + Integer.toString(board.getClicks()));
-				}
-				return Item.TWIG;
-			case BOTTLE:
-				// reduce player score
-				score = score - 25;
-				trash++;
-				if (board.getClicks() == 0) {
-					System.out.println(" ");
-					System.out.println("Out of clicks!");
-					System.out.println("Your score is: " + Integer.toString(score));
-					
-				}
-				else {
-					System.out.println("Ate some bottle :(");
-					System.out.println("Score: " + Integer.toString(score));
-					System.out.println("Remaining clicks: " + Integer.toString(board.getClicks()));
-				}
-				return Item.BOTTLE;
-			case PESTICIDE:
-				// reduce player score
-				score = score - 50;;
-				trash++;
-				if (board.getClicks() == 0) {
-					System.out.println(" ");
-					System.out.println("Out of clicks!");
-					System.out.println("Your score is: " + Integer.toString(score));
-					
-				}
-				else {
-					System.out.println("Ate some pesticide :(");
-					System.out.println("Score: " + Integer.toString(score));
-					System.out.println("Remaining clicks: " + Integer.toString(board.getClicks()));
-				}
-				return Item.PESTICIDE;
+				return Item.TRASH;
 			case EMPTY:
 				if (board.getClicks() == 0) {
 					System.out.println("Out of clicks!");
@@ -181,7 +140,7 @@ public class Player implements Serializable {
 	 * Increments the score
 	 */
 	public void incScore() {
-		score++;
+		score+=multiplier ;
 	}
 	
 	/**
@@ -262,4 +221,61 @@ public class Player implements Serializable {
 		return this.yLoc;
 	}
 	
+	public void setPointsPerEgg(int points) {
+		this.pointsPerEgg = points;
+	}
+	
+	public void incTotalCorrectAnswers() {
+		this.totalCorrectAnswers++;
+	}
+	
+	public int gettotalCorrectAnswers() {
+		return this.totalCorrectAnswers;
+	}
+	
+	public void setCurrentPowerUp(PowerUps powerUp) {
+		this.currentPowerUp = powerUp;
+		System.out.println("Current powerUp is: " + powerUp);
+		if(powerUp == PowerUps.BONUS) {
+			int newMultiplier = NumberManipulation.generateNum(5);
+			if(newMultiplier == 1) {
+				newMultiplier++;
+			}
+			System.out.println("Bonus!\n" + "You now have a multiplier of " + newMultiplier);
+			this.setMultiplier(newMultiplier);
+		}
+	}
+	
+	public PowerUps getCurrentPowerUp() {
+		return this.currentPowerUp;
+	}
+	
+	public void setPowerupStatus(boolean playerHasPowerup) {
+		this.hasPowerUp = playerHasPowerup;
+		if(playerHasPowerup) {
+			PowerUps obtainedPowerUp = this.generatePowerUp();
+			this.setCurrentPowerUp(obtainedPowerUp);
+		} else {
+			this.currentPowerUp = null;
+			this.setMultiplier(0);
+		}
+	}
+	
+	public void setMultiplier(int adjustment) {
+		this.multiplier = adjustment;
+	}
+	
+	
+	private PowerUps generatePowerUp() {
+		List<PowerUps> powerUps = new ArrayList<>();
+		for(PowerUps choice: PowerUps.values()) {
+			if(choice != PowerUps.DEVEOUR) {
+				powerUps.add(choice);
+			}
+		}
+		Collections.shuffle(powerUps);
+		Collections.shuffle(powerUps);
+		PowerUps selectedPowerUp = powerUps.get(0);
+		return selectedPowerUp;
+	}
 }

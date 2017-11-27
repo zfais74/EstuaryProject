@@ -29,6 +29,10 @@ public class GridSpace implements Serializable {
 		return this.contents;
 	}
 	
+	public void setItem(Item item) {
+		this.contents = item;
+	}
+	
 	/**
 	 * Return the boolean status of the gridspace. For if the gridspace is covered or not
 	 * @return the status of a specified gridspace
