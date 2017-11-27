@@ -792,10 +792,6 @@ public class Controller implements Serializable, ActionListener {
 
 	}
 	
-	private void setGameBoardTimer() {
-		 
-	}
-	
 	private void checkTimers() {
 		if(powerUpTimer != null) {
 			boolean timeElapsed = powerUpTimer.isTimesUp();
