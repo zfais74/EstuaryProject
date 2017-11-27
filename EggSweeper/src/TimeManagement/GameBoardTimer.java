@@ -2,10 +2,11 @@ package TimeManagement;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.Serializable;
 
 import javax.swing.Timer;
 
-public class GameBoardTimer implements ActionListener {
+public class GameBoardTimer implements ActionListener, Serializable {
 
 	private int timeRemaining;
 	private Timer timer;

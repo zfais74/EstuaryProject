@@ -2,10 +2,11 @@ package TimeManagement;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.Serializable;
 
 import javax.swing.Timer;
 
-public class PowerUpTimer implements ActionListener {
+public class PowerUpTimer implements ActionListener, Serializable {
 	
 	private int timeRemaining;
 	private Timer timer;

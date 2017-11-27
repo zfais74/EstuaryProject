@@ -13,6 +13,7 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.io.FileNotFoundException;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
@@ -28,6 +29,7 @@ import TimeManagement.PowerUpTimer;
 import enums.Bird;
 import enums.Item;
 import enums.PowerUps;
+import powerUpModels.Cleaner;
 import powerUpModels.Helper;
 
 // The Controller
@@ -51,6 +53,8 @@ public class Controller implements Serializable, ActionListener {
 	// Constant for tick method
 	private int boardBuilt = 0;
 	JLabel answerLabel = new JLabel(" ");
+	List<Helper> helpers;
+	List<Cleaner> cleaners;
 	
 	
 	private GridBagConstraints constraintFactory() {
@@ -326,7 +330,7 @@ public class Controller implements Serializable, ActionListener {
     		
 		JLabel ateSomeHolder = new JLabel(" ");
 		ateSomeHolder.setFont(new Font("Arial", Font.PLAIN, 40));
-    	boardPanel.add(ateSomeHolder, constraints);
+		boardPanel.add(ateSomeHolder, constraints);
 		
 		constraints.gridx = 1;
 		constraints.gridy = 5;
@@ -797,6 +801,7 @@ public class Controller implements Serializable, ActionListener {
 			boolean timeElapsed = powerUpTimer.isTimesUp();
 			if(timeElapsed) {
 				this.powerUpTimer.getTimer().stop();
+				this.powerUpTimer = null;
 				removePowerUp();
 			}
 		}
@@ -812,7 +817,16 @@ public class Controller implements Serializable, ActionListener {
 	}
 	
 	private void removePowerUp() {
+		System.out.println("Power up is gone");
+		PowerUps currentPowerUp = player.getCurrentPowerUp();
 		player.setPowerupStatus(false);
+		if(currentPowerUp == PowerUps.CLEANER) {
+			cleaners.clear();
+		}
+		
+		if(currentPowerUp == PowerUps.HELPER) {
+			helpers.clear();
+		}
 		
 	}
 	
@@ -846,6 +860,8 @@ public class Controller implements Serializable, ActionListener {
 			for(GridSpace gridSpace: row) {
 				if(gridSpace.getItem() == Item.EGG) {
 					Helper helper = new Helper(boardX, boardY);
+					helpers = new ArrayList<>();
+					helpers.add(helper);
 					count--;
 					System.out.println(helper);
 				}
@@ -865,9 +881,11 @@ public class Controller implements Serializable, ActionListener {
 			int boardY = 0;
 			for(GridSpace gridSpace: row) {
 				if(gridSpace.getItem() == Item.EGG) {
-					Helper helper = new Helper(boardX, boardY);
+					Cleaner cleaner = new Cleaner(boardX, boardY);
+					cleaners = new ArrayList<>();
+					cleaners.add(cleaner);
 					count--;
-					System.out.println(helper);
+					System.out.println(cleaner);
 				}
 				boardY++;
 			}
@@ -876,7 +894,7 @@ public class Controller implements Serializable, ActionListener {
 	}
 	
 	private void pauseGameBoardTimer() {
-		gameBoardTimer.getTimer().setDelay(5000);
+		gameBoardTimer.getTimer().setDelay(2000);
 	}
 
 	public static void tick(Animation animation, Controller controller) {
