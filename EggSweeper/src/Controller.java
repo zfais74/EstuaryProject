@@ -21,6 +21,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.Timer;
 
 import TimeManagement.GameBoardTimer;
 import TimeManagement.PowerUpTimer;
@@ -31,13 +32,14 @@ import powerUpModels.Helper;
 
 // The Controller
 
-public class Controller implements Serializable {
+public class Controller implements Serializable, ActionListener {
 	
 	// The Model
 	Player player;
 	Board gameBoard;
 	PowerUpTimer powerUpTimer;
 	GameBoardTimer gameBoardTimer;
+	Timer checkTimersTimer;
 	
 	// The View
 	JFrame frame;
@@ -71,6 +73,8 @@ public class Controller implements Serializable {
 	}
 	// displays start button
 	public void startScreen() {
+		checkTimersTimer = new Timer(1000, this);
+		checkTimersTimer.start();
 		//Declare a new JPanel
 		JPanel startPanel = new JPanel();
 		//Set its layout manager to GridBag
@@ -713,6 +717,7 @@ public class Controller implements Serializable {
 	// displays score, and a quit button
 	public void endScreen() {
 		
+		this.checkTimersTimer.stop();
 		//Declare a new JPanel
 		JPanel endPanel = new JPanel();
 		//Set its layout manager to GridBag
@@ -797,6 +802,14 @@ public class Controller implements Serializable {
 			if(timeElapsed) {
 				this.powerUpTimer.getTimer().stop();
 				removePowerUp();
+			}
+		}
+		if(gameBoardTimer != null) {
+			boolean timeElapsed = gameBoardTimer.isTimesUp();
+			if(timeElapsed) {
+				this.gameBoardTimer.getTimer().stop();
+				System.out.println("Level over");
+				this.endScreen();
 			}
 		}
 		
@@ -965,6 +978,11 @@ public class Controller implements Serializable {
 	    		}
 	  	}
 		
+	}
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		// TODO Auto-generated method stub
+		this.checkTimers();
 	}
 	
 }
