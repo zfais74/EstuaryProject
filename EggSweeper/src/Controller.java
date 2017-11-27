@@ -456,16 +456,15 @@ public class Controller implements Serializable, ActionListener {
 		        		}
 	        			
 	        			List<Direction> dirList = gameBoard.getAdjacentItemGridDirections(xIndex, yIndex);
-	        			for(Direction d : dirList) {
-	        				System.out.println(String.format("Item at Direction:%s", d.name()));
-	        			}
-	        			
 	        			Collections.shuffle(dirList);
 	        			for(int count = 0; count < dirList.size() && count < 3; count++) {
-	        				//Highlight square
-	        				
+	        				Direction d = dirList.get(count);
+	        				System.out.println(String.format("Item at Direction:%s", d.name()));
+	        				String loc_disp = String.format("This Location: (%d,%d) That Location: (%d,%d)", xIndex, yIndex, xIndex + gameBoard.convertXDim(d), yIndex + gameBoard.convertYDim(d));
+	        				System.out.println(loc_disp);
+	        				int[] dims = maggieSizePos(xIndex + gameBoard.convertXDim(d),yIndex + gameBoard.convertYDim(d));
+	        				animation.addMaggie(dims[0], dims[1], dims[2], dims[3]);
 	        			}
-	        			//Logic to get adjacent squares and highlight them
 	        			
 	        		}
 	        		
