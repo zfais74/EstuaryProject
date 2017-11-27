@@ -259,17 +259,38 @@ public class Animation extends JPanel implements Serializable{
 		return;
 	}
 	
-	private void maggieImages(int xLoc, int yLoc, int sizeX, int sizeY) {
+	void addMaggie(int xLoc, int yLoc, int sizeX, int sizeY) {
 		try {
-            BufferedImage maggie = ImageIO.read(new File("images/maggie1.png"));
+			BufferedImage maggie1 = ImageIO.read(new File("images/maggie1.png"));
+			BufferedImage maggie2 = ImageIO.read(new File("images/maggie2.png"));
+			BufferedImage maggie3 = ImageIO.read(new File("images/maggie3.png"));
+			BufferedImage maggie4 = ImageIO.read(new File("images/maggie4.png"));
+			BufferedImage maggie5 = ImageIO.read(new File("images/maggie5.png"));
+			BufferedImage maggie6 = ImageIO.read(new File("images/maggie6.png"));
 			List<BufferedImage> maggieList = new ArrayList<BufferedImage>();
-			maggieList.add(maggie);
+			maggieList.add(maggie1);
+			maggieList.add(maggie2);
+			maggieList.add(maggie3);
+			maggieList.add(maggie4);
+			maggieList.add(maggie5);
+			maggieList.add(maggie6);
 			AniObject maggieObject = new AniObject("maggie", xLoc, yLoc, sizeX, sizeY, maggieList);
 			maggieObject.setVisible(true);
 			images.add(maggieObject);
+			int i = images.size() - 1;
+			int j = 0;
+			Iterator<AniObject> maggieBirdItr = images.iterator();
+			while (maggieBirdItr.hasNext()) {
+				AniObject next = maggieBirdItr.next();
+				if (next.toString().compareToIgnoreCase("bird") == 0) {
+					break;
+				}
+				j++;
+			}
+			Collections.swap(images, i, j);
             return;
 		} catch (IOException e1) {
-			System.out.println("failed to load hole, trying bin folder");
+			System.out.println("failed to load maggie, trying bin folder");
 		}
 		
 		
