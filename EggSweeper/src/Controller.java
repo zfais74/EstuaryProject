@@ -13,6 +13,7 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.io.FileNotFoundException;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
@@ -21,23 +22,28 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTextArea;
+import javax.swing.Timer;
 
 import TimeManagement.GameBoardTimer;
 import TimeManagement.PowerUpTimer;
 import enums.Bird;
+import enums.Direction;
 import enums.Item;
 import enums.PowerUps;
+import powerUpModels.Cleaner;
 import powerUpModels.Helper;
 
 // The Controller
 
-public class Controller implements Serializable {
+public class Controller implements Serializable, ActionListener {
 	
 	// The Model
 	Player player;
 	Board gameBoard;
 	PowerUpTimer powerUpTimer;
 	GameBoardTimer gameBoardTimer;
+	Timer checkTimersTimer;
 	
 	// The View
 	JFrame frame;
@@ -49,6 +55,7 @@ public class Controller implements Serializable {
 	// Constant for tick method
 	private int boardBuilt = 0;
 	JLabel answerLabel = new JLabel(" ");
+	List<Helper> helpers;
 	
 	
 	private GridBagConstraints constraintFactory() {
@@ -71,6 +78,8 @@ public class Controller implements Serializable {
 	}
 	// displays start button
 	public void startScreen() {
+		checkTimersTimer = new Timer(1000, this);
+		checkTimersTimer.start();
 		//Declare a new JPanel
 		JPanel startPanel = new JPanel();
 		//Set its layout manager to GridBag
@@ -87,8 +96,12 @@ public class Controller implements Serializable {
 		//Add components to the start panel instead of the frame's contentPane directly
 		startPanel.add(title, constraints);
 		
-		JButton startButton = new JButton("Start Game");JButton instButton = new JButton("Instructions");JButton loadButton = new JButton("Load");
-		startButton.setFont(new Font("Arial", Font.PLAIN, 30));instButton.setFont(new Font("Arial", Font.PLAIN, 30));loadButton.setFont(new Font("Arial", Font.PLAIN, 30));
+		JButton startButton = new JButton("Start Game");
+		JButton instButton = new JButton("Instructions");
+		JButton loadButton = new JButton("Load");
+		startButton.setFont(new Font("Arial", Font.PLAIN, 30));
+		instButton.setFont(new Font("Arial", Font.PLAIN, 30));
+		loadButton.setFont(new Font("Arial", Font.PLAIN, 30));
 		startButton.setVisible(true);instButton.setVisible(true);
 		
 		//This component will be in the same column, just 3 rows below
@@ -156,8 +169,10 @@ public class Controller implements Serializable {
 	        }
 	    );
 		
-		JLabel instructions = new JLabel("Instructions will \n go \n right here");
+		JTextArea instructions = new JTextArea("Help the Red Knot find Horseshoe Crab eggs on the\nbeach so it has enough energy to make it to the arctic\ncirlce to have babies!\n\n"
+				+ "Follow the question marks to find items and click\n the treasure chest to answer questions for a power up!");
 		instructions.setFont(new Font("Arial", Font.PLAIN, 40));
+		instructions.setEditable(false);
 		
 		constraints.gridx = 0;
 		constraints.gridy = 0;
@@ -167,8 +182,10 @@ public class Controller implements Serializable {
 		constraints.gridy = 1;
 		instructionPanel.add(startButton, constraints);
 		
-		frame.add(instructionPanel);
+		cardPanel.add(instructionPanel, "Instructions");
+		screens.show(cardPanel, "Instructions");
 		frame.validate();
+		frame.repaint();
 
 	}
 	// displays easy, medium and hard button
@@ -181,8 +198,8 @@ public class Controller implements Serializable {
 		constraints.weightx = 50;
 		constraints.weighty = 50;
 		
-		//The width of space between each button
-		int width = 3;
+		JLabel pickDiff = new JLabel("Pick a Difficulty");
+		pickDiff.setFont(new Font("Arial", Font.PLAIN, 50));
 		
 		JButton easyButton = new JButton("Easy");
 		easyButton.setFont(new Font("Arial", Font.PLAIN, 30));
@@ -196,12 +213,19 @@ public class Controller implements Serializable {
 		hardButton.setFont(new Font("Arial", Font.PLAIN, 30));
 		hardButton.setVisible(true);
 		
+		constraints.gridy = 0;
+		difficultyPanel.add(pickDiff,constraints);
+		constraints.gridy = 1;
 		//After a button is added add the width
 		difficultyPanel.add(easyButton,constraints);
-		constraints.gridy = width;
+		constraints.gridy = 2;
 		difficultyPanel.add(mediumButton,constraints);
-		constraints.gridy = 2*width;
+		constraints.gridy = 3;
 		difficultyPanel.add(hardButton,constraints);
+		
+		JLabel holder = new JLabel(" ");
+		constraints.gridy = 4;
+		difficultyPanel.add(holder, constraints);
 		
 		cardPanel.add(difficultyPanel, "Difficulty");
 		screens.show(cardPanel, "Difficulty");
@@ -251,19 +275,11 @@ public class Controller implements Serializable {
 		GridBagConstraints constraints = constraintFactory();
 		
 		constraints.gridx = 1;
-		constraints.gridy = 0;
+		constraints.gridy = 1;
 		constraints.anchor = GridBagConstraints.EAST;
 		
 		answerLabel.setFont(new Font("Arial", Font.PLAIN, 40));
 		boardPanel.add(answerLabel, constraints, 0);
-		
-		constraints.gridx = 1;
-		constraints.gridy = 1;
-		constraints.anchor = GridBagConstraints.EAST;
-		
-		JLabel clicks = new JLabel("Clicks remaining: " + Integer.toString(gameBoard.getClicks()) + " ");
-		clicks.setFont(new Font("Arial", Font.PLAIN, 40));
-		boardPanel.add(clicks, constraints);
 		
 		constraints.gridx = 1;
 		constraints.gridy = 2;
@@ -322,7 +338,7 @@ public class Controller implements Serializable {
     		
 		JLabel ateSomeHolder = new JLabel(" ");
 		ateSomeHolder.setFont(new Font("Arial", Font.PLAIN, 40));
-    	boardPanel.add(ateSomeHolder, constraints);
+		boardPanel.add(ateSomeHolder, constraints);
 		
 		constraints.gridx = 1;
 		constraints.gridy = 5;
@@ -342,7 +358,7 @@ public class Controller implements Serializable {
 
 			@Override
 			public void mouseMoved(MouseEvent e) {
-				birdMouse.setX( (int) Math.round(e.getX() - birdMouse.getYSize()/8.) + chestButton.getX());
+				birdMouse.setX( (int) Math.round(e.getX() - birdMouse.getYSize()/7.) + chestButton.getX());
 				birdMouse.setY((int) Math.round(e.getY() - birdMouse.getYSize()/1.8) + chestButton.getY());
 				double newBirdRatio = getSizeRatio(birdMouse.getY(), boardMouse);
 				birdMouse.setSize(newBirdRatio);
@@ -363,7 +379,7 @@ public class Controller implements Serializable {
 		frame.getContentPane().addMouseListener(new MouseListener() {
 		    @Override
 		    public void mouseClicked(MouseEvent e) {
-		    	int xLoc = e.getX();
+		    		int xLoc = e.getX();
 		        int yLoc = e.getY();
 		        int[] gridIndex = windowToGrid(xLoc, yLoc);
 		        int xIndex = gridIndex[0];
@@ -381,18 +397,10 @@ public class Controller implements Serializable {
 		        	frame.repaint();
 	                
 		        	constraints.gridx = 1;
-		    		constraints.gridy = 0;
+		    		constraints.gridy = 1;
 		    		constraints.anchor = GridBagConstraints.EAST;
 		    		
 		    		boardPanel.add(answerLabel, constraints);
-		        	
-		        	constraints.gridx = 1;
-		        	constraints.gridy = 1;
-		        	constraints.anchor = GridBagConstraints.EAST;
-		        	
-	                JLabel newClicks = new JLabel("Clicks remaining: " + Integer.toString(gameBoard.getClicks()) + " ");
-	        		newClicks.setFont(new Font("Arial", Font.PLAIN, 40));
-	        		boardPanel.add(newClicks, constraints);
 	                
 	        		constraints.gridx = 1;
 	        		constraints.gridy = 2;
@@ -415,34 +423,8 @@ public class Controller implements Serializable {
 	        			Load.SaveGame(thisController);
 	        		});
 	        		
-	        		constraints.gridx = 1;
-	        		constraints.gridy = 4;
-	        		constraints.anchor = GridBagConstraints.EAST;
-	        		
-	        		JLabel ateSome = null;
-	        		
-	        		if (item == Item.TRASH) {
-		        		ateSome = new JLabel("Ate Some Trash :(");
-		        		ateSome.setFont(new Font("Arial", Font.PLAIN, 40));
-		        		boardPanel.add(ateSome, constraints);
-	        		}
-	        		else if (item == Item.EGG) {
-		        		ateSome = new JLabel("You Found and egg!!!");
-		        		ateSome.setFont(new Font("Arial", Font.PLAIN, 40));
-		        		frame.getContentPane().add(ateSome, 0);
-		        		boardPanel.add(ateSome, constraints);
-	        		}
-	        		else if (item == Item.EMPTY) {
-		        		ateSome = new JLabel("Nothing there...");
-		        		ateSome.setFont(new Font("Arial", Font.PLAIN, 40));
-		        		boardPanel.add(ateSome, constraints);
-	        		}
-	        		else if (item == Item.ALREADYCHECKED) {
-		        		ateSome = new JLabel("Already checked there.");
-		        		ateSome.setFont(new Font("Arial", Font.PLAIN, 40));
-		        		boardPanel.add(ateSome, constraints);
-	        		}
-	        		
+	        		JLabel ateSome = new JLabel(" ");
+	        		Font ateFont = new Font("Arial", Font.PLAIN, 40);
 	        		final JLabel ateSomeRef = ateSome;
 	        		
 	        		constraints.gridx = 1;
@@ -488,7 +470,7 @@ public class Controller implements Serializable {
 
 	        			@Override
 	        			public void mouseMoved(MouseEvent e) {
-	        				birdMouse.setX( (int) Math.round(e.getX() - birdMouse.getYSize()/8.) + chestButton.getX());
+	        				birdMouse.setX( (int) Math.round(e.getX() - birdMouse.getYSize()/7.) + chestButton.getX());
 	        				birdMouse.setY((int) Math.round(e.getY() - birdMouse.getYSize()/1.8) + chestButton.getY());
 	        				double newBirdRatio = getSizeRatio(birdMouse.getY(), boardMouse);
 	        				birdMouse.setSize(newBirdRatio);
@@ -500,23 +482,59 @@ public class Controller implements Serializable {
 	        		
 	        		boardPanel.add(chestButton, constraints);
 	        		
+	        		if (item == Item.EGG) {
+	        			birdMouse.incScoreSize();
+		        		ateSome.setText("You Found and egg!!!");
+		        		ateSome.setFont(ateFont);
+		        		frame.getContentPane().add(ateSome, 0);
+		        		constraints.gridx = 1;
+		        		constraints.gridy = 4;
+		        		constraints.anchor = GridBagConstraints.EAST;
+		        		boardPanel.add(ateSome, constraints);
+		        		if (NumberManipulation.generateNum(10) < 6) {
+		        			chestButton.setIcon(animation.getChestIcon());
+		                	chestButton.setEnabled(true);
+		        		}
+	        		}
+	        		else if (item == Item.ALREADYCHECKED) {
+		        		ateSome = new JLabel("Already checked there.");
+		        		ateSome.setFont(ateFont);
+		        		boardPanel.add(ateSome, constraints);
+	        		}
+	        		else {
+	        			if (item == Item.TRASH) {
+	        				birdMouse.decScoreSize();
+			        		ateSome.setText("Ate Some Trash :(");
+			        		ateSome.setFont(ateFont);
+			        		constraints.gridx = 1;
+			        		constraints.gridy = 4;
+			        		constraints.anchor = GridBagConstraints.EAST;
+			        		boardPanel.add(ateSome, constraints);
+		        		}
+		        		
+	        			else if (item == Item.EMPTY) {
+			        		ateSome.setText("Nothing there...");
+			        		ateSome.setFont(ateFont);
+			        		constraints.gridx = 1;
+			        		constraints.gridy = 4;
+			        		constraints.anchor = GridBagConstraints.EAST;
+			        		boardPanel.add(ateSome, constraints);
+		        		}
+	        			
+	        			List<Direction> dirList = gameBoard.getAdjacentItemGridDirections(xIndex, yIndex);
+	        			Collections.shuffle(dirList);
+	        			for(int count = 0; count < dirList.size() && count < 3; count++) {
+	        				Direction d = dirList.get(count);
+	        				System.out.println(String.format("Item at Direction:%s", d.name()));
+	        				String loc_disp = String.format("This Location: (%d,%d) That Location: (%d,%d)", xIndex, yIndex, xIndex + gameBoard.convertXDim(d), yIndex + gameBoard.convertYDim(d));
+	        				System.out.println(loc_disp);
+	        				int[] dims = indexSizePos(xIndex + gameBoard.convertXDim(d),yIndex + gameBoard.convertYDim(d));
+	        				animation.addQuestionmark(dims[0], dims[1], dims[2], dims[3]);
+	        			}
+	        			
+	        		}      		
 
 	        		frame.validate();
-	        		
-	                if (gameBoard.getClicks() == 0){
-	                	endScreen();
-	                }
-	                //Established getClicks() != 0
-	                else if (gameBoard.getClicks() % 3 == 0) {
-	                	chestButton.setIcon(animation.getChestIcon());
-	                	chestButton.setEnabled(true);
-	                	
-	                }
-	                //Established getClicks() % 3 != 0
-	                else {
-	                	chestButton.setIcon(null);
-	                	chestButton.setEnabled(false);
-	                }
 		        }
 		        
 		    }
@@ -556,7 +574,7 @@ public class Controller implements Serializable {
 
 			@Override
 			public void mouseMoved(MouseEvent e) {
-				birdMouse.setX( (int) Math.round(e.getX() - birdMouse.getYSize()/8.));
+				birdMouse.setX( (int) Math.round(e.getX() - birdMouse.getYSize()/7.));
 				birdMouse.setY((int) Math.round(e.getY() - birdMouse.getYSize()/1.8));
 				double newBirdRatio = getSizeRatio(birdMouse.getY(), boardMouse);
 				birdMouse.setSize(newBirdRatio);
@@ -601,7 +619,6 @@ public class Controller implements Serializable {
 			}	
 		}
 		
-		int gridImageHeight = boardImage.getYSize();
 		int gridImageWidth = boardImage.getXSize();
 		int imageXloc = boardImage.getX();
 		int imageYloc = boardImage.getY();
@@ -710,9 +727,51 @@ public class Controller implements Serializable {
 		return gridIndex;
 	}
 	
+	public int[] indexSizePos(int xIndex, int yIndex) {
+		double[] LineSlopes = {-0.3115, -0.2492, -0.1869, -0.1246, -0.0623, 0, 0.0623, 0.1246, 0.1869, 0.2492, 0.3115};
+		int[] LineTopX = {201, 261, 320, 380, 440, 500, 560, 620, 680, 739, 799};
+		int[] LineHeights = {0, 51, 104, 160, 219, 281, 346, 415, 488, 564, 644};
+		
+		Iterator<AniObject> boardItr = animation.getImages().iterator();
+		AniObject boardImage = null;
+		while (boardItr.hasNext()) {
+			boardImage = boardItr.next();
+			if (boardImage.toString().compareToIgnoreCase("board") == 0) {
+				break;
+			}	
+		}
+		
+		int gridImageWidth = boardImage.getXSize();
+		int imageXloc = boardImage.getX();
+		int imageYloc = boardImage.getY();
+		
+		int maggieX = 1;
+		int maggieY = 1;
+		int maggieXSize = 1;
+		int maggieYSize = 1;
+		
+		if ((xIndex != -1) && (yIndex != -1)){
+			double boxRatio = ((double) LineHeights[9] - (double) LineHeights[8])/((double) LineHeights[10] - (double) LineHeights[9]);
+			double gridSizeRatio = 1/Math.pow(boxRatio, yIndex);
+			maggieYSize = (int) Math.round(gridSizeRatio * (gridImageWidth/1000)*(LineHeights[1] - LineHeights[0]));
+			maggieY = (int) Math.round(imageYloc + LineHeights[yIndex] + ((gridImageWidth/1000.)*(LineHeights[yIndex+1] - LineHeights[yIndex])/2.) - (maggieYSize/2.) );
+			
+			maggieX = (int) Math.round(imageXloc + (gridImageWidth/1000)*(LineTopX[xIndex] + LineSlopes[xIndex] * (LineHeights[yIndex] + LineHeights[yIndex+1])/2.));
+			maggieXSize = (int) ((gridImageWidth/1000)*((LineTopX[xIndex + 1]  + (LineSlopes[xIndex + 1] * (LineHeights[yIndex] + LineHeights[yIndex+1])/2.)) - (LineTopX[xIndex]  + (LineSlopes[xIndex] * (LineHeights[yIndex] + LineHeights[yIndex+1])/2.))));
+		}
+		
+		int[] gridIndex = {maggieX, maggieY, maggieXSize, maggieYSize};
+		
+		return gridIndex;
+		
+	}
+	
 	// displays score, and a quit button
 	public void endScreen() {
 		
+		frame.getContentPane().removeMouseListener(frame.getContentPane().getMouseListeners()[0]);
+		
+		this.checkTimersTimer.stop();
 		//Declare a new JPanel
 		JPanel endPanel = new JPanel();
 		//Set its layout manager to GridBag
@@ -787,23 +846,39 @@ public class Controller implements Serializable {
 
 	}
 	
-	private void setGameBoardTimer() {
-		 
-	}
-	
 	private void checkTimers() {
 		if(powerUpTimer != null) {
 			boolean timeElapsed = powerUpTimer.isTimesUp();
 			if(timeElapsed) {
 				this.powerUpTimer.getTimer().stop();
+				this.powerUpTimer = null;
 				removePowerUp();
+			}
+		}
+		if(gameBoardTimer != null) {
+			boolean timeElapsed = gameBoardTimer.isTimesUp();
+			if(timeElapsed) {
+				this.gameBoardTimer.getTimer().stop();
+				System.out.println("Level over");
+				this.endScreen();
 			}
 		}
 		
 	}
 	
 	private void removePowerUp() {
+		System.out.println("Power up is gone");
+		PowerUps currentPowerUp = player.getCurrentPowerUp();
 		player.setPowerupStatus(false);
+		player.setPointsPerEgg(1);
+		if(currentPowerUp == PowerUps.HELPER) {
+			helpers.clear();
+			for (AniObject ani: animation.getImages()) {
+				if (ani.toString().compareToIgnoreCase("maggie") == 0){
+					ani.setVisible(false);
+				}
+			}
+		}
 		
 	}
 	
@@ -824,50 +899,61 @@ public class Controller implements Serializable {
 			System.out.println("Looks like you have some more time");
 			pauseGameBoardTimer();
 		}
+		if (currentPowerUp == PowerUps.BONUS) {
+			System.out.println("Eggs are worth double points!");
+			player.setPointsPerEgg(2);
+		}
 	}
 	
 	private void addHelpers() {
-		int count = 5;
 		int boardX = 0;
+		helpers = new ArrayList<>();
 		for(GridSpace[] row: gameBoard.getBoard()) {
-			if(count == 0) {
-				return;
-			}
 			int boardY = 0;
 			for(GridSpace gridSpace: row) {
 				if(gridSpace.getItem() == Item.EGG) {
 					Helper helper = new Helper(boardX, boardY);
-					count--;
-					System.out.println(helper);
+					helpers.add(helper);
 				}
 				boardY++;
 			}
 			boardX++;
+		}
+		for (Helper helper: helpers) {
+			int[] gridIndex = indexSizePos(helper.getXPos(), helper.getYPos());
+			animation.addMaggie(gridIndex[0], gridIndex[1], gridIndex[2], gridIndex[3]);
 		}
 	}
 	
 	private void addCleaners() {
-		int count = 5;
-		int boardX = 0;
-		for(GridSpace[] row: gameBoard.getBoard()) {
-			if(count == 0) {
-				return;
-			}
-			int boardY = 0;
-			for(GridSpace gridSpace: row) {
-				if(gridSpace.getItem() == Item.EGG) {
-					Helper helper = new Helper(boardX, boardY);
-					count--;
-					System.out.println(helper);
+		int count = 0;
+		int totTrash = 0;
+		for (int i = 0; i < 10; i++) {
+			for (int j = 0; j < 10; j++) {
+				GridSpace trySpace = gameBoard.getSpace(i,  j);
+				if (trySpace.getIsCovered() == true && trySpace.getItem() == Item.TRASH) {
+					totTrash++;
 				}
-				boardY++;
 			}
-			boardX++;
+		}
+		while (count < 10 && count < totTrash) {
+			int X = NumberManipulation.generateNum(10);
+			int Y = NumberManipulation.generateNum(10);
+			X = X - 1;
+			Y = Y - 1;	
+			GridSpace trySpace = gameBoard.getSpace(X,  Y);
+			if (trySpace.getIsCovered() == true && trySpace.getItem() == Item.TRASH) {
+				trySpace.setIsCovered(false);
+				trySpace.setItem(Item.ALREADYCHECKED);
+				int[] gridIndex = indexSizePos(X, Y);
+				animation.addHole(gridIndex[0], gridIndex[1], gridIndex[2], gridIndex[3]);
+				count++;
+			}
 		}
 	}
 	
 	private void pauseGameBoardTimer() {
-		gameBoardTimer.getTimer().setDelay(5000);
+		gameBoardTimer.getTimer().setDelay(2000);
 	}
 
 	public static void tick(Animation animation, Controller controller) {
@@ -876,8 +962,8 @@ public class Controller implements Serializable {
 			while (itrMigration.hasNext()) {
 				AniObject aniObject = itrMigration.next();
 				if (aniObject.toString().compareToIgnoreCase("bird") == 0) {
-					aniObject.setY(aniObject.getY() - 10);
-					if (aniObject.getY() == animation.contentPaneSize/5) {
+					aniObject.setY(aniObject.getY() - 5);
+					if (aniObject.getY() <= (int) Math.round(animation.contentPaneSize/3)) {
 						controller.boardBuilt = 1;
 						break;
 					}
@@ -929,11 +1015,30 @@ public class Controller implements Serializable {
 			player.setPowerupStatus(playerWasCorrect);
 			if (playerWasCorrect) {
 				implementPowerUp();
+				screens.show(cardPanel, "Board");
+				showImages();
+				frame.validate();
+				frame.repaint();	
+			} else {
+				JPanel correctAnswerPanel = new JPanel();
+				JLabel title = new JLabel("The Correct Answer Was");
+				JLabel explanation = new JLabel(gameBoard.getAnswer());
+				correctAnswerPanel.add(title);
+				correctAnswerPanel.add(explanation);
+				JButton okButton = new JButton("Ok");
+				okButton.addActionListener((ActionEvent e)->{
+					screens.show(cardPanel, "Board");
+					showImages();
+					frame.validate();
+					frame.repaint();		
+				});
+				correctAnswerPanel.add(okButton);
+				cardPanel.add(correctAnswerPanel, "correctAnswer");
+				screens.show(cardPanel, "correctAnswer");
+				frame.revalidate();
+				frame.repaint();
 			}
-			screens.show(cardPanel, "Board");
-			showImages();
-			frame.validate();
-			frame.repaint();	
+			
 		});
 		return possibleAnswer;
 	}
@@ -965,6 +1070,11 @@ public class Controller implements Serializable {
 	    		}
 	  	}
 		
+	}
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		// TODO Auto-generated method stub
+		this.checkTimers();
 	}
 	
 }

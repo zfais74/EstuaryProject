@@ -214,10 +214,10 @@ public class Animation extends JPanel implements Serializable{
 
 	public void migrationAnimation() {
 		try {			
-			BufferedImage US = ImageIO.read(new File("images/US.png"));
+			BufferedImage US = ImageIO.read(new File("images/map.png"));
 			List<BufferedImage> USList = new ArrayList<BufferedImage>();
 			USList.add(US);
-			AniObject USObject = new AniObject("US", 100, 100, 450, 600, USList);
+			AniObject USObject = new AniObject("US", 350, 100, 450, 600, USList);
 			USObject.setVisible(true);
 			images.add(USObject);
 			
@@ -236,7 +236,7 @@ public class Animation extends JPanel implements Serializable{
 			System.out.println("failed to load US or Bird, trying bin folder");
 		}
 		try {
-			BufferedImage US = ImageIO.read(new File("US.png"));
+			BufferedImage US = ImageIO.read(new File("map.png"));
 			List<BufferedImage> USList = new ArrayList<BufferedImage>();
 			USList.add(US);
 			AniObject USObject = new AniObject("US", 100, 100, 450, 600, USList);
@@ -259,17 +259,71 @@ public class Animation extends JPanel implements Serializable{
 		return;
 	}
 	
-	private void maggieImages(int xLoc, int yLoc, int sizeX, int sizeY) {
+	void addMaggie(int xLoc, int yLoc, int sizeX, int sizeY) {
 		try {
-            BufferedImage maggie = ImageIO.read(new File("images/maggie1.png"));
+			BufferedImage maggie1 = ImageIO.read(new File("images/maggie1.png"));
+			BufferedImage maggie2 = ImageIO.read(new File("images/maggie2.png"));
+			BufferedImage maggie3 = ImageIO.read(new File("images/maggie3.png"));
+			BufferedImage maggie4 = ImageIO.read(new File("images/maggie4.png"));
+			BufferedImage maggie5 = ImageIO.read(new File("images/maggie5.png"));
+			BufferedImage maggie6 = ImageIO.read(new File("images/maggie6.png"));
 			List<BufferedImage> maggieList = new ArrayList<BufferedImage>();
-			maggieList.add(maggie);
+			maggieList.add(maggie1);
+			maggieList.add(maggie1);
+			maggieList.add(maggie2);
+			maggieList.add(maggie2);
+			maggieList.add(maggie3);
+			maggieList.add(maggie3);
+			maggieList.add(maggie4);
+			maggieList.add(maggie4);
+			maggieList.add(maggie5);
+			maggieList.add(maggie5);
+			maggieList.add(maggie6);
+			maggieList.add(maggie6);
 			AniObject maggieObject = new AniObject("maggie", xLoc, yLoc, sizeX, sizeY, maggieList);
 			maggieObject.setVisible(true);
 			images.add(maggieObject);
+			int i = images.size() - 1;
+			int j = 0;
+			Iterator<AniObject> maggieBirdItr = images.iterator();
+			while (maggieBirdItr.hasNext()) {
+				AniObject next = maggieBirdItr.next();
+				if (next.toString().compareToIgnoreCase("bird") == 0) {
+					break;
+				}
+				j++;
+			}
+			Collections.swap(images, i, j);
             return;
 		} catch (IOException e1) {
-			System.out.println("failed to load hole, trying bin folder");
+			System.out.println("failed to load maggie, trying bin folder");
+		}
+		
+		
+	}
+	
+	void addQuestionmark(int xLoc, int yLoc, int sizeX, int sizeY) {
+		try {
+			BufferedImage questionmark = ImageIO.read(new File("images/questionMark2.png"));
+			List<BufferedImage> qmList = new ArrayList<BufferedImage>();
+			qmList.add(questionmark);
+			AniObject qmObject = new AniObject("qm", xLoc, yLoc, sizeX, sizeY, qmList);
+			qmObject.setVisible(true);
+			images.add(qmObject);
+			int i = images.size() - 1;
+			int j = 0;
+			Iterator<AniObject> qmBirdItr = images.iterator();
+			while (qmBirdItr.hasNext()) {
+				AniObject next = qmBirdItr.next();
+				if (next.toString().compareToIgnoreCase("bird") == 0) {
+					break;
+				}
+				j++;
+			}
+			Collections.swap(images, i, j);
+            return;
+		} catch (IOException e1) {
+			System.out.println("failed to load questionmark, trying bin folder");
 		}
 		
 		
@@ -281,5 +335,5 @@ public class Animation extends JPanel implements Serializable{
 		Image resizedChest = chestImage.getScaledInstance( 200, 200,  java.awt.Image.SCALE_SMOOTH ) ;  
 		return new ImageIcon(resizedChest);
 	}
-	
+
 }

@@ -37,7 +37,6 @@ public class CommandController {
 	}
 	
 	public void playGame() {
-		while (gameBoard.getClicks() != 0) {
 			System.out.println(" ");
 			System.out.println("Pick Row 0 to 19:");
 			Scanner scan = new Scanner(System.in);
@@ -45,7 +44,6 @@ public class CommandController {
 			System.out.println("Pick column 0 to 19:");
 			int col = scan.nextInt();
 			player.checkSpace(col, row, gameBoard);
-		}
 		System.exit(0);
 	}
 	

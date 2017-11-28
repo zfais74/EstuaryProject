@@ -30,6 +30,7 @@ public class Player implements Serializable {
 	private PowerUps currentPowerUp = null;
 	private int multiplier = 1;
 	private int totalCorrectAnswers = 0;
+	private int pointsPerEgg = 1;
 	
 	// constructor
 	
@@ -62,58 +63,31 @@ public class Player implements Serializable {
 		if (space.getIsCovered() == false) {
 			System.out.println("Already checked there!");
 			System.out.println("Score: " + Integer.toString(score));
-			System.out.println("Remaining clicks: " + Integer.toString(board.getClicks()));
 			return Item.ALREADYCHECKED;
 		}
 		else {
 			// take a turn
 			space.setIsCovered(false);
-			board.decClicks();
 		}
 		Item item = space.getItem();
 		switch (item) {
 			case EGG:
 				// up player score
-				score++;;
+				score = score + pointsPerEgg;;
 				eggs++;
-				if (board.getClicks() == 0) {
-					System.out.println("Out of clicks!");
-					System.out.println("Your score is: " + Integer.toString(score));
-					
-				}
-				else {
-					System.out.println("Found an egg!!!");
-					System.out.println("Score: " + Integer.toString(score));
-					System.out.println("Remaining clicks: " + Integer.toString(board.getClicks()));
-				}
+				System.out.println("Found an egg!!!");
+				System.out.println("Score: " + Integer.toString(score));
 				return Item.EGG;
 			case TRASH:
 				// reduce player score
 				score--;
 				trash++;
-				if (board.getClicks() == 0) {
-					System.out.println(" ");
-					System.out.println("Out of clicks!");
-					System.out.println("Your score is: " + Integer.toString(score));
-					
-				}
-				else {
-					System.out.println("Ate some trash :(");
-					System.out.println("Score: " + Integer.toString(score));
-					System.out.println("Remaining clicks: " + Integer.toString(board.getClicks()));
-				}
+				System.out.println("Ate some trash :(");
+				System.out.println("Score: " + Integer.toString(score));
 				return Item.TRASH;
 			case EMPTY:
-				if (board.getClicks() == 0) {
-					System.out.println("Out of clicks!");
-					System.out.println("Your score is: " + Integer.toString(score));
-					
-				}
-				else {
-					System.out.println("Nothing.");
-					System.out.println("Score: " + Integer.toString(score));
-					System.out.println("Remaining clicks: " + Integer.toString(board.getClicks()));
-				}
+				System.out.println("Nothing.");
+				System.out.println("Score: " + Integer.toString(score));
 				return Item.EMPTY;
 		}
 		return null;
@@ -218,6 +192,10 @@ public class Player implements Serializable {
 	 */
 	public int getYLoc() {
 		return this.yLoc;
+	}
+	
+	public void setPointsPerEgg(int points) {
+		this.pointsPerEgg = points;
 	}
 	
 	public void incTotalCorrectAnswers() {
