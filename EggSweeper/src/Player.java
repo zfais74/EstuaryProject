@@ -93,6 +93,10 @@ public class Player implements Serializable {
 		return null;
 	}
 	
+	public boolean hasPowerUp(){
+		return this.hasPowerUp;
+	}
+	
 	/**
 	 * Bird getter
 	 * @return bird
