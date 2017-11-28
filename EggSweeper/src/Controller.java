@@ -1011,11 +1011,30 @@ public class Controller implements Serializable, ActionListener {
 			player.setPowerupStatus(playerWasCorrect);
 			if (playerWasCorrect) {
 				implementPowerUp();
+				screens.show(cardPanel, "Board");
+				showImages();
+				frame.validate();
+				frame.repaint();	
+			} else {
+				JPanel correctAnswerPanel = new JPanel();
+				JLabel title = new JLabel("The Correct Answer Was");
+				JLabel explanation = new JLabel(gameBoard.getAnswer());
+				correctAnswerPanel.add(title);
+				correctAnswerPanel.add(explanation);
+				JButton okButton = new JButton("Ok");
+				okButton.addActionListener((ActionEvent e)->{
+					screens.show(cardPanel, "Board");
+					showImages();
+					frame.validate();
+					frame.repaint();		
+				});
+				correctAnswerPanel.add(okButton);
+				cardPanel.add(correctAnswerPanel, "correctAnswer");
+				screens.show(cardPanel, "correctAnswer");
+				frame.revalidate();
+				frame.repaint();
 			}
-			screens.show(cardPanel, "Board");
-			showImages();
-			frame.validate();
-			frame.repaint();	
+			
 		});
 		return possibleAnswer;
 	}

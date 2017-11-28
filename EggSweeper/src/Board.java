@@ -419,5 +419,9 @@ public class Board implements Serializable {
 		boolean checkAnswer(String playerAnswer) {
 			return playerAnswer.equalsIgnoreCase(correctAnswer);
 		}
+		
+		public String getAnswer() {
+			return this.correctAnswer;
+		}
 }
 	
