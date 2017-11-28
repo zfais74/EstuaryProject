@@ -980,6 +980,7 @@ public class Controller implements ActionListener {
 	}
 	
 	private void checkTimers() {
+		Load.SaveGame(thisController.gameBoard);
 		if(powerUpTimer != null) {
 			boolean timeElapsed = powerUpTimer.isTimesUp();
 			if(timeElapsed) {
@@ -1243,7 +1244,7 @@ public class Controller implements ActionListener {
 	  	while (true) {
 	    		cont.frame.repaint();
 	    		tick(cont.animation, cont);
-	    		Load.SaveGame(cont.gameBoard);
+	    		//Load.SaveGame(cont.gameBoard);
 
 	   		try {
 	    			Thread.sleep(40);
