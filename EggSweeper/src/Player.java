@@ -30,7 +30,7 @@ public class Player implements Serializable {
 	private PowerUps currentPowerUp = null;
 	private int multiplier = 1;
 	private int totalCorrectAnswers = 0;
-	private int pointsPerEgg = 1;
+	private int eggMultiplier = 1;
 	
 	// constructor
 	
@@ -73,8 +73,8 @@ public class Player implements Serializable {
 		switch (item) {
 			case EGG:
 				// up player score
-				score = score + pointsPerEgg;;
-				eggs++;
+				score = score + eggMultiplier;
+				eggs = eggs + eggMultiplier;
 				System.out.println("Found an egg!!!");
 				System.out.println("Score: " + Integer.toString(score));
 				return Item.EGG;
@@ -198,8 +198,8 @@ public class Player implements Serializable {
 		return this.yLoc;
 	}
 	
-	public void setPointsPerEgg(int points) {
-		this.pointsPerEgg = points;
+	public void setEggMultiplier(int points) {
+		this.eggMultiplier = points;
 	}
 	
 	public void incTotalCorrectAnswers() {
