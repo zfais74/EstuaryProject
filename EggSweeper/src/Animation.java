@@ -259,6 +259,32 @@ public class Animation extends JPanel implements Serializable{
 		return;
 	}
 	
+	public void migrationAnimation2() {
+		try {			
+			BufferedImage US = ImageIO.read(new File("images/map.png"));
+			List<BufferedImage> USList = new ArrayList<BufferedImage>();
+			USList.add(US);
+			AniObject USObject = new AniObject("US", 350, 100, 450, 600, USList);
+			USObject.setVisible(true);
+			images.add(USObject);
+			int i = images.size() - 1;
+			int j = 0;
+			Iterator<AniObject> holeBirdItr = images.iterator();
+			while (holeBirdItr.hasNext()) {
+				AniObject next = holeBirdItr.next();
+				if (next.toString().compareToIgnoreCase("bird") == 0) {
+					break;
+				}
+				j++;
+			}
+			Collections.swap(images, i, j);
+			
+            return;
+		} catch (IOException e1) {
+			System.out.println("failed to load US or Bird, trying bin folder");
+		}
+	}
+	
 	void addMaggie(int xLoc, int yLoc, int sizeX, int sizeY) {
 		try {
 			BufferedImage maggie1 = ImageIO.read(new File("images/maggie1.png"));
