@@ -7,6 +7,7 @@ import java.util.Random;
 import java.util.Scanner;
 
 import enums.Item;
+import enums.Difficulty;
 import enums.Direction;
 // The Model
 
@@ -23,7 +24,6 @@ public class Board implements Serializable {
 		private GridSpace[][] board = new GridSpace[boardSize][boardSize];
 		
 		// the Difficulty affects distribution of EGGs and TRASH
-		public static enum Difficulty {EASY, MEDIUM, HARD};
 		
 		// Board data
 		private Difficulty difficulty;
@@ -209,6 +209,7 @@ public class Board implements Serializable {
 		}
 		
 		public int convertYDim(Direction dir) {
+			System.out.println("blah " + dir);
 			if (dir.name().contains("NORTH")) {
 				return -1;
 			}
@@ -367,7 +368,7 @@ public class Board implements Serializable {
 						answer.append(line);
 						answer = removeColon(answer);
 						this.possibleAnswers.add(answer.toString());
-						this.correctAnswer = answer.toString();
+						setCorrectAnswer(answer.toString());
 						answer.setLength(0);
 						break;
 					}
@@ -422,6 +423,10 @@ public class Board implements Serializable {
 		
 		public String getAnswer() {
 			return this.correctAnswer;
+		}
+		
+		public void setCorrectAnswer(String answer) {
+			this.correctAnswer = answer;
 		}
 }
 	
