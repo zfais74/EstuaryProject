@@ -198,9 +198,6 @@ public class Controller implements Serializable, ActionListener {
 		constraints.weightx = 50;
 		constraints.weighty = 50;
 		
-		//The width of space between each button
-		int width = 3;
-		
 		JLabel pickDiff = new JLabel("Pick a Difficulty");
 		pickDiff.setFont(new Font("Arial", Font.PLAIN, 50));
 		
@@ -216,14 +213,19 @@ public class Controller implements Serializable, ActionListener {
 		hardButton.setFont(new Font("Arial", Font.PLAIN, 30));
 		hardButton.setVisible(true);
 		
+		constraints.gridy = 0;
 		difficultyPanel.add(pickDiff,constraints);
-		constraints.gridy = width;
+		constraints.gridy = 1;
 		//After a button is added add the width
 		difficultyPanel.add(easyButton,constraints);
-		constraints.gridy = 2*width;
+		constraints.gridy = 2;
 		difficultyPanel.add(mediumButton,constraints);
-		constraints.gridy = 3*width;
+		constraints.gridy = 3;
 		difficultyPanel.add(hardButton,constraints);
+		
+		JLabel holder = new JLabel(" ");
+		constraints.gridy = 4;
+		difficultyPanel.add(holder, constraints);
 		
 		cardPanel.add(difficultyPanel, "Difficulty");
 		screens.show(cardPanel, "Difficulty");
@@ -356,7 +358,7 @@ public class Controller implements Serializable, ActionListener {
 
 			@Override
 			public void mouseMoved(MouseEvent e) {
-				birdMouse.setX( (int) Math.round(e.getX() - birdMouse.getYSize()/8.) + chestButton.getX());
+				birdMouse.setX( (int) Math.round(e.getX() - birdMouse.getYSize()/7.) + chestButton.getX());
 				birdMouse.setY((int) Math.round(e.getY() - birdMouse.getYSize()/1.8) + chestButton.getY());
 				double newBirdRatio = getSizeRatio(birdMouse.getY(), boardMouse);
 				birdMouse.setSize(newBirdRatio);
@@ -468,7 +470,7 @@ public class Controller implements Serializable, ActionListener {
 
 	        			@Override
 	        			public void mouseMoved(MouseEvent e) {
-	        				birdMouse.setX( (int) Math.round(e.getX() - birdMouse.getYSize()/8.) + chestButton.getX());
+	        				birdMouse.setX( (int) Math.round(e.getX() - birdMouse.getYSize()/7.) + chestButton.getX());
 	        				birdMouse.setY((int) Math.round(e.getY() - birdMouse.getYSize()/1.8) + chestButton.getY());
 	        				double newBirdRatio = getSizeRatio(birdMouse.getY(), boardMouse);
 	        				birdMouse.setSize(newBirdRatio);
@@ -481,6 +483,7 @@ public class Controller implements Serializable, ActionListener {
 	        		boardPanel.add(chestButton, constraints);
 	        		
 	        		if (item == Item.EGG) {
+	        			birdMouse.incScoreSize();
 		        		ateSome.setText("You Found and egg!!!");
 		        		ateSome.setFont(ateFont);
 		        		frame.getContentPane().add(ateSome, 0);
@@ -500,6 +503,7 @@ public class Controller implements Serializable, ActionListener {
 	        		}
 	        		else {
 	        			if (item == Item.TRASH) {
+	        				birdMouse.decScoreSize();
 			        		ateSome.setText("Ate Some Trash :(");
 			        		ateSome.setFont(ateFont);
 			        		constraints.gridx = 1;
@@ -570,7 +574,7 @@ public class Controller implements Serializable, ActionListener {
 
 			@Override
 			public void mouseMoved(MouseEvent e) {
-				birdMouse.setX( (int) Math.round(e.getX() - birdMouse.getYSize()/8.));
+				birdMouse.setX( (int) Math.round(e.getX() - birdMouse.getYSize()/7.));
 				birdMouse.setY((int) Math.round(e.getY() - birdMouse.getYSize()/1.8));
 				double newBirdRatio = getSizeRatio(birdMouse.getY(), boardMouse);
 				birdMouse.setSize(newBirdRatio);
@@ -958,8 +962,8 @@ public class Controller implements Serializable, ActionListener {
 			while (itrMigration.hasNext()) {
 				AniObject aniObject = itrMigration.next();
 				if (aniObject.toString().compareToIgnoreCase("bird") == 0) {
-					aniObject.setY(aniObject.getY() - 10);
-					if (aniObject.getY() == animation.contentPaneSize/5) {
+					aniObject.setY(aniObject.getY() - 5);
+					if (aniObject.getY() <= (int) Math.round(animation.contentPaneSize/3)) {
 						controller.boardBuilt = 1;
 						break;
 					}
