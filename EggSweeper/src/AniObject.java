@@ -2,7 +2,7 @@ import java.awt.image.BufferedImage;
 import java.io.Serializable;
 import java.util.List;
 
-public class AniObject implements Serializable {
+public class AniObject{
 	
 	private String name;
 	private int X;

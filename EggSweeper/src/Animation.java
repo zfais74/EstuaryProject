@@ -18,11 +18,11 @@ import javax.swing.JPanel;
 
 // The View
 
-public class Animation extends JPanel implements Serializable{
+public class Animation extends JPanel{
 	
 	private transient List<AniObject> images;
 	private AniObject boardImage;
-
+	
 	// constants for placing buttons
 	public int buffer = 50;
 	public int gridButtonSize = 45;
@@ -213,7 +213,7 @@ public class Animation extends JPanel implements Serializable{
 	}
 
 	public void migrationAnimation() {
-		try {
+		try {			
 			BufferedImage US = ImageIO.read(new File("images/map.png"));
 			List<BufferedImage> USList = new ArrayList<BufferedImage>();
 			USList.add(US);
@@ -258,9 +258,9 @@ public class Animation extends JPanel implements Serializable{
 		}
 		return;
 	}
-	
+
 	public void migrationAnimation2() {
-		try {			
+		try {
 			BufferedImage US = ImageIO.read(new File("images/map.png"));
 			List<BufferedImage> USList = new ArrayList<BufferedImage>();
 			USList.add(US);
@@ -278,13 +278,13 @@ public class Animation extends JPanel implements Serializable{
 				j++;
 			}
 			Collections.swap(images, i, j);
-			
+
             return;
 		} catch (IOException e1) {
 			System.out.println("failed to load US or Bird, trying bin folder");
 		}
 	}
-	
+
 	void addMaggie(int xLoc, int yLoc, int sizeX, int sizeY) {
 		try {
 			BufferedImage maggie1 = ImageIO.read(new File("images/maggie1.png"));
@@ -361,5 +361,28 @@ public class Animation extends JPanel implements Serializable{
 		Image resizedChest = chestImage.getScaledInstance( 200, 200,  java.awt.Image.SCALE_SMOOTH ) ;  
 		return new ImageIcon(resizedChest);
 	}
+	public void addHomeBackground(){
+		try {
+			BufferedImage HB = ImageIO.read(new File("images/homeBackground.png"));
+			List<BufferedImage> HBList = new ArrayList<BufferedImage>();
+			HBList.add(HB);
+			AniObject HBObject = new AniObject("HB", 0, 0, 450, 600, HBList);
+			HBObject.setVisible(true);
+			images.add(HBObject);
+			return;
+		} catch (IOException e1) {
+			System.out.println("failed to load HomeBackground, trying bin folder");
+		}
+		try {
+			BufferedImage HB = ImageIO.read(new File("homeBackground.png"));
+			List<BufferedImage> HBList = new ArrayList<BufferedImage>();
+			HBList.add(HB);
+			AniObject HBObject = new AniObject("HB", 0, 0, 1200, 900, HBList);
+			HBObject.setVisible(true);
+			images.add(HBObject);
+		} catch (IOException e1) {
+			System.out.println("failed to load HomeBackground");
+		}
 
+	}
 }

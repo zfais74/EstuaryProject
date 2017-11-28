@@ -1,7 +1,7 @@
 import java.io.*;
 
 public class Load {
-    public static void SaveGame(Controller cont){//everything but buffered image
+    public static void SaveGame(Board cont){//everything but buffered image
         try
         {
 
@@ -15,22 +15,27 @@ public class Load {
             System.out.print("Exception thrown while saving game" + ex.toString());
         }
     }
-    public static void LoadGame(){
+    public static Board LoadGame(){
+        Board cont = null;
         try
         {
             FileInputStream fis = new FileInputStream("savedata.ser");
             ObjectInputStream ois = new ObjectInputStream(fis);
-            Controller cont = (Controller) ois.readObject();
+            cont = (Board) ois.readObject();
             ois.close();
+
 
 
             // Clean up the file
             new File("savedata.ser").delete();
+
         }
         catch (Exception ex)
         {
             System.out.print("Exception thrown during test: " + ex.toString());
         }
 
+        return cont;
     }
+    
 }
