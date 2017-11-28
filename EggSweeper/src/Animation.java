@@ -18,7 +18,7 @@ import javax.swing.JPanel;
 
 // The View
 
-public class Animation extends JPanel implements Serializable{
+public class Animation extends JPanel{
 	
 	private transient List<AniObject> images;
 	private AniObject boardImage;
