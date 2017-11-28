@@ -221,6 +221,13 @@ public class Controller implements Serializable, ActionListener {
 	}
 	// displays easy, medium and hard button
 	public void pickDifficulty() {
+		Iterator<AniObject> itrRemove = animation.getImages().iterator();
+		while (itrRemove.hasNext()) {
+			AniObject aniObjectRemove = itrRemove.next();
+			if (aniObjectRemove.toString().compareToIgnoreCase("HB") == 0) {
+				itrRemove.remove();
+			}
+		}
 		JPanel difficultyPanel = new JPanel();
 		difficultyPanel.setLayout(new GridBagLayout());
 		
