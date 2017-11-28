@@ -37,7 +37,7 @@ import powerUpModels.Helper;
 
 // The Controller
 
-public class Controller implements Serializable, ActionListener {
+public class Controller implements ActionListener {
 	
 	// The Model
 	Player player;
@@ -123,9 +123,11 @@ public class Controller implements Serializable, ActionListener {
 		
 		JButton startButton = new JButton("Start Game");
 		JButton instButton = new JButton("Instructions");
+		JButton loadButton = new JButton("Load");
 		startButton.setFont(new Font("Arial", Font.PLAIN, 30));
 		instButton.setFont(new Font("Arial", Font.PLAIN, 30));
-		startButton.setVisible(true);instButton.setVisible(true);
+		loadButton.setFont(new Font("Arial", Font.PLAIN, 30));
+		startButton.setVisible(true);instButton.setVisible(true);loadButton.setVisible(true);
 		
 		//This component will be in the same column, just 3 rows below
 		constraints.gridy = 3;
@@ -134,8 +136,8 @@ public class Controller implements Serializable, ActionListener {
 		startPanel.add(instButton,constraints, 1);
 		
 		constraints.gridy = 5;
-		JLabel holder2 = new JLabel(" ");
-		startPanel.add(holder2, constraints);
+		//JLabel holder2 = new JLabel(" ");
+		startPanel.add(loadButton, constraints);
 
 		
 		startButton.addActionListener((ActionEvent e)->{
@@ -155,6 +157,10 @@ public class Controller implements Serializable, ActionListener {
 
 			}
 		);
+
+		loadButton.addActionListener((ActionEvent e)->{
+			Load.LoadGame();
+		});
 
 //		constraints.gridy = 5;
 //		JButton loadButton = new JButton("Load");
