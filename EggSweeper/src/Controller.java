@@ -28,6 +28,7 @@ import javax.swing.Timer;
 import TimeManagement.GameBoardTimer;
 import TimeManagement.PowerUpTimer;
 import enums.Bird;
+import enums.Difficulty;
 import enums.Direction;
 import enums.Item;
 import enums.PowerUps;
@@ -43,7 +44,10 @@ public class Controller implements Serializable, ActionListener {
 	Board gameBoard;
 	PowerUpTimer powerUpTimer;
 	GameBoardTimer gameBoardTimer;
+	PowerUpTimer devourAnimationTimer;
 	Timer checkTimersTimer;
+	int correctAnswersInARow = 0;
+	int correctAnswerThreshold = 1;
 	
 	// The View
 	JFrame frame;
@@ -51,6 +55,7 @@ public class Controller implements Serializable, ActionListener {
 	CardLayout screens;
 	JPanel cardPanel;
 	Controller thisController;
+	AniObject birdMouse;
 	
 	// Constant for tick method
 	private int boardBuilt = 0;
@@ -238,7 +243,7 @@ public class Controller implements Serializable, ActionListener {
 	        	frame.getContentPane().revalidate();
 	        	frame.getContentPane().repaint();
         		// when clicked picks character and difficulty
-        		gameBoard = new Board(Board.Difficulty.EASY);
+        		gameBoard = new Board(Difficulty.EASY);
         		player = new Player(Bird.DUNLIN);
         		animation.migrationAnimation();
 	        }
@@ -248,7 +253,7 @@ public class Controller implements Serializable, ActionListener {
 	        	screens.show(cardPanel, "Blank");
 	        	frame.getContentPane().revalidate();
 	        	frame.getContentPane().repaint();
-	        	gameBoard = new Board(Board.Difficulty.MEDIUM);
+	        	gameBoard = new Board(Difficulty.MEDIUM);
 	        	player = new Player(Bird.SANDPIPER); 
 	        	animation.migrationAnimation();
 	        }
@@ -259,7 +264,7 @@ public class Controller implements Serializable, ActionListener {
 	        	screens.show(cardPanel, "Blank");
 	        	frame.getContentPane().revalidate();
 	        	frame.getContentPane().repaint();
-	        	gameBoard = new Board(Board.Difficulty.HARD);
+	        	gameBoard = new Board(Difficulty.HARD);
 	        	player = new Player(Bird.REDKNOT);
 	        	animation.migrationAnimation();
 	        }
@@ -329,7 +334,7 @@ public class Controller implements Serializable, ActionListener {
 		bird.setX((int) Math.round(mouseLoc.getX() + 3 - bird.getYSize()/4.5));
 		bird.setY((int) Math.round(mouseLoc.getY() - 31 - bird.getYSize()/1.8));
 		
-		final AniObject birdMouse = bird;
+		birdMouse = bird;
 		final AniObject boardMouse = board;
 		
 		constraints.gridx = 1;
@@ -848,7 +853,11 @@ public class Controller implements Serializable, ActionListener {
 		frame.repaint();
 
 	}
-	
+	/**
+	 * The master timer checks to see if the game board timer and the power up timer reaches zero
+	 * If the game board timer reaches zero, the game ends.
+	 * If the power up timer reaches zero, the removePowerUp method will be called
+	 */
 	private void checkTimers() {
 		if(powerUpTimer != null) {
 			boolean timeElapsed = powerUpTimer.isTimesUp();
@@ -867,8 +876,21 @@ public class Controller implements Serializable, ActionListener {
 			}
 		}
 		
+		if(devourAnimationTimer !=null) {
+			boolean timeElapsed = devourAnimationTimer.isTimesUp();
+			if(timeElapsed) {
+				System.out.println("You ate all of the eggs!");
+				this.devourAnimationTimer.getTimer().stop();
+				this.endScreen();
+			} else {
+			birdMouse.incScoreSize(100);
+			}
+		}
+		
 	}
-	
+	/**
+	 * Disables the player's power up
+	 */
 	private void removePowerUp() {
 		System.out.println("Power up is gone");
 		PowerUps currentPowerUp = player.getCurrentPowerUp();
@@ -887,8 +909,18 @@ public class Controller implements Serializable, ActionListener {
 		}
 		
 	}
-	
+	/**
+	 * Shows and applies the power given to the player.
+	 * Checks the current power up the player has and call power up methods according to their PowerUps value
+	 * @see PowerUps
+	 */
 	private void implementPowerUp() {
+		if(this.correctAnswersInARow > this.correctAnswerThreshold) {
+			this.gameBoardTimer.getTimer().stop();
+			this.powerUpTimer.getTimer().stop();
+			this.powerUpTimer = null;
+			player.setCurrentPowerUp(PowerUps.DEVOUR);
+		}
 		PowerUps currentPowerUp = player.getCurrentPowerUp();
 		System.out.println("current power up: " + currentPowerUp);
 		if(currentPowerUp == PowerUps.HELPER) {
@@ -909,8 +941,32 @@ public class Controller implements Serializable, ActionListener {
 			System.out.println("Eggs are worth double points!");
 			player.setPointsPerEgg(2);
 		}
+		
+		if (currentPowerUp == PowerUps.DEVOUR) {
+			devorEggs();
+		}
 	}
-	
+	/**
+	 * Enables the devour animation for the bird. The player score increases while the bird grows 
+	 */
+	private void devorEggs() {
+		System.out.println("Devouring all of the eggs");
+		for(GridSpace[]row: gameBoard.getBoard()) {
+			for(GridSpace grid: row) {
+				if(grid.getItem() == Item.EGG) {
+					System.out.println("*Gulp*");
+					player.incScore();
+				}
+			}
+		}
+		devourAnimationTimer = new PowerUpTimer();
+		devourAnimationTimer.getTimer().start();
+		
+	}
+	/**
+	 * Adds helpers onto the board to help the player find eggs
+	 * @see Helper
+	 */
 	private void addHelpers() {
 		int boardX = 0;
 		helpers = new ArrayList<>();
@@ -930,7 +986,10 @@ public class Controller implements Serializable, ActionListener {
 			animation.addMaggie(gridIndex[0], gridIndex[1], gridIndex[2], gridIndex[3]);
 		}
 	}
-	
+	/**
+	 * Cleans up 10 grid spaces that holds trash and marks the spaces as ALREADYCHECKED
+	 * @see Item
+	 */
 	private void addCleaners() {
 		int count = 0;
 		int totTrash = 0;
@@ -957,7 +1016,10 @@ public class Controller implements Serializable, ActionListener {
 			}
 		}
 	}
-	
+	/**
+	 * Stops the game board timer for approximately 2 seconds
+	 * @see GameBoardTimer
+	 */
 	private void pauseGameBoardTimer() {
 		gameBoardTimer.getTimer().setDelay(2000);
 	}
@@ -991,13 +1053,19 @@ public class Controller implements Serializable, ActionListener {
 			return;
 		}
 	}
-	
+	/**
+	 * Sets the visibility of all AniObjects in the animation array to true
+	 * @see AniObject
+	 */
 	private void showImages() {
 		for(AniObject object: animation.getImages()) {
 			object.setVisible(true);
 		}
 	}
-	
+	/**
+	 * Sets the visibility of all AniObjects in the animation array to false
+	 * @see AniObject
+	 */
 	private void hideImages() {
 		for(AniObject object: animation.getImages()) {
 			object.setVisible(false);
@@ -1010,22 +1078,20 @@ public class Controller implements Serializable, ActionListener {
 			JButton selectedButton = (JButton)a.getSource();
 			String userAnswer = selectedButton.getText();
 			boolean playerWasCorrect = gameBoard.checkAnswer(userAnswer);
-			if (playerWasCorrect){
+			player.setPowerupStatus(playerWasCorrect);
+			if (playerWasCorrect) {
 				answerLabel.setText("Correct!!!");
 				powerUpTimer = new PowerUpTimer();
 				powerUpTimer.getTimer().start();
-			}
-			else {
-				answerLabel.setText("Incorrect.");
-			}
-			player.setPowerupStatus(playerWasCorrect);
-			if (playerWasCorrect) {
+				this.correctAnswersInARow++;
 				implementPowerUp();
 				screens.show(cardPanel, "Board");
 				showImages();
 				frame.validate();
 				frame.repaint();	
 			} else {
+				this.correctAnswersInARow = 0;
+				answerLabel.setText("Incorrect.");
 				JPanel correctAnswerPanel = setUpCorrectAnswerPanel();
 				cardPanel.add(correctAnswerPanel, "correctAnswer");
 				screens.show(cardPanel, "correctAnswer");
@@ -1036,7 +1102,10 @@ public class Controller implements Serializable, ActionListener {
 		});
 		return possibleAnswer;
 	}
-	
+	/**
+	 * Builds a JPanel which is used to present the correct answer to the player
+	 * @return correctAnswerPanel - A JPanel which has a title label, an explanation label, and an exit button
+	 */
 	private JPanel setUpCorrectAnswerPanel() {
 		JPanel correctAnswerPanel = new JPanel();
 		correctAnswerPanel.setLayout(new GridLayout(3,1));

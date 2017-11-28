@@ -12,7 +12,7 @@ public enum PowerUps {
 	/**
 	 * The player's bird will grow and devour every egg on the board
 	 */
-	DEVEOUR,
+	DEVOUR,
 	/**
 	 * The player will have a helper who will clean up trash
 	 */

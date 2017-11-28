@@ -73,7 +73,7 @@ public class Player implements Serializable {
 		switch (item) {
 			case EGG:
 				// up player score
-				score = score + pointsPerEgg;;
+				score += pointsPerEgg;;
 				eggs++;
 				System.out.println("Found an egg!!!");
 				System.out.println("Score: " + Integer.toString(score));
@@ -234,7 +234,6 @@ public class Player implements Serializable {
 			this.setCurrentPowerUp(obtainedPowerUp);
 		} else {
 			this.currentPowerUp = null;
-			this.setMultiplier(0);
 		}
 	}
 	
@@ -246,7 +245,7 @@ public class Player implements Serializable {
 	private PowerUps generatePowerUp() {
 		List<PowerUps> powerUps = new ArrayList<>();
 		for(PowerUps choice: PowerUps.values()) {
-			if(choice != PowerUps.DEVEOUR) {
+			if(choice != PowerUps.DEVOUR) {
 				powerUps.add(choice);
 			}
 		}
