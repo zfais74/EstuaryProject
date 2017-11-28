@@ -1026,19 +1026,7 @@ public class Controller implements Serializable, ActionListener {
 				frame.validate();
 				frame.repaint();	
 			} else {
-				JPanel correctAnswerPanel = new JPanel();
-				JLabel title = new JLabel("The Correct Answer Was");
-				JLabel explanation = new JLabel(gameBoard.getAnswer());
-				correctAnswerPanel.add(title);
-				correctAnswerPanel.add(explanation);
-				JButton okButton = new JButton("Ok");
-				okButton.addActionListener((ActionEvent e)->{
-					screens.show(cardPanel, "Board");
-					showImages();
-					frame.validate();
-					frame.repaint();		
-				});
-				correctAnswerPanel.add(okButton);
+				JPanel correctAnswerPanel = setUpCorrectAnswerPanel();
 				cardPanel.add(correctAnswerPanel, "correctAnswer");
 				screens.show(cardPanel, "correctAnswer");
 				frame.revalidate();
@@ -1047,6 +1035,28 @@ public class Controller implements Serializable, ActionListener {
 			
 		});
 		return possibleAnswer;
+	}
+	
+	private JPanel setUpCorrectAnswerPanel() {
+		JPanel correctAnswerPanel = new JPanel();
+		correctAnswerPanel.setLayout(new GridLayout(3,1));
+		JLabel title = new JLabel("The Correct Answer Was");
+		title.setFont(new Font("Arial", Font.PLAIN, 60));
+		title.setHorizontalAlignment(JLabel.CENTER);
+		correctAnswerPanel.add(title);
+		JLabel explanation = new JLabel(gameBoard.getAnswer());
+		explanation.setFont(new Font("Arial", Font.PLAIN, 40));
+		explanation.setHorizontalAlignment(JLabel.CENTER);
+		correctAnswerPanel.add(explanation);
+		JButton okButton = new JButton("Ok");
+		okButton.addActionListener((ActionEvent e)->{
+			screens.show(cardPanel, "Board");
+			showImages();
+			frame.validate();
+			frame.repaint();		
+		});
+		correctAnswerPanel.add(okButton);
+		return correctAnswerPanel;
 	}
 	
 	// Game with GUI
