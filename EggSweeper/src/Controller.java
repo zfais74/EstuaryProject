@@ -9,6 +9,8 @@ import java.awt.MouseInfo;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
@@ -81,6 +83,66 @@ public class Controller implements Serializable, ActionListener {
 	}
 	// displays start button
 	public void startScreen() {
+		frame.addKeyListener(new KeyListener() {
+
+			@Override
+			public void keyTyped(KeyEvent e) {
+				
+				
+			}
+
+			@Override
+			public void keyPressed(KeyEvent e) {
+				
+			}
+
+			@Override
+			public void keyReleased(KeyEvent e) {
+				// TODO Auto-generated method stub
+				if(e.getKeyCode() == KeyEvent.VK_E) {
+					endScreen();
+				} 
+				else if (e.getKeyCode() == KeyEvent.VK_Q) {
+					String question;
+					try {
+						question = gameBoard.getPowerupQuestion();
+						List<String> possibleAns = gameBoard.getPossibleAnswers();
+						System.out.println("---------------------------------");
+						Collections.shuffle(possibleAns);
+						System.out.println(possibleAns);
+						questionScreen(question, possibleAns);
+					} catch (FileNotFoundException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+					
+					
+				} else if (e.getKeyCode() == KeyEvent.VK_P) {
+					player.setPowerupStatus(true);
+					powerUpTimer = new PowerUpTimer();
+					powerUpTimer.getTimer().start();
+					implementPowerUp();
+					frame.validate();
+					frame.repaint();	
+					
+				}
+				
+				else if (e.getKeyCode() == KeyEvent.VK_S) {
+					startScreen();
+				}
+				else if (e.getKeyCode() == KeyEvent.VK_W) {
+					int value = 200;
+					while(value > 0) {
+						player.incScore();
+						value--;
+					}
+					endScreen();
+					
+					
+				}
+			}
+			
+		});
 		checkTimersTimer = new Timer(1000, this);
 		checkTimersTimer.start();
 		//Declare a new JPanel
@@ -1148,12 +1210,15 @@ public class Controller implements Serializable, ActionListener {
 	public static void main(String[] args) {
 		Controller cont = new Controller();
        	cont.frame = new JFrame();
+       	cont.frame.setFocusableWindowState(true);
        	//cont.frame.setPreferredSize(new Dimension(1000,1000));
        	cont.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	  	cont.animation = new Animation();
 	  	cont.animation.setVisible(true);
 	  	cont.frame.getContentPane().add(cont.animation);
 	  	cont.frame.pack();
+	  	cont.frame.setFocusable(true);
+	  	cont.frame.setFocusTraversalKeysEnabled(false );
 	  	cont.frame.setVisible(true);
 	  	cont.cardPanel = new JPanel();
 	  	cont.cardPanel.setVisible(true);
