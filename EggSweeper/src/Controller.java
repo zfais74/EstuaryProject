@@ -334,7 +334,7 @@ public class Controller implements Serializable, ActionListener {
 		double birdRatio = getSizeRatio(bird.getY(), board);
 		bird.setSize(birdRatio);
 		Point mouseLoc = MouseInfo.getPointerInfo().getLocation();
-		bird.setX((int) Math.round(mouseLoc.getX() + 3 - bird.getYSize()/5.));
+		bird.setX((int) Math.round(mouseLoc.getX() + 3 - bird.getYSize()/4.5));
 		bird.setY((int) Math.round(mouseLoc.getY() - 31 - bird.getYSize()/1.8));
 		
 		final AniObject birdMouse = bird;
@@ -366,7 +366,7 @@ public class Controller implements Serializable, ActionListener {
 
 			@Override
 			public void mouseMoved(MouseEvent e) {
-				birdMouse.setX( (int) Math.round(e.getX() - birdMouse.getYSize()/7.) + chestButton.getX());
+				birdMouse.setX( (int) Math.round(e.getX() + 5 - birdMouse.getYSize()/6.) + chestButton.getX());
 				birdMouse.setY((int) Math.round(e.getY() - birdMouse.getYSize()/1.8) + chestButton.getY());
 				double newBirdRatio = getSizeRatio(birdMouse.getY(), boardMouse);
 				birdMouse.setSize(newBirdRatio);
@@ -478,7 +478,7 @@ public class Controller implements Serializable, ActionListener {
 
 	        			@Override
 	        			public void mouseMoved(MouseEvent e) {
-	        				birdMouse.setX( (int) Math.round(e.getX() - birdMouse.getYSize()/7.) + chestButton.getX());
+	        				birdMouse.setX( (int) Math.round(e.getX() + 5 - birdMouse.getYSize()/6.) + chestButton.getX());
 	        				birdMouse.setY((int) Math.round(e.getY() - birdMouse.getYSize()/1.8) + chestButton.getY());
 	        				double newBirdRatio = getSizeRatio(birdMouse.getY(), boardMouse);
 	        				birdMouse.setSize(newBirdRatio);
@@ -499,7 +499,7 @@ public class Controller implements Serializable, ActionListener {
 		        		constraints.gridy = 4;
 		        		constraints.anchor = GridBagConstraints.EAST;
 		        		boardPanel.add(ateSome, constraints);
-		        		if (NumberManipulation.generateNum(10) < 6) {
+		        		if (NumberManipulation.generateNum(10) < 6 && player.hasPowerUp() == false) {
 		        			chestButton.setIcon(animation.getChestIcon());
 		                	chestButton.setEnabled(true);
 		        		}
@@ -507,6 +507,9 @@ public class Controller implements Serializable, ActionListener {
 	        		else if (item == Item.ALREADYCHECKED) {
 		        		ateSome = new JLabel("Already checked there.");
 		        		ateSome.setFont(ateFont);
+		        		constraints.gridx = 1;
+		        		constraints.gridy = 4;
+		        		constraints.anchor = GridBagConstraints.EAST;
 		        		boardPanel.add(ateSome, constraints);
 	        		}
 	        		else {
@@ -582,7 +585,7 @@ public class Controller implements Serializable, ActionListener {
 
 			@Override
 			public void mouseMoved(MouseEvent e) {
-				birdMouse.setX( (int) Math.round(e.getX() - birdMouse.getYSize()/7.));
+				birdMouse.setX( (int) Math.round(e.getX() + 5 - birdMouse.getYSize()/6.));
 				birdMouse.setY((int) Math.round(e.getY() - birdMouse.getYSize()/1.8));
 				double newBirdRatio = getSizeRatio(birdMouse.getY(), boardMouse);
 				birdMouse.setSize(newBirdRatio);
@@ -881,9 +884,12 @@ public class Controller implements Serializable, ActionListener {
 		player.setPointsPerEgg(1);
 		if(currentPowerUp == PowerUps.HELPER) {
 			helpers.clear();
-			for (AniObject ani: animation.getImages()) {
-				if (ani.toString().compareToIgnoreCase("maggie") == 0){
-					ani.setVisible(false);
+			Iterator<AniObject> aniIter = animation.getImages().iterator();
+			AniObject next;
+			while (aniIter.hasNext()) {
+				next = aniIter.next();
+				if (next.toString().compareToIgnoreCase("maggie") == 0) {
+					aniIter.remove();
 				}
 			}
 		}
@@ -919,7 +925,7 @@ public class Controller implements Serializable, ActionListener {
 		for(GridSpace[] row: gameBoard.getBoard()) {
 			int boardY = 0;
 			for(GridSpace gridSpace: row) {
-				if(gridSpace.getItem() == Item.EGG) {
+				if(gridSpace.getItem() == Item.EGG && gridSpace.getIsCovered() == true) {
 					Helper helper = new Helper(boardX, boardY);
 					helpers.add(helper);
 				}
@@ -1028,19 +1034,7 @@ public class Controller implements Serializable, ActionListener {
 				frame.validate();
 				frame.repaint();	
 			} else {
-				JPanel correctAnswerPanel = new JPanel();
-				JLabel title = new JLabel("The Correct Answer Was");
-				JLabel explanation = new JLabel(gameBoard.getAnswer());
-				correctAnswerPanel.add(title);
-				correctAnswerPanel.add(explanation);
-				JButton okButton = new JButton("Ok");
-				okButton.addActionListener((ActionEvent e)->{
-					screens.show(cardPanel, "Board");
-					showImages();
-					frame.validate();
-					frame.repaint();		
-				});
-				correctAnswerPanel.add(okButton);
+				JPanel correctAnswerPanel = setUpCorrectAnswerPanel();
 				cardPanel.add(correctAnswerPanel, "correctAnswer");
 				screens.show(cardPanel, "correctAnswer");
 				frame.revalidate();
@@ -1049,6 +1043,28 @@ public class Controller implements Serializable, ActionListener {
 			
 		});
 		return possibleAnswer;
+	}
+	
+	private JPanel setUpCorrectAnswerPanel() {
+		JPanel correctAnswerPanel = new JPanel();
+		correctAnswerPanel.setLayout(new GridLayout(3,1));
+		JLabel title = new JLabel("The Correct Answer Was");
+		title.setFont(new Font("Arial", Font.PLAIN, 60));
+		title.setHorizontalAlignment(JLabel.CENTER);
+		correctAnswerPanel.add(title);
+		JLabel explanation = new JLabel(gameBoard.getAnswer());
+		explanation.setFont(new Font("Arial", Font.PLAIN, 40));
+		explanation.setHorizontalAlignment(JLabel.CENTER);
+		correctAnswerPanel.add(explanation);
+		JButton okButton = new JButton("Ok");
+		okButton.addActionListener((ActionEvent e)->{
+			screens.show(cardPanel, "Board");
+			showImages();
+			frame.validate();
+			frame.repaint();		
+		});
+		correctAnswerPanel.add(okButton);
+		return correctAnswerPanel;
 	}
 	
 	// Game with GUI
