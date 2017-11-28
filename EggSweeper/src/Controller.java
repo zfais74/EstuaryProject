@@ -4,7 +4,6 @@ import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
-import java.awt.Image;
 import java.awt.MouseInfo;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
@@ -19,7 +18,6 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -33,6 +31,7 @@ import enums.Bird;
 import enums.Direction;
 import enums.Item;
 import enums.PowerUps;
+import powerUpModels.Cleaner;
 import powerUpModels.Helper;
 
 // The Controller
@@ -54,10 +53,8 @@ public class Controller implements Serializable, ActionListener {
 	Controller thisController;
 	
 	// Constant for tick method
-	private int tickStage = 0;
-	JLabel powerUpLabel = new JLabel("<html>Help the hungry bird&nbsp<br/>find some Eggs!</html>");
-	JLabel aniLabel = new JLabel("A Red Knot migrating from South America to the Arctic stops in the Delaware Bay to refuel on Horseshoe Crab eggs. ");
-	JLabel timerLabel = new JLabel("");
+	private int boardBuilt = 0;
+	JLabel answerLabel = new JLabel(" ");
 	List<Helper> helpers;
 	
 	
@@ -92,47 +89,30 @@ public class Controller implements Serializable, ActionListener {
 		//The constraints describe each new component's location
 		GridBagConstraints constraints = constraintFactory();
 		//The component will render in the 3rd column of the first row
-		constraints.gridx = 1;
-		constraints.gridy = 1;
-		
-		JLabel holder1 = new JLabel(" ");
-		startPanel.add(holder1, constraints, 0);
-		
-		constraints.gridy = 2;
+		constraints.gridx = 3;
 		
 		JLabel title = new JLabel("EGG SWEEPER");
 		title.setFont(new Font("Arial", Font.PLAIN, 80));
 		
 		//Add components to the start panel instead of the frame's contentPane directly
-		startPanel.add(title, constraints, 0);
-		
-		constraints.gridy = 1;
-		constraints.gridheight = 5;
-//		ImageIcon background = new ImageIcon("images/homeBackground.png");
-//		Image backImage = background.getImage();
-//		Image resizedBack = backImage.getScaledInstance( 1600, 900,  java.awt.Image.SCALE_SMOOTH ) ; 
-//		JLabel backgroundImage = new JLabel(new ImageIcon(resizedBack));
-		JLabel backgroundImage = new JLabel(new ImageIcon("images/homeBackground169.png"));
-		startPanel.add(backgroundImage, constraints, 1);
-		
-		constraints.gridheight = 1;
+		startPanel.add(title, constraints);
 		
 		JButton startButton = new JButton("Start Game");
 		JButton instButton = new JButton("Instructions");
+		JButton loadButton = new JButton("Load");
 		startButton.setFont(new Font("Arial", Font.PLAIN, 30));
 		instButton.setFont(new Font("Arial", Font.PLAIN, 30));
+		loadButton.setFont(new Font("Arial", Font.PLAIN, 30));
 		startButton.setVisible(true);instButton.setVisible(true);
 		
 		//This component will be in the same column, just 3 rows below
 		constraints.gridy = 3;
-		startPanel.add(startButton,constraints, 1);
+		
+		startPanel.add(startButton,constraints);
 		constraints.gridy = 4;
-		startPanel.add(instButton,constraints, 1);
-		
+		startPanel.add(instButton,constraints);
 		constraints.gridy = 5;
-		JLabel holder2 = new JLabel(" ");
-		startPanel.add(holder2, constraints);
-		
+		startPanel.add(loadButton,constraints);
 		
 		startButton.addActionListener((ActionEvent e)->{
 
@@ -152,28 +132,17 @@ public class Controller implements Serializable, ActionListener {
 			}
 		);
 
-//		constraints.gridy = 5;
-//		JButton loadButton = new JButton("Load");
-//		loadButton.setFont(new Font("Arial", Font.PLAIN, 30));
-//		startPanel.add(loadButton,constraints);
-//		loadButton.addActionListener((ActionEvent e)-> {
-//				Load.LoadGame();
-//				//find correct method so that it keeps ticking
-//
-//			}
-//		);
-		
+		loadButton.addActionListener((ActionEvent e)-> {
+				Load.LoadGame();
+				//find correct method so that it keeps ticking
+
+			}
+		);
 		//Adds the start screen to the deck
 		cardPanel.add(startPanel, "Start");
 		screens.show(cardPanel, "Start");
 		//adds a blank screen to the deck
 		JPanel blankScreen = new JPanel();
-		blankScreen.setLayout(new GridLayout(10,0));
-		aniLabel.setFont(new Font("Arial", Font.PLAIN, 30));
-		aniLabel.setVerticalAlignment(JLabel.CENTER);
-		aniLabel.setHorizontalAlignment(JLabel.CENTER);
-		
-		blankScreen.add(aniLabel);
     	cardPanel.add(blankScreen, "Blank");
 
 		frame.add(cardPanel);
@@ -233,11 +202,9 @@ public class Controller implements Serializable, ActionListener {
 		difficultyPanel.setLayout(new GridBagLayout());
 		
 		GridBagConstraints constraints = constraintFactory();
-		constraints.gridx = 1;
+		constraints.gridx = 3;
 		constraints.weightx = 50;
 		constraints.weighty = 50;
-		
-		JLabel holder1 = new JLabel(" ");
 		
 		JLabel pickDiff = new JLabel("Pick a Difficulty");
 		pickDiff.setFont(new Font("Arial", Font.PLAIN, 50));
@@ -254,34 +221,19 @@ public class Controller implements Serializable, ActionListener {
 		hardButton.setFont(new Font("Arial", Font.PLAIN, 30));
 		hardButton.setVisible(true);
 		
-		JLabel holder2 = new JLabel(" ");
-		
 		constraints.gridy = 0;
-		
-		difficultyPanel.add(holder1, constraints, 0);
+		difficultyPanel.add(pickDiff,constraints);
 		constraints.gridy = 1;
-		difficultyPanel.add(pickDiff,constraints, 0);
-		
-		constraints.gridy = 0;
-		constraints.gridheight = 6;
-//		ImageIcon background = new ImageIcon("images/homeBackground.png");
-//		Image backImage = background.getImage();
-//		Image resizedBack = backImage.getScaledInstance( 1600, 900,  java.awt.Image.SCALE_SMOOTH ) ; 
-//		JLabel backgroundImage = new JLabel(new ImageIcon(resizedBack));
-		JLabel backgroundImage = new JLabel(new ImageIcon("images/homeBackground169.png"));
-		difficultyPanel.add(backgroundImage, constraints, 1);
-		
-		constraints.gridheight = 1;
-		
-		constraints.gridy = 2;
 		//After a button is added add the width
-		difficultyPanel.add(easyButton,constraints, 1);
+		difficultyPanel.add(easyButton,constraints);
+		constraints.gridy = 2;
+		difficultyPanel.add(mediumButton,constraints);
 		constraints.gridy = 3;
-		difficultyPanel.add(mediumButton,constraints, 1);
+		difficultyPanel.add(hardButton,constraints);
+		
+		JLabel holder = new JLabel(" ");
 		constraints.gridy = 4;
-		difficultyPanel.add(hardButton,constraints, 1);
-		constraints.gridy = 5;
-		difficultyPanel.add(holder2, constraints, 1);
+		difficultyPanel.add(holder, constraints);
 		
 		cardPanel.add(difficultyPanel, "Difficulty");
 		screens.show(cardPanel, "Difficulty");
@@ -326,7 +278,6 @@ public class Controller implements Serializable, ActionListener {
 		
 		gameBoardTimer = new GameBoardTimer();
 		gameBoardTimer.getTimer().start();
-		timerLabel.setText("Time: " + Integer.toString(gameBoardTimer.getTimeRemaining()/1000) + " ");
 		JPanel boardPanel = new JPanel();
 		boardPanel.setLayout(new GridBagLayout());
 		GridBagConstraints constraints = constraintFactory();
@@ -335,8 +286,8 @@ public class Controller implements Serializable, ActionListener {
 		constraints.gridy = 1;
 		constraints.anchor = GridBagConstraints.EAST;
 		
-		powerUpLabel.setFont(new Font("Arial", Font.PLAIN, 40));
-		boardPanel.add(powerUpLabel, constraints, 0);
+		answerLabel.setFont(new Font("Arial", Font.PLAIN, 40));
+		boardPanel.add(answerLabel, constraints, 0);
 		
 		constraints.gridx = 1;
 		constraints.gridy = 2;
@@ -349,18 +300,15 @@ public class Controller implements Serializable, ActionListener {
 		constraints.gridx = 1;
 		constraints.gridy = 3;
 		constraints.anchor = GridBagConstraints.EAST;
-		
-		timerLabel.setFont(new Font("Arial", Font.PLAIN, 40));
-		boardPanel.add(timerLabel, constraints);
-		
-//		JButton save = new JButton("Save");
-//		save.setFont(new Font("Arial", Font.PLAIN, 30));
-//		save.setFocusable(false);
-//		save.setVisible(true);
-//		boardPanel.add(save,constraints);
-//		save.addActionListener((ActionEvent a)->{
-//			Load.SaveGame(this);
-//		});
+
+		JButton save = new JButton("Save");
+		save.setFont(new Font("Arial", Font.PLAIN, 30));
+		save.setFocusable(false);
+		save.setVisible(true);
+		boardPanel.add(save,constraints);
+		save.addActionListener((ActionEvent a)->{
+			Load.SaveGame(this);
+		});
 		
 		AniObject bird = null;
 		AniObject board = null;
@@ -452,6 +400,7 @@ public class Controller implements Serializable, ActionListener {
 		        	animation.addHole(gridIndex[2], gridIndex[3], gridIndex[4], gridIndex[5]);
 		        	
 		        	boardPanel.removeAll();
+		        	answerLabel.setText(" ");
 		        	frame.validate();
 		        	frame.repaint();
 	                
@@ -459,7 +408,7 @@ public class Controller implements Serializable, ActionListener {
 		    		constraints.gridy = 1;
 		    		constraints.anchor = GridBagConstraints.EAST;
 		    		
-		    		boardPanel.add(powerUpLabel, constraints);
+		    		boardPanel.add(answerLabel, constraints);
 	                
 	        		constraints.gridx = 1;
 	        		constraints.gridy = 2;
@@ -473,17 +422,14 @@ public class Controller implements Serializable, ActionListener {
 	        		constraints.gridy = 3;
 	        		constraints.anchor = GridBagConstraints.EAST;
 
-	        		timerLabel.setFont(new Font("Arial", Font.PLAIN, 40));
-	        		boardPanel.add(timerLabel, constraints);
-	        		
-//	        		JButton save = new JButton("Save");
-//	        		save.setFocusable(false);
-//	        		save.setFont(new Font("Arial", Font.PLAIN, 30));
-//	        		save.setVisible(true);
-//	        		boardPanel.add(save,constraints);
-//	        		save.addActionListener((ActionEvent a)->{
-//	        			Load.SaveGame(thisController);
-//	        		});
+	        		JButton save = new JButton("Save");
+	        		save.setFocusable(false);
+	        		save.setFont(new Font("Arial", Font.PLAIN, 30));
+	        		save.setVisible(true);
+	        		boardPanel.add(save,constraints);
+	        		save.addActionListener((ActionEvent a)->{
+	        			Load.SaveGame(thisController);
+	        		});
 	        		
 	        		JLabel ateSome = new JLabel(" ");
 	        		Font ateFont = new Font("Arial", Font.PLAIN, 40);
@@ -518,6 +464,8 @@ public class Controller implements Serializable, ActionListener {
 								
 							}
 	        	        	
+	        	        	System.out.println("Chest Button Clicked");
+	        	        	
 	        	        }
 	        	    );
 	        		chestButton.addMouseMotionListener(new MouseMotionListener() {
@@ -544,7 +492,7 @@ public class Controller implements Serializable, ActionListener {
 	        		
 	        		if (item == Item.EGG) {
 	        			birdMouse.incScoreSize();
-		        		ateSome.setText("You Found and egg!! ");
+		        		ateSome.setText("You Found and egg!!!");
 		        		ateSome.setFont(ateFont);
 		        		frame.getContentPane().add(ateSome, 0);
 		        		constraints.gridx = 1;
@@ -557,7 +505,7 @@ public class Controller implements Serializable, ActionListener {
 		        		}
 	        		}
 	        		else if (item == Item.ALREADYCHECKED) {
-		        		ateSome = new JLabel("Already looked there ");
+		        		ateSome = new JLabel("Already checked there.");
 		        		ateSome.setFont(ateFont);
 		        		constraints.gridx = 1;
 		        		constraints.gridy = 4;
@@ -567,7 +515,7 @@ public class Controller implements Serializable, ActionListener {
 	        		else {
 	        			if (item == Item.TRASH) {
 	        				birdMouse.decScoreSize();
-			        		ateSome.setText("Ate Some Trash :( ");
+			        		ateSome.setText("Ate Some Trash :(");
 			        		ateSome.setFont(ateFont);
 			        		constraints.gridx = 1;
 			        		constraints.gridy = 4;
@@ -576,7 +524,7 @@ public class Controller implements Serializable, ActionListener {
 		        		}
 		        		
 	        			else if (item == Item.EMPTY) {
-			        		ateSome.setText("Nothing there ");
+			        		ateSome.setText("Nothing there...");
 			        		ateSome.setFont(ateFont);
 			        		constraints.gridx = 1;
 			        		constraints.gridy = 4;
@@ -833,10 +781,31 @@ public class Controller implements Serializable, ActionListener {
 	public void endScreen() {
 		
 		frame.getContentPane().removeMouseListener(frame.getContentPane().getMouseListeners()[0]);
-		frame.getContentPane().removeMouseMotionListener(frame.getContentPane().getMouseMotionListeners()[0]);
 		
-		hideImages();
 		this.checkTimersTimer.stop();
+		//Declare a new JPanel
+		JPanel endPanel = new JPanel();
+		//Set its layout manager to GridBag
+		endPanel.setLayout(new GridBagLayout());
+		
+		GridBagConstraints constraints = constraintFactory();
+		
+		constraints.gridx = 3;
+		constraints.weightx = 1.0;
+		constraints.weighty = 1.0;
+		int width = 2;
+		hideImages();
+		
+		// create a label
+		JLabel eggLabel = new JLabel("You found " + Integer.toString(player.getEggs()) + " eggs,");
+		eggLabel.setFont(new Font("Arial", Font.PLAIN, 60));
+		// bounds must be set for label to display
+		
+		JLabel trashLabel = new JLabel("and you ate " + Integer.toString(player.getTrash()) + " pieces of trash,");
+		trashLabel.setFont(new Font("Arial", Font.PLAIN, 60));
+		
+		JLabel scoreLabel = new JLabel("so your score is " + Integer.toString(player.getScore()) + "!!!");
+		scoreLabel.setFont(new Font("Arial", Font.PLAIN, 60));
 		
 		JButton quitButton = new JButton("Quit");
 		quitButton.setFont(new Font("Arial", Font.PLAIN, 30));
@@ -849,39 +818,23 @@ public class Controller implements Serializable, ActionListener {
 	                
 	        }
 	    });
-
-		if (player.getScore() > 10) {
-			
-			Iterator<AniObject> itr = animation.getImages().iterator();
-			while (itr.hasNext()) {
-				AniObject aniObject = itr.next();
-				if (aniObject.toString().compareToIgnoreCase("bird") == 0) {
-					aniObject.setScoreSize(0);
-					aniObject.setSize(1);
-					aniObject.setY((int) Math.round(animation.contentPaneSize/3));
-					aniObject.setX(600);
-					aniObject.setVisible(true);
-				}
-			}
-			animation.migrationAnimation2();
-			aniLabel.setText("Your score was " + Integer.toString(player.getScore()) + ". Your bird will make it to the Arctic!!!");
-			aniLabel.setFont(new Font("Arial", Font.PLAIN, 50));
-			screens.show(cardPanel, "Blank");
-			tickStage = 3;
-		}
-		else {
-			aniLabel.setText("Your score was " + Integer.toString(player.getScore()) + ". Your bird will not make it to the Arctic :(");
-			aniLabel.setFont(new Font("Arial", Font.PLAIN, 50));
-			screens.show(cardPanel, "Blank");
-		}
-
+		
+		endPanel.add(eggLabel, constraints);
+		constraints.gridy = width;
+		endPanel.add(trashLabel, constraints);
+		constraints.gridy = 2*width;
+		endPanel.add(scoreLabel, constraints);
+		constraints.gridy = 3*width;
+		endPanel.add(quitButton, constraints);
+		cardPanel.add(endPanel, "End");
+		screens.show(cardPanel, "End");
+		
 		//Add and repaint
 		frame.validate();
 		frame.repaint();
 	}
 	
 	private void questionScreen(String question, List<String> possibleAns) {
-		gameBoardTimer.getTimer().stop();
 		JPanel questionPanel = new JPanel();
 		questionPanel.setLayout(new GridLayout(6,0));
 		
@@ -926,10 +879,9 @@ public class Controller implements Serializable, ActionListener {
 	
 	private void removePowerUp() {
 		System.out.println("Power up is gone");
-		powerUpLabel.setText(" ");
 		PowerUps currentPowerUp = player.getCurrentPowerUp();
 		player.setPowerupStatus(false);
-		player.setEggMultiplier(1);
+		player.setPointsPerEgg(1);
 		if(currentPowerUp == PowerUps.HELPER) {
 			helpers.clear();
 			Iterator<AniObject> aniIter = animation.getImages().iterator();
@@ -941,20 +893,15 @@ public class Controller implements Serializable, ActionListener {
 				}
 			}
 		}
-		if(currentPowerUp == PowerUps.FREEZE) {
-			gameBoardTimer.getTimer().start();
-		}
 		
 	}
 	
 	private void implementPowerUp() {
-		
 		PowerUps currentPowerUp = player.getCurrentPowerUp();
 		System.out.println("current power up: " + currentPowerUp);
 		if(currentPowerUp == PowerUps.HELPER) {
 			System.out.println("Maggie went out to find some eggs");
 			addHelpers();
-			
 		}
 		
 		if (currentPowerUp == PowerUps.CLEANER) {
@@ -968,7 +915,7 @@ public class Controller implements Serializable, ActionListener {
 		}
 		if (currentPowerUp == PowerUps.BONUS) {
 			System.out.println("Eggs are worth double points!");
-			player.setEggMultiplier(2);
+			player.setPointsPerEgg(2);
 		}
 	}
 	
@@ -1024,21 +971,21 @@ public class Controller implements Serializable, ActionListener {
 	}
 
 	public static void tick(Animation animation, Controller controller) {
-		if (controller.tickStage == 0) {
+		if (controller.boardBuilt == 0) {
 			Iterator<AniObject> itrMigration = animation.getImages().iterator();
 			while (itrMigration.hasNext()) {
 				AniObject aniObject = itrMigration.next();
 				if (aniObject.toString().compareToIgnoreCase("bird") == 0) {
-					aniObject.setY(aniObject.getY() - 2);
+					aniObject.setY(aniObject.getY() - 5);
 					if (aniObject.getY() <= (int) Math.round(animation.contentPaneSize/3)) {
-						controller.tickStage = 1;
+						controller.boardBuilt = 1;
 						break;
 					}
 				}
 			}
 		}
-		else if (controller.tickStage == 1) {
-			controller.tickStage = 2;
+		else if (controller.boardBuilt == 1) {
+			controller.boardBuilt = 2;
 			Iterator<AniObject> itrRemove = animation.getImages().iterator();
 			while (itrRemove.hasNext()) {
 				AniObject aniObjectRemove = itrRemove.next();
@@ -1047,19 +994,6 @@ public class Controller implements Serializable, ActionListener {
 				}
 			}
 			controller.buildBoard();
-		}
-		else if (controller.tickStage == 3) {
-			Iterator<AniObject> itrMigration2 = animation.getImages().iterator();
-			while (itrMigration2.hasNext()) {
-				AniObject aniObject = itrMigration2.next();
-				if (aniObject.toString().compareToIgnoreCase("bird") == 0) {
-					aniObject.setY(aniObject.getY() - 3);
-					if (aniObject.getY() <= 65) {
-						controller.tickStage = 4;
-						break;
-					}
-				}
-			}
 		}
 		else {
 			return;
@@ -1084,27 +1018,17 @@ public class Controller implements Serializable, ActionListener {
 			JButton selectedButton = (JButton)a.getSource();
 			String userAnswer = selectedButton.getText();
 			boolean playerWasCorrect = gameBoard.checkAnswer(userAnswer);
-			player.setPowerupStatus(playerWasCorrect);
-			if (playerWasCorrect) {
+			if (playerWasCorrect){
+				answerLabel.setText("Correct!!!");
 				powerUpTimer = new PowerUpTimer();
 				powerUpTimer.getTimer().start();
+			}
+			else {
+				answerLabel.setText("Incorrect.");
+			}
+			player.setPowerupStatus(playerWasCorrect);
+			if (playerWasCorrect) {
 				implementPowerUp();
-				PowerUps currentPowerUp = player.getCurrentPowerUp();
-				if (currentPowerUp == PowerUps.BONUS) {
-					powerUpLabel.setText("Double Eggs! ");
-				}
-				else if (currentPowerUp == PowerUps.CLEANER) {
-					powerUpLabel.setText("Cleared Some Trash! ");
-				}
-				else if (currentPowerUp == PowerUps.HELPER) {
-					powerUpLabel.setText("Help Finding Eggs! ");
-				}
-				else if (currentPowerUp == PowerUps.FREEZE) {
-					powerUpLabel.setText("Timer Frozen! ");
-				}
-				if (currentPowerUp != PowerUps.FREEZE) {
-					gameBoardTimer.getTimer().start();
-				}
 				screens.show(cardPanel, "Board");
 				showImages();
 				frame.validate();
@@ -1133,11 +1057,9 @@ public class Controller implements Serializable, ActionListener {
 		explanation.setHorizontalAlignment(JLabel.CENTER);
 		correctAnswerPanel.add(explanation);
 		JButton okButton = new JButton("Ok");
-		okButton.setFont(new Font("Arial", Font.PLAIN, 60));
 		okButton.addActionListener((ActionEvent e)->{
 			screens.show(cardPanel, "Board");
 			showImages();
-			gameBoardTimer.getTimer().start();
 			frame.validate();
 			frame.repaint();		
 		});
@@ -1176,9 +1098,6 @@ public class Controller implements Serializable, ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
-		if(gameBoardTimer != null) {
-			timerLabel.setText("Time: " + Integer.toString(gameBoardTimer.getTimeRemaining()/1000) + " ");
-		}
 		this.checkTimers();
 	}
 	

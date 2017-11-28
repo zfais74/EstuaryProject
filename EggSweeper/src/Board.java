@@ -338,6 +338,7 @@ public class Board implements Serializable {
 		 */
 		private int generateQuestionNum(int range) {
 			int rand = (int)(Math.random() * ((range - 1) + 1)) + 1;
+			System.out.println("rand = " + Integer.toString(rand));
 			return rand;
 		}
 		
