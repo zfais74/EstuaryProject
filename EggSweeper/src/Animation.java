@@ -231,7 +231,7 @@ public class Animation extends JPanel implements Serializable {
 			AniObject birdObject = new AniObject("bird", 600, 600, 100, 150, birdList);
 			birdObject.setVisible(true);
 			images.add(birdObject);
-			return;
+            return;
 		} catch (IOException e1) {
 			System.out.println("failed to load US or Bird, trying bin folder");
 		}
@@ -242,7 +242,7 @@ public class Animation extends JPanel implements Serializable {
 			AniObject USObject = new AniObject("US", 100, 100, 450, 600, USList);
 			USObject.setVisible(true);
 			images.add(USObject);
-
+			
 			BufferedImage bird1 = ImageIO.read(new File("bird1.png"));
 			BufferedImage bird2 = ImageIO.read(new File("bird2.png"));
 			BufferedImage bird3 = ImageIO.read(new File("bird3.png"));
@@ -259,6 +259,32 @@ public class Animation extends JPanel implements Serializable {
 		return;
 	}
 
+	public void migrationAnimation2() {
+		try {			
+			BufferedImage US = ImageIO.read(new File("images/map.png"));
+			List<BufferedImage> USList = new ArrayList<BufferedImage>();
+			USList.add(US);
+			AniObject USObject = new AniObject("US", 350, 100, 450, 600, USList);
+			USObject.setVisible(true);
+			images.add(USObject);
+			int i = images.size() - 1;
+			int j = 0;
+			Iterator<AniObject> holeBirdItr = images.iterator();
+			while (holeBirdItr.hasNext()) {
+				AniObject next = holeBirdItr.next();
+				if (next.toString().compareToIgnoreCase("bird") == 0) {
+					break;
+				}
+				j++;
+			}
+			Collections.swap(images, i, j);
+			
+            return;
+		} catch (IOException e1) {
+			System.out.println("failed to load US or Bird, trying bin folder");
+		}
+	}
+	
 	void addMaggie(int xLoc, int yLoc, int sizeX, int sizeY) {
 		try {
 			BufferedImage maggie1 = ImageIO.read(new File("images/maggie1.png"));
@@ -294,14 +320,14 @@ public class Animation extends JPanel implements Serializable {
 				j++;
 			}
 			Collections.swap(images, i, j);
-			return;
+            return;
 		} catch (IOException e1) {
 			System.out.println("failed to load maggie, trying bin folder");
 		}
-
-
+		
+		
 	}
-
+	
 	void addQuestionmark(int xLoc, int yLoc, int sizeX, int sizeY) {
 		try {
 			BufferedImage questionmark = ImageIO.read(new File("images/questionMark2.png"));
@@ -321,18 +347,18 @@ public class Animation extends JPanel implements Serializable {
 				j++;
 			}
 			Collections.swap(images, i, j);
-			return;
+            return;
 		} catch (IOException e1) {
 			System.out.println("failed to load questionmark, trying bin folder");
 		}
-
-
+		
+		
 	}
-
-	public ImageIcon getChestIcon() {
+	
+	public ImageIcon getChestIcon(){
 		ImageIcon chest = new ImageIcon("images/chest.png");
 		Image chestImage = chest.getImage();
-		Image resizedChest = chestImage.getScaledInstance(200, 200, java.awt.Image.SCALE_SMOOTH);
+		Image resizedChest = chestImage.getScaledInstance( 200, 200,  java.awt.Image.SCALE_SMOOTH ) ;  
 		return new ImageIcon(resizedChest);
 	}
 

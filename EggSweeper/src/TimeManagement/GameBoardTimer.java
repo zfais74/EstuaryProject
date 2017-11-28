@@ -14,7 +14,7 @@ public class GameBoardTimer implements ActionListener, Serializable {
 	public boolean timerStarted;
 	
 	public GameBoardTimer() {
-		this.timeRemaining = 60000;
+		this.timeRemaining = 30000;
 		this.setTimer();
 	}
 
@@ -58,8 +58,8 @@ public class GameBoardTimer implements ActionListener, Serializable {
 		int currentTime = getTimeRemaining();
 		currentTime /= 1000;
 		StringBuilder sb = new StringBuilder();
-		sb.append("Time remaining: 0:")
-		.append(currentTime);
+		sb.append("Time remaining: 0:").append(currentTime);
+		System.out.println(currentTime);
 		}
 	}
 
