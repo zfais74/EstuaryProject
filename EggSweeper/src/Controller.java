@@ -43,7 +43,10 @@ public class Controller implements Serializable, ActionListener {
 	Board gameBoard;
 	PowerUpTimer powerUpTimer;
 	GameBoardTimer gameBoardTimer;
+	PowerUpTimer devourAnimationTimer;
 	Timer checkTimersTimer;
+	int correctAnswersInARow = 0;
+	int correctAnswerThreshold = 1;
 	
 	// The View
 	JFrame frame;
@@ -51,6 +54,7 @@ public class Controller implements Serializable, ActionListener {
 	CardLayout screens;
 	JPanel cardPanel;
 	Controller thisController;
+	AniObject birdMouse;
 	
 	// Constant for tick method
 	private int boardBuilt = 0;
@@ -329,7 +333,7 @@ public class Controller implements Serializable, ActionListener {
 		bird.setX((int) Math.round(mouseLoc.getX() + 3 - bird.getYSize()/4.5));
 		bird.setY((int) Math.round(mouseLoc.getY() - 31 - bird.getYSize()/1.8));
 		
-		final AniObject birdMouse = bird;
+		birdMouse = bird;
 		final AniObject boardMouse = board;
 		
 		constraints.gridx = 1;
@@ -867,6 +871,17 @@ public class Controller implements Serializable, ActionListener {
 			}
 		}
 		
+		if(devourAnimationTimer !=null) {
+			boolean timeElapsed = devourAnimationTimer.isTimesUp();
+			if(timeElapsed) {
+				System.out.println("You ate all of the eggs!");
+				this.devourAnimationTimer.getTimer().stop();
+				this.endScreen();
+			} else {
+			birdMouse.incScoreSize(100);
+			}
+		}
+		
 	}
 	
 	private void removePowerUp() {
@@ -889,6 +904,13 @@ public class Controller implements Serializable, ActionListener {
 	}
 	
 	private void implementPowerUp() {
+		if(this.correctAnswersInARow > this.correctAnswerThreshold) {
+			this.gameBoardTimer.getTimer().stop();
+			this.powerUpTimer.getTimer().stop();
+			this.gameBoardTimer = null;
+			this.powerUpTimer = null;
+			player.setCurrentPowerUp(PowerUps.DEVOUR);
+		}
 		PowerUps currentPowerUp = player.getCurrentPowerUp();
 		System.out.println("current power up: " + currentPowerUp);
 		if(currentPowerUp == PowerUps.HELPER) {
@@ -909,6 +931,25 @@ public class Controller implements Serializable, ActionListener {
 			System.out.println("Eggs are worth double points!");
 			player.setPointsPerEgg(2);
 		}
+		
+		if (currentPowerUp == PowerUps.DEVOUR) {
+			devorEggs();
+		}
+	}
+	
+	private void devorEggs() {
+		System.out.println("Devouring all of the eggs");
+		for(GridSpace[]row: gameBoard.getBoard()) {
+			for(GridSpace grid: row) {
+				if(grid.getItem() == Item.EGG) {
+					System.out.println("*Gulp*");
+					player.incScore();
+				}
+			}
+		}
+		devourAnimationTimer = new PowerUpTimer();
+		devourAnimationTimer.getTimer().start();
+		
 	}
 	
 	private void addHelpers() {
@@ -1010,22 +1051,20 @@ public class Controller implements Serializable, ActionListener {
 			JButton selectedButton = (JButton)a.getSource();
 			String userAnswer = selectedButton.getText();
 			boolean playerWasCorrect = gameBoard.checkAnswer(userAnswer);
-			if (playerWasCorrect){
+			player.setPowerupStatus(playerWasCorrect);
+			if (playerWasCorrect) {
 				answerLabel.setText("Correct!!!");
 				powerUpTimer = new PowerUpTimer();
 				powerUpTimer.getTimer().start();
-			}
-			else {
-				answerLabel.setText("Incorrect.");
-			}
-			player.setPowerupStatus(playerWasCorrect);
-			if (playerWasCorrect) {
+				this.correctAnswersInARow++;
 				implementPowerUp();
 				screens.show(cardPanel, "Board");
 				showImages();
 				frame.validate();
 				frame.repaint();	
 			} else {
+				this.correctAnswersInARow = 0;
+				answerLabel.setText("Incorrect.");
 				JPanel correctAnswerPanel = setUpCorrectAnswerPanel();
 				cardPanel.add(correctAnswerPanel, "correctAnswer");
 				screens.show(cardPanel, "correctAnswer");
