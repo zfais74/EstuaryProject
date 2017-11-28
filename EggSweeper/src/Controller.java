@@ -83,11 +83,15 @@ public class Controller implements Serializable, ActionListener {
 	public void startScreen() {
 		checkTimersTimer = new Timer(1000, this);
 		checkTimersTimer.start();
-		//animation.addHomeBackground();
+
 		//Declare a new JPanel
-		JPanel startPanel = new JPanel();
+		JPanel startPanel = new JSIPanel();
 		//Set its layout manager to GridBag
 		startPanel.setLayout(new GridBagLayout());
+
+
+
+
 		
 		//The constraints describe each new component's location
 		GridBagConstraints constraints = constraintFactory();
@@ -132,7 +136,7 @@ public class Controller implements Serializable, ActionListener {
 		constraints.gridy = 5;
 		JLabel holder2 = new JLabel(" ");
 		startPanel.add(holder2, constraints);
-		
+
 		
 		startButton.addActionListener((ActionEvent e)->{
 
@@ -162,6 +166,7 @@ public class Controller implements Serializable, ActionListener {
 //
 //			}
 //		);
+
 		
 		//Adds the start screen to the deck
 		cardPanel.add(startPanel, "Start");
@@ -183,7 +188,7 @@ public class Controller implements Serializable, ActionListener {
 	}
 	
 	public void DisplayInstructions(){
-		JPanel instructionPanel = new JPanel();
+		JPanel instructionPanel = new JSIPanel();
 		instructionPanel.setLayout(new GridBagLayout());
 		GridBagConstraints constraints = constraintFactory();
 		
@@ -229,7 +234,7 @@ public class Controller implements Serializable, ActionListener {
 				itrRemove.remove();
 			}
 		}
-		JPanel difficultyPanel = new JPanel();
+		JPanel difficultyPanel = new JSIPanel();
 		difficultyPanel.setLayout(new GridBagLayout());
 		
 		GridBagConstraints constraints = constraintFactory();

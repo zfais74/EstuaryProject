@@ -361,5 +361,28 @@ public class Animation extends JPanel implements Serializable{
 		Image resizedChest = chestImage.getScaledInstance( 200, 200,  java.awt.Image.SCALE_SMOOTH ) ;  
 		return new ImageIcon(resizedChest);
 	}
+	public void addHomeBackground(){
+		try {
+			BufferedImage HB = ImageIO.read(new File("images/homeBackground.png"));
+			List<BufferedImage> HBList = new ArrayList<BufferedImage>();
+			HBList.add(HB);
+			AniObject HBObject = new AniObject("HB", 0, 0, 450, 600, HBList);
+			HBObject.setVisible(true);
+			images.add(HBObject);
+			return;
+		} catch (IOException e1) {
+			System.out.println("failed to load HomeBackground, trying bin folder");
+		}
+		try {
+			BufferedImage HB = ImageIO.read(new File("homeBackground.png"));
+			List<BufferedImage> HBList = new ArrayList<BufferedImage>();
+			HBList.add(HB);
+			AniObject HBObject = new AniObject("HB", 0, 0, 1200, 900, HBList);
+			HBObject.setVisible(true);
+			images.add(HBObject);
+		} catch (IOException e1) {
+			System.out.println("failed to load HomeBackground");
+		}
 
+	}
 }
