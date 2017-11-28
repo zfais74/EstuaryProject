@@ -1,6 +1,7 @@
 import static org.junit.Assert.*;
 
 import java.io.FileNotFoundException;
+import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -116,6 +117,9 @@ public class BoardTest {
 	@Test
 	public void getPowerUpQuestionTest() throws FileNotFoundException {
 		board.getPowerupQuestion();
+		List<String> ans = board.getPossibleAnswers();
+		assertTrue(ans.size() > 0);
+		
 	}
 
 }
