@@ -201,6 +201,9 @@ public class Controller implements Serializable, ActionListener {
 		//The width of space between each button
 		int width = 3;
 		
+		JLabel pickDiff = new JLabel("Pick a Difficulty");
+		pickDiff.setFont(new Font("Arial", Font.PLAIN, 50));
+		
 		JButton easyButton = new JButton("Easy");
 		easyButton.setFont(new Font("Arial", Font.PLAIN, 30));
 		easyButton.setVisible(true);
@@ -213,11 +216,13 @@ public class Controller implements Serializable, ActionListener {
 		hardButton.setFont(new Font("Arial", Font.PLAIN, 30));
 		hardButton.setVisible(true);
 		
+		difficultyPanel.add(pickDiff,constraints);
+		constraints.gridy = width;
 		//After a button is added add the width
 		difficultyPanel.add(easyButton,constraints);
-		constraints.gridy = width;
-		difficultyPanel.add(mediumButton,constraints);
 		constraints.gridy = 2*width;
+		difficultyPanel.add(mediumButton,constraints);
+		constraints.gridy = 3*width;
 		difficultyPanel.add(hardButton,constraints);
 		
 		cardPanel.add(difficultyPanel, "Difficulty");

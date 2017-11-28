@@ -335,5 +335,5 @@ public class Animation extends JPanel implements Serializable{
 		Image resizedChest = chestImage.getScaledInstance( 200, 200,  java.awt.Image.SCALE_SMOOTH ) ;  
 		return new ImageIcon(resizedChest);
 	}
-	
+
 }
