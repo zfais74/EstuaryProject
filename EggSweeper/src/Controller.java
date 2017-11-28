@@ -483,6 +483,7 @@ public class Controller implements Serializable, ActionListener {
 	        		boardPanel.add(chestButton, constraints);
 	        		
 	        		if (item == Item.EGG) {
+	        			birdMouse.incScoreSize();
 		        		ateSome.setText("You Found and egg!!!");
 		        		ateSome.setFont(ateFont);
 		        		frame.getContentPane().add(ateSome, 0);
@@ -502,6 +503,7 @@ public class Controller implements Serializable, ActionListener {
 	        		}
 	        		else {
 	        			if (item == Item.TRASH) {
+	        				birdMouse.decScoreSize();
 			        		ateSome.setText("Ate Some Trash :(");
 			        		ateSome.setFont(ateFont);
 			        		constraints.gridx = 1;
@@ -960,8 +962,8 @@ public class Controller implements Serializable, ActionListener {
 			while (itrMigration.hasNext()) {
 				AniObject aniObject = itrMigration.next();
 				if (aniObject.toString().compareToIgnoreCase("bird") == 0) {
-					aniObject.setY(aniObject.getY() - 10);
-					if (aniObject.getY() == animation.contentPaneSize/5) {
+					aniObject.setY(aniObject.getY() - 5);
+					if (aniObject.getY() <= (int) Math.round(animation.contentPaneSize/3)) {
 						controller.boardBuilt = 1;
 						break;
 					}
