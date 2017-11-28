@@ -9,6 +9,7 @@ public class Load {
             ObjectOutputStream oos = new ObjectOutputStream(fos);
             oos.writeObject(cont);
             oos.close();
+            System.out.println("Saved");
         }
         catch (Exception ex)
         {
@@ -28,6 +29,7 @@ public class Load {
 
             // Clean up the file
             new File("savedata.ser").delete();
+            System.out.print("Loaded");
 
         }
         catch (Exception ex)
@@ -37,5 +39,5 @@ public class Load {
 
         return cont;
     }
-    
+
 }
