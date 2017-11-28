@@ -358,7 +358,7 @@ public class Controller implements Serializable, ActionListener {
 
 			@Override
 			public void mouseMoved(MouseEvent e) {
-				birdMouse.setX( (int) Math.round(e.getX() - birdMouse.getYSize()/8.) + chestButton.getX());
+				birdMouse.setX( (int) Math.round(e.getX() - birdMouse.getYSize()/7.) + chestButton.getX());
 				birdMouse.setY((int) Math.round(e.getY() - birdMouse.getYSize()/1.8) + chestButton.getY());
 				double newBirdRatio = getSizeRatio(birdMouse.getY(), boardMouse);
 				birdMouse.setSize(newBirdRatio);
@@ -470,7 +470,7 @@ public class Controller implements Serializable, ActionListener {
 
 	        			@Override
 	        			public void mouseMoved(MouseEvent e) {
-	        				birdMouse.setX( (int) Math.round(e.getX() - birdMouse.getYSize()/8.) + chestButton.getX());
+	        				birdMouse.setX( (int) Math.round(e.getX() - birdMouse.getYSize()/7.) + chestButton.getX());
 	        				birdMouse.setY((int) Math.round(e.getY() - birdMouse.getYSize()/1.8) + chestButton.getY());
 	        				double newBirdRatio = getSizeRatio(birdMouse.getY(), boardMouse);
 	        				birdMouse.setSize(newBirdRatio);
@@ -574,7 +574,7 @@ public class Controller implements Serializable, ActionListener {
 
 			@Override
 			public void mouseMoved(MouseEvent e) {
-				birdMouse.setX( (int) Math.round(e.getX() - birdMouse.getYSize()/8.));
+				birdMouse.setX( (int) Math.round(e.getX() - birdMouse.getYSize()/7.));
 				birdMouse.setY((int) Math.round(e.getY() - birdMouse.getYSize()/1.8));
 				double newBirdRatio = getSizeRatio(birdMouse.getY(), boardMouse);
 				birdMouse.setSize(newBirdRatio);
