@@ -273,19 +273,11 @@ public class Controller implements Serializable, ActionListener {
 		GridBagConstraints constraints = constraintFactory();
 		
 		constraints.gridx = 1;
-		constraints.gridy = 0;
+		constraints.gridy = 1;
 		constraints.anchor = GridBagConstraints.EAST;
 		
 		answerLabel.setFont(new Font("Arial", Font.PLAIN, 40));
 		boardPanel.add(answerLabel, constraints, 0);
-		
-		constraints.gridx = 1;
-		constraints.gridy = 1;
-		constraints.anchor = GridBagConstraints.EAST;
-		
-		JLabel clicks = new JLabel("Clicks remaining: " + Integer.toString(gameBoard.getClicks()) + " ");
-		clicks.setFont(new Font("Arial", Font.PLAIN, 40));
-		boardPanel.add(clicks, constraints);
 		
 		constraints.gridx = 1;
 		constraints.gridy = 2;
@@ -403,18 +395,10 @@ public class Controller implements Serializable, ActionListener {
 		        	frame.repaint();
 	                
 		        	constraints.gridx = 1;
-		    		constraints.gridy = 0;
+		    		constraints.gridy = 1;
 		    		constraints.anchor = GridBagConstraints.EAST;
 		    		
 		    		boardPanel.add(answerLabel, constraints);
-		        	
-		        	constraints.gridx = 1;
-		        	constraints.gridy = 1;
-		        	constraints.anchor = GridBagConstraints.EAST;
-		        	
-	                JLabel newClicks = new JLabel("Clicks remaining: " + Integer.toString(gameBoard.getClicks()) + " ");
-	        		newClicks.setFont(new Font("Arial", Font.PLAIN, 40));
-	        		boardPanel.add(newClicks, constraints);
 	                
 	        		constraints.gridx = 1;
 	        		constraints.gridy = 2;

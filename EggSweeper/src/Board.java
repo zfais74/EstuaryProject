@@ -26,8 +26,6 @@ public class Board implements Serializable {
 		public static enum Difficulty {EASY, MEDIUM, HARD};
 		
 		// Board data
-		private int timer;
-		private int clicks;
 		private Difficulty difficulty;
 		private List<String>possibleAnswers = new ArrayList<>();
 		
@@ -59,10 +57,6 @@ public class Board implements Serializable {
 			System.out.println("Difficulty selected: " + newDifficulty);
 			System.out.println("Score: 0");
 			difficulty = newDifficulty;
-			//timer is currently unused
-			timer = 100;
-			// max number of clicks
-			clicks = 10;
 			
 			Random rand = new Random();
 			// cycle through each GridSpace pointer
@@ -291,45 +285,6 @@ public class Board implements Serializable {
 				}
 			}
 			return adjDirections;
-		}
-		
-		/**
-		 * getter for number of clicks left
-		 * @return clicks left
-		 */
-		public int getClicks() {
-			return clicks;
-		}
-		
-		/**
-		 * setter for number of clicks left
-		 * @param newClicks number of clicks to be set
-		 */
-		public void setClicks(int newClicks) {
-			clicks = newClicks;
-		}
-		
-		/**
-		 * decrement clicks by one
-		 */
-		public void decClicks() {
-			clicks--;
-		}
-		
-		/**
-		 * getter for time left in game
-		 * @return time left
-		 */
-		public int getTime() {
-			return timer;
-		}
-		
-		/**
-		 * setter for time left in game
-		 * @param newTime new amount of time to be set
-		 */
-		public void setTime(int newTime) {
-			timer = newTime;
 		}
 		
 		/**
