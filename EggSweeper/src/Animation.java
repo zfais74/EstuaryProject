@@ -302,6 +302,33 @@ public class Animation extends JPanel implements Serializable{
 		
 	}
 	
+	void addQuestionmark(int xLoc, int yLoc, int sizeX, int sizeY) {
+		try {
+			BufferedImage questionmark = ImageIO.read(new File("images/questionMark2.png"));
+			List<BufferedImage> qmList = new ArrayList<BufferedImage>();
+			qmList.add(questionmark);
+			AniObject qmObject = new AniObject("qm", xLoc, yLoc, sizeX, sizeY, qmList);
+			qmObject.setVisible(true);
+			images.add(qmObject);
+			int i = images.size() - 1;
+			int j = 0;
+			Iterator<AniObject> qmBirdItr = images.iterator();
+			while (qmBirdItr.hasNext()) {
+				AniObject next = qmBirdItr.next();
+				if (next.toString().compareToIgnoreCase("bird") == 0) {
+					break;
+				}
+				j++;
+			}
+			Collections.swap(images, i, j);
+            return;
+		} catch (IOException e1) {
+			System.out.println("failed to load questionmark, trying bin folder");
+		}
+		
+		
+	}
+	
 	public ImageIcon getChestIcon(){
 		ImageIcon chest = new ImageIcon("images/chest.png");
 		Image chestImage = chest.getImage();

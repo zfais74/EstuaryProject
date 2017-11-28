@@ -22,6 +22,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTextArea;
 import javax.swing.Timer;
 
 import TimeManagement.GameBoardTimer;
@@ -55,7 +56,6 @@ public class Controller implements Serializable, ActionListener {
 	private int boardBuilt = 0;
 	JLabel answerLabel = new JLabel(" ");
 	List<Helper> helpers;
-	List<Cleaner> cleaners;
 	
 	
 	private GridBagConstraints constraintFactory() {
@@ -96,8 +96,12 @@ public class Controller implements Serializable, ActionListener {
 		//Add components to the start panel instead of the frame's contentPane directly
 		startPanel.add(title, constraints);
 		
-		JButton startButton = new JButton("Start Game");JButton instButton = new JButton("Instructions");JButton loadButton = new JButton("Load");
-		startButton.setFont(new Font("Arial", Font.PLAIN, 30));instButton.setFont(new Font("Arial", Font.PLAIN, 30));loadButton.setFont(new Font("Arial", Font.PLAIN, 30));
+		JButton startButton = new JButton("Start Game");
+		JButton instButton = new JButton("Instructions");
+		JButton loadButton = new JButton("Load");
+		startButton.setFont(new Font("Arial", Font.PLAIN, 30));
+		instButton.setFont(new Font("Arial", Font.PLAIN, 30));
+		loadButton.setFont(new Font("Arial", Font.PLAIN, 30));
 		startButton.setVisible(true);instButton.setVisible(true);
 		
 		//This component will be in the same column, just 3 rows below
@@ -165,8 +169,10 @@ public class Controller implements Serializable, ActionListener {
 	        }
 	    );
 		
-		JLabel instructions = new JLabel("Instructions will \n go \n right here");
+		JTextArea instructions = new JTextArea("Help the Red Knot find Horseshoe Crab eggs on the\nbeach so it has enough energy to make it to the arctic\ncirlce to have babies!\n\n"
+				+ "Follow the question marks to find items and click\n the treasure chest to answer questions for a power up!");
 		instructions.setFont(new Font("Arial", Font.PLAIN, 40));
+		instructions.setEditable(false);
 		
 		constraints.gridx = 0;
 		constraints.gridy = 0;
@@ -176,8 +182,10 @@ public class Controller implements Serializable, ActionListener {
 		constraints.gridy = 1;
 		instructionPanel.add(startButton, constraints);
 		
-		frame.add(instructionPanel);
+		cardPanel.add(instructionPanel, "Instructions");
+		screens.show(cardPanel, "Instructions");
 		frame.validate();
+		frame.repaint();
 
 	}
 	// displays easy, medium and hard button
@@ -527,8 +535,8 @@ public class Controller implements Serializable, ActionListener {
 	        				System.out.println(String.format("Item at Direction:%s", d.name()));
 	        				String loc_disp = String.format("This Location: (%d,%d) That Location: (%d,%d)", xIndex, yIndex, xIndex + gameBoard.convertXDim(d), yIndex + gameBoard.convertYDim(d));
 	        				System.out.println(loc_disp);
-	        				int[] dims = maggieSizePos(xIndex + gameBoard.convertXDim(d),yIndex + gameBoard.convertYDim(d));
-	        				animation.addMaggie(dims[0], dims[1], dims[2], dims[3]);
+	        				int[] dims = indexSizePos(xIndex + gameBoard.convertXDim(d),yIndex + gameBoard.convertYDim(d));
+	        				animation.addQuestionmark(dims[0], dims[1], dims[2], dims[3]);
 	        			}
 	        			
 	        		}      		
@@ -726,7 +734,7 @@ public class Controller implements Serializable, ActionListener {
 		return gridIndex;
 	}
 	
-	public int[] maggieSizePos(int xIndex, int yIndex) {
+	public int[] indexSizePos(int xIndex, int yIndex) {
 		double[] LineSlopes = {-0.3115, -0.2492, -0.1869, -0.1246, -0.0623, 0, 0.0623, 0.1246, 0.1869, 0.2492, 0.3115};
 		int[] LineTopX = {201, 261, 320, 380, 440, 500, 560, 620, 680, 739, 799};
 		int[] LineHeights = {0, 51, 104, 160, 219, 281, 346, 415, 488, 564, 644};
@@ -919,7 +927,7 @@ public class Controller implements Serializable, ActionListener {
 			boardX++;
 		}
 		for (Helper helper: helpers) {
-			int[] gridIndex = maggieSizePos(helper.getXPos(), helper.getYPos());
+			int[] gridIndex = indexSizePos(helper.getXPos(), helper.getYPos());
 			animation.addMaggie(gridIndex[0], gridIndex[1], gridIndex[2], gridIndex[3]);
 		}
 	}
@@ -944,7 +952,7 @@ public class Controller implements Serializable, ActionListener {
 			if (trySpace.getIsCovered() == true && trySpace.getItem() == Item.TRASH) {
 				trySpace.setIsCovered(false);
 				trySpace.setItem(Item.ALREADYCHECKED);
-				int[] gridIndex = maggieSizePos(X, Y);
+				int[] gridIndex = indexSizePos(X, Y);
 				animation.addHole(gridIndex[0], gridIndex[1], gridIndex[2], gridIndex[3]);
 				count++;
 			}
