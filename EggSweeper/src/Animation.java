@@ -342,7 +342,7 @@ public class Animation extends JPanel implements Serializable {
 			BufferedImage HB = ImageIO.read(new File("images/homeBackground.png"));
 			List<BufferedImage> HBList = new ArrayList<BufferedImage>();
 			HBList.add(HB);
-			AniObject HBObject = new AniObject("HB", 100, 100, 450, 600, HBList);
+			AniObject HBObject = new AniObject("HB", 0, 0, 450, 600, HBList);
 			HBObject.setVisible(true);
 			images.add(HBObject);
 			return;
@@ -353,7 +353,7 @@ public class Animation extends JPanel implements Serializable {
 			BufferedImage HB = ImageIO.read(new File("homeBackground.png"));
 			List<BufferedImage> HBList = new ArrayList<BufferedImage>();
 			HBList.add(HB);
-			AniObject HBObject = new AniObject("HB", 100, 100, 450, 600, HBList);
+			AniObject HBObject = new AniObject("HB", 0, 0, 450, 600, HBList);
 			HBObject.setVisible(true);
 			images.add(HBObject);
 		} catch (IOException e1) {
