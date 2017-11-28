@@ -55,6 +55,7 @@ public class Controller implements Serializable, ActionListener {
 	// Constant for tick method
 	private int boardBuilt = 0;
 	JLabel answerLabel = new JLabel(" ");
+	JLabel powerupLabel = new JLabel(" ");
 	List<Helper> helpers;
 	
 	
@@ -240,6 +241,7 @@ public class Controller implements Serializable, ActionListener {
         		// when clicked picks character and difficulty
         		gameBoard = new Board(Board.Difficulty.EASY);
         		player = new Player(Bird.DUNLIN);
+        		displayMigrationStory();
         		animation.migrationAnimation();
 	        }
 	    );
@@ -249,7 +251,8 @@ public class Controller implements Serializable, ActionListener {
 	        	frame.getContentPane().revalidate();
 	        	frame.getContentPane().repaint();
 	        	gameBoard = new Board(Board.Difficulty.MEDIUM);
-	        	player = new Player(Bird.SANDPIPER); 
+	        	player = new Player(Bird.SANDPIPER);
+	        	displayMigrationStory();
 	        	animation.migrationAnimation();
 	        }
 	    );
@@ -261,6 +264,7 @@ public class Controller implements Serializable, ActionListener {
 	        	frame.getContentPane().repaint();
 	        	gameBoard = new Board(Board.Difficulty.HARD);
 	        	player = new Player(Bird.REDKNOT);
+	        	displayMigrationStory();
 	        	animation.migrationAnimation();
 	        }
 	    );
@@ -302,6 +306,7 @@ public class Controller implements Serializable, ActionListener {
 			Load.SaveGame(this);
 		});
 		
+		
 		AniObject bird = null;
 		AniObject board = null;
 		Iterator<AniObject> boardItr = animation.getImages().iterator();
@@ -342,6 +347,13 @@ public class Controller implements Serializable, ActionListener {
 		
 		constraints.gridx = 1;
 		constraints.gridy = 5;
+		constraints.anchor = GridBagConstraints.EAST;
+		
+		powerupLabel.setFont(new Font("Arial", Font.PLAIN, 40));
+		boardPanel.add(powerupLabel, constraints, 0);
+		
+		constraints.gridx = 1;
+		constraints.gridy = 6;
 		constraints.anchor = GridBagConstraints.EAST;
 		JButton chestButton = new JButton();
 		chestButton.setPreferredSize(new Dimension(200, 200));
@@ -393,6 +405,21 @@ public class Controller implements Serializable, ActionListener {
 		        	
 		        	boardPanel.removeAll();
 		        	answerLabel.setText(" ");
+		        	if (player.hasPowerUp()) {
+		        		if (player.getCurrentPowerUp() == PowerUps.BONUS) {
+		        			powerupLabel.setText("Powerup is: Bonus");
+		        		}else if(player.getCurrentPowerUp() == PowerUps.CLEANER) {
+		        			powerupLabel.setText("Powerup is: Cleaner");
+		        		}else if(player.getCurrentPowerUp() == PowerUps.DEVEOUR) {
+		        			powerupLabel.setText("Powerup is: Deveour");
+		        		}else if(player.getCurrentPowerUp() == PowerUps.FREEZE) {
+		        			powerupLabel.setText("Powerup is: Freeze");
+		        		}else if(player.getCurrentPowerUp() == PowerUps.HELPER) {
+		        			powerupLabel.setText("Powerup is: Helper");
+		        		}
+		        	}else {
+		        		powerupLabel.setText(" ");
+		        	}
 		        	frame.validate();
 		        	frame.repaint();
 	                
@@ -428,7 +455,13 @@ public class Controller implements Serializable, ActionListener {
 	        		final JLabel ateSomeRef = ateSome;
 	        		
 	        		constraints.gridx = 1;
-	        		constraints.gridy = 5;
+		    		constraints.gridy = 5;
+		    		constraints.anchor = GridBagConstraints.EAST;
+		    		
+		    		boardPanel.add(powerupLabel, constraints);
+	        		
+	        		constraints.gridx = 1;
+	        		constraints.gridy = 6;
 	        		constraints.anchor = GridBagConstraints.EAST;
 	        		
 	        		JButton chestButton = new JButton();
@@ -856,6 +889,9 @@ public class Controller implements Serializable, ActionListener {
 				this.powerUpTimer.getTimer().stop();
 				this.powerUpTimer = null;
 				removePowerUp();
+				powerupLabel.setText(" ");
+				frame.validate();
+				frame.repaint();
 			}
 		}
 		if(gameBoardTimer != null) {
@@ -968,7 +1004,7 @@ public class Controller implements Serializable, ActionListener {
 			while (itrMigration.hasNext()) {
 				AniObject aniObject = itrMigration.next();
 				if (aniObject.toString().compareToIgnoreCase("bird") == 0) {
-					aniObject.setY(aniObject.getY() - 5);
+					aniObject.setY(aniObject.getY() - 2);//control speed
 					if (aniObject.getY() <= (int) Math.round(animation.contentPaneSize/3)) {
 						controller.boardBuilt = 1;
 						break;
@@ -990,6 +1026,43 @@ public class Controller implements Serializable, ActionListener {
 		else {
 			return;
 		}
+	}
+	
+	public void displayMigrationStory() {
+		JPanel migrationStoryPanel = new JPanel();
+		migrationStoryPanel.setLayout(new GridBagLayout());
+		GridBagConstraints constraints = constraintFactory();
+		
+		JLabel offset1 = new JLabel("              ");
+		offset1.setFont(new Font("Arial", Font.PLAIN, 50));
+		JLabel offset2 = new JLabel("              ");
+		offset2.setFont(new Font("Arial", Font.PLAIN, 50));
+		JLabel offset3 = new JLabel("              ");
+		offset3.setFont(new Font("Arial", Font.PLAIN, 50));
+		JLabel offset4 = new JLabel("              ");
+		offset4.setFont(new Font("Arial", Font.PLAIN, 50));
+		
+		JTextArea migrationStory = new JTextArea("Every year the\nredknot migrate from\nChile and Argentina\nto Canada. Along\nthe way it make 2\n"
+				+ "stops to feed and\none of them is in\nBrazil and other one \nis the Delaware Bay.");
+		migrationStory.setFont(new Font("Arial", Font.PLAIN, 40));
+		migrationStory.setEditable(false);
+		
+		constraints.gridx = 0;
+		migrationStoryPanel.add(offset1,constraints);
+		constraints.gridx = 1;
+		migrationStoryPanel.add(offset2,constraints);
+		constraints.gridx = 2;
+		migrationStoryPanel.add(offset3,constraints);
+		constraints.gridx = 3;
+		migrationStoryPanel.add(offset4,constraints);
+		constraints.gridx = 10;
+		constraints.gridy = 0;
+		migrationStoryPanel.add(migrationStory, constraints);
+		
+		cardPanel.add(migrationStoryPanel, "migrationStory");
+		screens.show(cardPanel, "migrationStory");
+		frame.validate();
+		frame.repaint();
 	}
 	
 	private void showImages() {
@@ -1021,6 +1094,17 @@ public class Controller implements Serializable, ActionListener {
 			player.setPowerupStatus(playerWasCorrect);
 			if (playerWasCorrect) {
 				implementPowerUp();
+				if (player.getCurrentPowerUp() == PowerUps.BONUS) {
+        			powerupLabel.setText("Powerup is: Bonus");
+        		}else if(player.getCurrentPowerUp() == PowerUps.CLEANER) {
+        			powerupLabel.setText("Powerup is: Cleaner");
+        		}else if(player.getCurrentPowerUp() == PowerUps.DEVEOUR) {
+        			powerupLabel.setText("Powerup is: Deveour");
+        		}else if(player.getCurrentPowerUp() == PowerUps.FREEZE) {
+        			powerupLabel.setText("Powerup is: Freeze");
+        		}else if(player.getCurrentPowerUp() == PowerUps.HELPER) {
+        			powerupLabel.setText("Powerup is: Helper");
+        		}
 				screens.show(cardPanel, "Board");
 				showImages();
 				frame.validate();
@@ -1078,6 +1162,7 @@ public class Controller implements Serializable, ActionListener {
 	  	cont.startScreen();
 	  	while (true) {
 	    		cont.frame.repaint();
+	    		
 	    		tick(cont.animation, cont);
 	   		try {
 	    			Thread.sleep(40);
