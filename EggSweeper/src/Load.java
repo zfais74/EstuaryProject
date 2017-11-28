@@ -1,20 +1,20 @@
 import java.io.*;
 
 public class Load {
-//    public static void SaveGame(Board cont){//everything but buffered image
-//        try
-//        {
-//
-//            FileOutputStream fos = new FileOutputStream("savedata.ser");
-//            ObjectOutputStream oos = new ObjectOutputStream(fos);
-//            oos.writeObject(cont);
-//            oos.close();
-//        }
-//        catch (Exception ex)
-//        {
-//            System.out.print("Exception thrown while saving game" + ex.toString());
-//        }
-//    }
+    public static void SaveGame(Board cont){//everything but buffered image
+        try
+        {
+
+            FileOutputStream fos = new FileOutputStream("savedata.ser");
+            ObjectOutputStream oos = new ObjectOutputStream(fos);
+            oos.writeObject(cont);
+            oos.close();
+        }
+        catch (Exception ex)
+        {
+            System.out.print("Exception thrown while saving game" + ex.toString());
+        }
+    }
     public static Board LoadGame(){
         Board cont = null;
         try
