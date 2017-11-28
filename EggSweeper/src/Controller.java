@@ -104,7 +104,7 @@ public class Controller implements Serializable, ActionListener {
 		
 		constraints.gridy = 2;
 		
-		JLabel title = new JLabel("EGG SWEEPER");
+		JLabel title = new JLabel("        ");
 		title.setFont(new Font("Arial", Font.PLAIN, 80));
 		
 		//Add components to the start panel instead of the frame's contentPane directly
