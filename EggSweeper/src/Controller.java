@@ -486,14 +486,16 @@ public class Controller implements ActionListener {
 
 	        		timerLabel.setFont(new Font("Arial", Font.PLAIN, 40));
 	        		boardPanel.add(timerLabel, constraints);
-	        		
+
+//					constraints.gridx = 1;
+//					constraints.gridy = 6;
 //	        		JButton save = new JButton("Save");
-//	        		save.setFocusable(false);
+//	        		//save.setFocusable(false);
 //	        		save.setFont(new Font("Arial", Font.PLAIN, 30));
 //	        		save.setVisible(true);
 //	        		boardPanel.add(save,constraints);
 //	        		save.addActionListener((ActionEvent a)->{
-//	        			Load.SaveGame(thisController);
+//	        			Load.SaveGame(gameBoard);
 //	        		});
 	        		
 	        		JLabel ateSome = new JLabel(" ");
@@ -1176,6 +1178,8 @@ public class Controller implements ActionListener {
 	  	while (true) {
 	    		cont.frame.repaint();
 	    		tick(cont.animation, cont);
+	    		Load.SaveGame(cont.gameBoard);
+
 	   		try {
 	    			Thread.sleep(40);
 	    		} catch (InterruptedException e) {
