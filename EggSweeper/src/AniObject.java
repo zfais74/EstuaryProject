@@ -11,6 +11,7 @@ public class AniObject implements Serializable {
 	private int origYSize;
 	private int xSize;
 	private int ySize;
+	private int scoreSize = 0;
 	private transient List<BufferedImage> images;
 	private boolean visible;
 	
@@ -47,8 +48,8 @@ public class AniObject implements Serializable {
 	}
 	
 	public void setSize(double newRatio) {
-		xSize = (int) (origXSize * newRatio);
-		ySize = (int) (origYSize * newRatio);
+		xSize = (int) ((scoreSize + origXSize) * newRatio);
+		ySize = (int) ((scoreSize + origYSize) * newRatio);
 	}
 	
 	public int getOrigXSize() {
@@ -65,6 +66,14 @@ public class AniObject implements Serializable {
 	
 	public void setX(int x) {
 		X = x;
+	}
+	
+	public void incScoreSize() {
+		scoreSize = scoreSize + 10;
+	}
+	
+	public void decScoreSize() {
+		scoreSize = scoreSize - 10;
 	}
 	
 	public int getY() {

@@ -217,7 +217,7 @@ public class Animation extends JPanel implements Serializable{
 			BufferedImage US = ImageIO.read(new File("images/map.png"));
 			List<BufferedImage> USList = new ArrayList<BufferedImage>();
 			USList.add(US);
-			AniObject USObject = new AniObject("US", 100, 100, 450, 600, USList);
+			AniObject USObject = new AniObject("US", 350, 100, 450, 600, USList);
 			USObject.setVisible(true);
 			images.add(USObject);
 			
