@@ -150,10 +150,6 @@ public class Controller implements ActionListener {
 		JPanel startPanel = new JSIPanel();
 		//Set its layout manager to GridBag
 		startPanel.setLayout(new GridBagLayout());
-
-
-
-
 		
 		//The constraints describe each new component's location
 		GridBagConstraints constraints = constraintFactory();
@@ -178,8 +174,8 @@ public class Controller implements ActionListener {
 //		Image backImage = background.getImage();
 //		Image resizedBack = backImage.getScaledInstance( 1600, 900,  java.awt.Image.SCALE_SMOOTH ) ; 
 //		JLabel backgroundImage = new JLabel(new ImageIcon(resizedBack));
-		JLabel backgroundImage = new JLabel(new ImageIcon("images/homeBackground169.png"));
-		startPanel.add(backgroundImage, constraints, 1);
+		//JLabel backgroundImage = new JLabel(new ImageIcon("images/homeBackground169.png"));
+		//startPanel.add(backgroundImage, constraints, 1);
 		
 		constraints.gridheight = 1;
 		
@@ -491,6 +487,7 @@ public class Controller implements ActionListener {
 
 			@Override
 			public void mouseMoved(MouseEvent e) {
+				//Load.SaveGame(thisController.gameBoard);
 				birdMouse.setX( (int) Math.round(e.getX() + 5 - birdMouse.getYSize()/6.) + chestButton.getX());
 				birdMouse.setY((int) Math.round(e.getY() - birdMouse.getYSize()/1.8) + chestButton.getY());
 				double newBirdRatio = getSizeRatio(birdMouse.getY(), boardMouse);
@@ -980,7 +977,7 @@ public class Controller implements ActionListener {
 	}
 	
 	private void checkTimers() {
-		Load.SaveGame(thisController.gameBoard);
+
 		if(powerUpTimer != null) {
 			boolean timeElapsed = powerUpTimer.isTimesUp();
 			if(timeElapsed) {
@@ -1124,7 +1121,11 @@ public class Controller implements ActionListener {
 			}
 			controller.buildBoard();
 		}
+		else if(controller.tickStage==2){
+			Load.SaveGame(controller.gameBoard);
+		}
 		else if (controller.tickStage == 3) {
+
 			Iterator<AniObject> itrMigration2 = animation.getImages().iterator();
 			while (itrMigration2.hasNext()) {
 				AniObject aniObject = itrMigration2.next();
