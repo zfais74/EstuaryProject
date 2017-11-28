@@ -22,7 +22,7 @@ public class Animation extends JPanel implements Serializable{
 	
 	private transient List<AniObject> images;
 	private AniObject boardImage;
-	
+
 	// constants for placing buttons
 	public int buffer = 50;
 	public int gridButtonSize = 45;
@@ -213,7 +213,7 @@ public class Animation extends JPanel implements Serializable{
 	}
 
 	public void migrationAnimation() {
-		try {			
+		try {
 			BufferedImage US = ImageIO.read(new File("images/map.png"));
 			List<BufferedImage> USList = new ArrayList<BufferedImage>();
 			USList.add(US);
@@ -257,6 +257,32 @@ public class Animation extends JPanel implements Serializable{
 			System.out.println("failed to load US or Bird");
 		}
 		return;
+	}
+	
+	public void migrationAnimation2() {
+		try {			
+			BufferedImage US = ImageIO.read(new File("images/map.png"));
+			List<BufferedImage> USList = new ArrayList<BufferedImage>();
+			USList.add(US);
+			AniObject USObject = new AniObject("US", 350, 100, 450, 600, USList);
+			USObject.setVisible(true);
+			images.add(USObject);
+			int i = images.size() - 1;
+			int j = 0;
+			Iterator<AniObject> holeBirdItr = images.iterator();
+			while (holeBirdItr.hasNext()) {
+				AniObject next = holeBirdItr.next();
+				if (next.toString().compareToIgnoreCase("bird") == 0) {
+					break;
+				}
+				j++;
+			}
+			Collections.swap(images, i, j);
+			
+            return;
+		} catch (IOException e1) {
+			System.out.println("failed to load US or Bird, trying bin folder");
+		}
 	}
 	
 	void addMaggie(int xLoc, int yLoc, int sizeX, int sizeY) {
