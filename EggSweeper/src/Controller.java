@@ -83,7 +83,6 @@ public class Controller implements Serializable, ActionListener {
 	public void startScreen() {
 		checkTimersTimer = new Timer(1000, this);
 		checkTimersTimer.start();
-		animation.addHomeBackground();
 		//Declare a new JPanel
 		JPanel startPanel = new JPanel();
 		//Set its layout manager to GridBag
