@@ -246,7 +246,7 @@ public class Player implements Serializable {
 	private PowerUps generatePowerUp() {
 		List<PowerUps> powerUps = new ArrayList<>();
 		for(PowerUps choice: PowerUps.values()) {
-			if(choice != PowerUps.DEVEOUR) {
+			if(choice != PowerUps.DEVOUR) {
 				powerUps.add(choice);
 			}
 		}
