@@ -30,6 +30,7 @@ import javax.swing.Timer;
 import TimeManagement.GameBoardTimer;
 import TimeManagement.PowerUpTimer;
 import enums.Bird;
+import enums.Difficulty;
 import enums.Direction;
 import enums.Item;
 import enums.PowerUps;
@@ -277,6 +278,13 @@ public class Controller implements Serializable, ActionListener {
 	}
 	// displays easy, medium and hard button
 	public void pickDifficulty() {
+		Iterator<AniObject> itrRemove = animation.getImages().iterator();
+		while (itrRemove.hasNext()) {
+			AniObject aniObjectRemove = itrRemove.next();
+			if (aniObjectRemove.toString().compareToIgnoreCase("HB") == 0) {
+				itrRemove.remove();
+			}
+		}
 		JPanel difficultyPanel = new JPanel();
 		difficultyPanel.setLayout(new GridBagLayout());
 		
@@ -406,7 +414,7 @@ public class Controller implements Serializable, ActionListener {
 	        	frame.getContentPane().revalidate();
 	        	frame.getContentPane().repaint();
         		// when clicked picks character and difficulty
-        		gameBoard = new Board(Board.Difficulty.EASY);
+        		gameBoard = new Board(Difficulty.EASY);
         		player = new Player(Bird.DUNLIN);
         		animation.migrationAnimation();
 	        }
@@ -416,7 +424,7 @@ public class Controller implements Serializable, ActionListener {
 	        	screens.show(cardPanel, "Blank");
 	        	frame.getContentPane().revalidate();
 	        	frame.getContentPane().repaint();
-	        	gameBoard = new Board(Board.Difficulty.MEDIUM);
+	        	gameBoard = new Board(Difficulty.MEDIUM);
 	        	player = new Player(Bird.SANDPIPER); 
 	        	animation.migrationAnimation();
 	        }
@@ -427,7 +435,7 @@ public class Controller implements Serializable, ActionListener {
 	        	screens.show(cardPanel, "Blank");
 	        	frame.getContentPane().revalidate();
 	        	frame.getContentPane().repaint();
-	        	gameBoard = new Board(Board.Difficulty.HARD);
+	        	gameBoard = new Board(Difficulty.HARD);
 	        	player = new Player(Bird.REDKNOT);
 	        	animation.migrationAnimation();
 	        }

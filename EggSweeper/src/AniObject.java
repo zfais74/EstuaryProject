@@ -69,11 +69,15 @@ public class AniObject implements Serializable {
 	}
 	
 	public void incScoreSize() {
-		scoreSize = scoreSize + 10;
+		scoreSize +=10;
+	}
+	
+	public void incScoreSize(int rate) {
+		scoreSize +=rate;
 	}
 	
 	public void decScoreSize() {
-		scoreSize = scoreSize - 10;
+		scoreSize-=10;
 	}
 	
 	public void setScoreSize(int newSize) {

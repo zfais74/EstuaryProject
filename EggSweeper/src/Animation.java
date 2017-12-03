@@ -22,7 +22,7 @@ public class Animation extends JPanel implements Serializable{
 	
 	private transient List<AniObject> images;
 	private AniObject boardImage;
-	
+
 	// constants for placing buttons
 	public int buffer = 50;
 	public int gridButtonSize = 45;
@@ -213,7 +213,7 @@ public class Animation extends JPanel implements Serializable{
 	}
 
 	public void migrationAnimation() {
-		try {			
+		try {
 			BufferedImage US = ImageIO.read(new File("images/map.png"));
 			List<BufferedImage> USList = new ArrayList<BufferedImage>();
 			USList.add(US);
