@@ -88,14 +88,65 @@ public class Controller implements Serializable, ActionListener {
 		//Set its layout manager to GridBag
 		startPanel.setLayout(new GridBagLayout());
 		
+		
+		
+		
+//		//The constraints describe each new component's location
+//		GridBagConstraints constraints = constraintFactory();
+//		//The component will render in the 3rd column of the first row
+//		constraints.gridx = 1;
+//		constraints.gridy = 1;
+//		
+//		JLabel holder1 = new JLabel(" ");
+//		startPanel.add(holder1, constraints, 0);
+//		
+//		constraints.gridy = 2;
+//		
+//		JLabel title = new JLabel("EGG SWEEPER");
+//		title.setFont(new Font("Arial", Font.PLAIN, 80));
+//		
+//		//Add components to the start panel instead of the frame's contentPane directly
+//		startPanel.add(title, constraints, 0);
+//		
+//		constraints.gridy = 1;
+//		constraints.gridheight = 5;
+//		JLabel backgroundImage = new JLabel(new ImageIcon("images/homeBackground169.png"));
+//		startPanel.add(backgroundImage, constraints, 1);
+//		
+//		constraints.gridheight = 1;
+//		
+//		JButton startButton = new JButton("Start Game");
+//		JButton instButton = new JButton("Instructions");
+//		startButton.setFont(new Font("Arial", Font.PLAIN, 30));
+//		instButton.setFont(new Font("Arial", Font.PLAIN, 30));
+//		startButton.setVisible(true);instButton.setVisible(true);
+//		
+//		//This component will be in the same column, just 3 rows below
+//		constraints.gridy = 3;
+//		startPanel.add(startButton,constraints, 1);
+//		constraints.gridy = 4;
+//		startPanel.add(instButton,constraints, 1);
+//		
+//		constraints.gridy = 5;
+//		JLabel holder2 = new JLabel(" ");
+//		startPanel.add(holder2, constraints);
+		
+		
+		
 		//The constraints describe each new component's location
 		GridBagConstraints constraints = constraintFactory();
 		//The component will render in the 3rd column of the first row
 		constraints.gridx = 1;
-		constraints.gridy = 1;
+		constraints.gridy = 0;
 		
 		JLabel holder1 = new JLabel(" ");
 		startPanel.add(holder1, constraints, 0);
+		
+		constraints.gridx = 1;
+		constraints.gridy = 1;
+		
+		JLabel holder2 = new JLabel(" ");
+		startPanel.add(holder2, constraints, 0);
 		
 		constraints.gridy = 2;
 		
@@ -105,13 +156,13 @@ public class Controller implements Serializable, ActionListener {
 		//Add components to the start panel instead of the frame's contentPane directly
 		startPanel.add(title, constraints, 0);
 		
-		constraints.gridy = 1;
-		constraints.gridheight = 5;
-//		ImageIcon background = new ImageIcon("images/homeBackground.png");
-//		Image backImage = background.getImage();
-//		Image resizedBack = backImage.getScaledInstance( 1600, 900,  java.awt.Image.SCALE_SMOOTH ) ; 
-//		JLabel backgroundImage = new JLabel(new ImageIcon(resizedBack));
-		JLabel backgroundImage = new JLabel(new ImageIcon("images/homeBackground169.png"));
+		constraints.gridy = 0;
+		constraints.gridheight = 7;
+		
+		ImageIcon background = new ImageIcon("images/homeBackground.png");
+		Image backImage = background.getImage();
+		Image resizedBack = backImage.getScaledInstance( 1200, 900,  java.awt.Image.SCALE_SMOOTH ) ; 
+		JLabel backgroundImage = new JLabel(new ImageIcon(resizedBack));
 		startPanel.add(backgroundImage, constraints, 1);
 		
 		constraints.gridheight = 1;
@@ -129,8 +180,13 @@ public class Controller implements Serializable, ActionListener {
 		startPanel.add(instButton,constraints, 1);
 		
 		constraints.gridy = 5;
-		JLabel holder2 = new JLabel(" ");
-		startPanel.add(holder2, constraints);
+		JLabel holder3 = new JLabel(" ");
+		startPanel.add(holder3, constraints);
+		
+		constraints.gridy = 6;
+		JLabel holder4 = new JLabel(" ");
+		startPanel.add(holder4, constraints);
+		
 		
 		
 		startButton.addActionListener((ActionEvent e)->{
@@ -224,12 +280,66 @@ public class Controller implements Serializable, ActionListener {
 		JPanel difficultyPanel = new JPanel();
 		difficultyPanel.setLayout(new GridBagLayout());
 		
+		
+		
+//		GridBagConstraints constraints = constraintFactory();
+//		constraints.gridx = 1;
+//		constraints.weightx = 50;
+//		constraints.weighty = 50;
+//		
+//		JLabel holder1 = new JLabel(" ");
+//		
+//		JLabel pickDiff = new JLabel("Pick a Difficulty");
+//		pickDiff.setFont(new Font("Arial", Font.PLAIN, 50));
+//		
+//		JButton easyButton = new JButton("Easy");
+//		easyButton.setFont(new Font("Arial", Font.PLAIN, 30));
+//		easyButton.setVisible(true);
+//		
+//		JButton mediumButton = new JButton("Medium");
+//		mediumButton.setFont(new Font("Arial", Font.PLAIN, 30));
+//		mediumButton.setVisible(true);
+//		
+//		JButton hardButton = new JButton("Hard");
+//		hardButton.setFont(new Font("Arial", Font.PLAIN, 30));
+//		hardButton.setVisible(true);
+//		
+//		JLabel holder2 = new JLabel(" ");
+//		
+//		constraints.gridy = 0;
+//		
+//		difficultyPanel.add(holder1, constraints, 0);
+//		constraints.gridy = 1;
+//		difficultyPanel.add(pickDiff,constraints, 0);
+//		
+//		constraints.gridy = 0;
+//		constraints.gridheight = 6;
+//		JLabel backgroundImage = new JLabel(new ImageIcon("images/homeBackground169.png"));
+//		difficultyPanel.add(backgroundImage, constraints, 1);
+//		
+//		constraints.gridheight = 1;
+//		
+//		constraints.gridy = 2;
+//		//After a button is added add the width
+//		difficultyPanel.add(easyButton,constraints, 1);
+//		constraints.gridy = 3;
+//		difficultyPanel.add(mediumButton,constraints, 1);
+//		constraints.gridy = 4;
+//		difficultyPanel.add(hardButton,constraints, 1);
+//		constraints.gridy = 5;
+//		difficultyPanel.add(holder2, constraints, 1);
+		
+		
+		
 		GridBagConstraints constraints = constraintFactory();
 		constraints.gridx = 1;
 		constraints.weightx = 50;
 		constraints.weighty = 50;
 		
 		JLabel holder1 = new JLabel(" ");
+		JLabel holder2 = new JLabel(" ");
+		JLabel holder3 = new JLabel(" ");
+		
 		
 		JLabel pickDiff = new JLabel("Pick a Difficulty");
 		pickDiff.setFont(new Font("Arial", Font.PLAIN, 50));
@@ -246,34 +356,44 @@ public class Controller implements Serializable, ActionListener {
 		hardButton.setFont(new Font("Arial", Font.PLAIN, 30));
 		hardButton.setVisible(true);
 		
-		JLabel holder2 = new JLabel(" ");
+		JLabel holder4 = new JLabel(" ");
+		JLabel holder5 = new JLabel(" ");
+		JLabel holder6 = new JLabel(" ");
 		
 		constraints.gridy = 0;
-		
 		difficultyPanel.add(holder1, constraints, 0);
 		constraints.gridy = 1;
+		difficultyPanel.add(holder2, constraints, 0);
+		constraints.gridy = 2;
+		difficultyPanel.add(holder3, constraints, 0);
+		constraints.gridy = 3;
 		difficultyPanel.add(pickDiff,constraints, 0);
 		
 		constraints.gridy = 0;
-		constraints.gridheight = 6;
-//		ImageIcon background = new ImageIcon("images/homeBackground.png");
-//		Image backImage = background.getImage();
-//		Image resizedBack = backImage.getScaledInstance( 1600, 900,  java.awt.Image.SCALE_SMOOTH ) ; 
-//		JLabel backgroundImage = new JLabel(new ImageIcon(resizedBack));
-		JLabel backgroundImage = new JLabel(new ImageIcon("images/homeBackground169.png"));
+		constraints.gridheight = 10;
+		ImageIcon background = new ImageIcon("images/homeBackground.png");
+		Image backImage = background.getImage();
+		Image resizedBack = backImage.getScaledInstance( 1200, 900,  java.awt.Image.SCALE_SMOOTH ) ; 
+		JLabel backgroundImage = new JLabel(new ImageIcon(resizedBack));
 		difficultyPanel.add(backgroundImage, constraints, 1);
 		
 		constraints.gridheight = 1;
 		
-		constraints.gridy = 2;
+		constraints.gridy = 4;
 		//After a button is added add the width
 		difficultyPanel.add(easyButton,constraints, 1);
-		constraints.gridy = 3;
-		difficultyPanel.add(mediumButton,constraints, 1);
-		constraints.gridy = 4;
-		difficultyPanel.add(hardButton,constraints, 1);
 		constraints.gridy = 5;
-		difficultyPanel.add(holder2, constraints, 1);
+		difficultyPanel.add(mediumButton,constraints, 1);
+		constraints.gridy = 6;
+		difficultyPanel.add(hardButton,constraints, 1);
+		constraints.gridy = 7;
+		difficultyPanel.add(holder4, constraints, 1);
+		constraints.gridy = 8;
+		difficultyPanel.add(holder5, constraints, 0);
+		constraints.gridy = 9;
+		difficultyPanel.add(holder6, constraints, 0);
+		
+		
 		
 		cardPanel.add(difficultyPanel, "Difficulty");
 		screens.show(cardPanel, "Difficulty");
@@ -987,7 +1107,7 @@ public class Controller implements Serializable, ActionListener {
 	private void addCleaners() {
 		int count = 0;
 		int totTrash = 0;
-		for (int i = 0; i < 10; i++) {
+		for (int i = 0; i < 5; i++) {
 			for (int j = 0; j < 10; j++) {
 				GridSpace trySpace = gameBoard.getSpace(i,  j);
 				if (trySpace.getIsCovered() == true && trySpace.getItem() == Item.TRASH) {
