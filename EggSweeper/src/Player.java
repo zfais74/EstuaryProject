@@ -28,7 +28,6 @@ public class Player implements Serializable {
 	private int xLoc;
 	private int yLoc;
 	private PowerUps currentPowerUp = null;
-	private int multiplier = 1;
 	private int totalCorrectAnswers = 0;
 	private int eggMultiplier = 1;
 	
@@ -117,7 +116,7 @@ public class Player implements Serializable {
 	 * Increments the score
 	 */
 	public void incScore() {
-		score+=multiplier ;
+		score+=eggMultiplier ;
 	}
 	
 	/**
@@ -198,10 +197,6 @@ public class Player implements Serializable {
 		return this.yLoc;
 	}
 	
-	public void setEggMultiplier(int points) {
-		this.eggMultiplier = points;
-	}
-	
 	public void incTotalCorrectAnswers() {
 		this.totalCorrectAnswers++;
 	}
@@ -214,12 +209,13 @@ public class Player implements Serializable {
 		this.currentPowerUp = powerUp;
 		System.out.println("Current powerUp is: " + powerUp);
 		if(powerUp == PowerUps.BONUS) {
-			int newMultiplier = NumberManipulation.generateNum(5);
-			if(newMultiplier == 1) {
-				newMultiplier++;
-			}
-			System.out.println("Bonus!\n" + "You now have a multiplier of " + newMultiplier);
-			this.setMultiplier(newMultiplier);
+			this.setEggMultiplier(2);
+//			int newMultiplier = NumberManipulation.generateNum(5);
+//			if(newMultiplier == 1) {
+//				newMultiplier++;
+//			}
+//			System.out.println("Bonus!\n" + "You now have a multiplier of " + newMultiplier);
+//			this.setMultiplier(newMultiplier);
 		}
 	}
 	
@@ -234,14 +230,17 @@ public class Player implements Serializable {
 			this.setCurrentPowerUp(obtainedPowerUp);
 		} else {
 			this.currentPowerUp = null;
-			this.setMultiplier(0);
+			this.setEggMultiplier(1);
 		}
 	}
 	
-	public void setMultiplier(int adjustment) {
-		this.multiplier = adjustment;
+	public void setEggMultiplier(int adjustment) {
+		this.eggMultiplier = adjustment;
 	}
 	
+	public int getEggMultiplier() {
+		return this.eggMultiplier;
+	}
 	
 	private PowerUps generatePowerUp() {
 		List<PowerUps> powerUps = new ArrayList<>();

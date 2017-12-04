@@ -89,14 +89,65 @@ public class Controller implements Serializable, ActionListener {
 		//Set its layout manager to GridBag
 		startPanel.setLayout(new GridBagLayout());
 		
+		
+		
+		
+//		//The constraints describe each new component's location
+//		GridBagConstraints constraints = constraintFactory();
+//		//The component will render in the 3rd column of the first row
+//		constraints.gridx = 1;
+//		constraints.gridy = 1;
+//		
+//		JLabel holder1 = new JLabel(" ");
+//		startPanel.add(holder1, constraints, 0);
+//		
+//		constraints.gridy = 2;
+//		
+//		JLabel title = new JLabel("EGG SWEEPER");
+//		title.setFont(new Font("Arial", Font.PLAIN, 80));
+//		
+//		//Add components to the start panel instead of the frame's contentPane directly
+//		startPanel.add(title, constraints, 0);
+//		
+//		constraints.gridy = 1;
+//		constraints.gridheight = 5;
+//		JLabel backgroundImage = new JLabel(new ImageIcon("images/homeBackground169.png"));
+//		startPanel.add(backgroundImage, constraints, 1);
+//		
+//		constraints.gridheight = 1;
+//		
+//		JButton startButton = new JButton("Start Game");
+//		JButton instButton = new JButton("Instructions");
+//		startButton.setFont(new Font("Arial", Font.PLAIN, 30));
+//		instButton.setFont(new Font("Arial", Font.PLAIN, 30));
+//		startButton.setVisible(true);instButton.setVisible(true);
+//		
+//		//This component will be in the same column, just 3 rows below
+//		constraints.gridy = 3;
+//		startPanel.add(startButton,constraints, 1);
+//		constraints.gridy = 4;
+//		startPanel.add(instButton,constraints, 1);
+//		
+//		constraints.gridy = 5;
+//		JLabel holder2 = new JLabel(" ");
+//		startPanel.add(holder2, constraints);
+		
+		
+		
 		//The constraints describe each new component's location
 		GridBagConstraints constraints = constraintFactory();
 		//The component will render in the 3rd column of the first row
 		constraints.gridx = 1;
-		constraints.gridy = 1;
+		constraints.gridy = 0;
 		
 		JLabel holder1 = new JLabel(" ");
 		startPanel.add(holder1, constraints, 0);
+		
+		constraints.gridx = 1;
+		constraints.gridy = 1;
+		
+		JLabel holder2 = new JLabel(" ");
+		startPanel.add(holder2, constraints, 0);
 		
 		constraints.gridy = 2;
 		
@@ -106,13 +157,13 @@ public class Controller implements Serializable, ActionListener {
 		//Add components to the start panel instead of the frame's contentPane directly
 		startPanel.add(title, constraints, 0);
 		
-		constraints.gridy = 1;
-		constraints.gridheight = 5;
-//		ImageIcon background = new ImageIcon("images/homeBackground.png");
-//		Image backImage = background.getImage();
-//		Image resizedBack = backImage.getScaledInstance( 1600, 900,  java.awt.Image.SCALE_SMOOTH ) ; 
-//		JLabel backgroundImage = new JLabel(new ImageIcon(resizedBack));
-		JLabel backgroundImage = new JLabel(new ImageIcon("images/homeBackground169.png"));
+		constraints.gridy = 0;
+		constraints.gridheight = 7;
+		
+		ImageIcon background = new ImageIcon("images/homeBackground.png");
+		Image backImage = background.getImage();
+		Image resizedBack = backImage.getScaledInstance( 1200, 900,  java.awt.Image.SCALE_SMOOTH ) ; 
+		JLabel backgroundImage = new JLabel(new ImageIcon(resizedBack));
 		startPanel.add(backgroundImage, constraints, 1);
 		
 		constraints.gridheight = 1;
@@ -130,8 +181,13 @@ public class Controller implements Serializable, ActionListener {
 		startPanel.add(instButton,constraints, 1);
 		
 		constraints.gridy = 5;
-		JLabel holder2 = new JLabel(" ");
-		startPanel.add(holder2, constraints);
+		JLabel holder3 = new JLabel(" ");
+		startPanel.add(holder3, constraints);
+		
+		constraints.gridy = 6;
+		JLabel holder4 = new JLabel(" ");
+		startPanel.add(holder4, constraints);
+		
 		
 		
 		startButton.addActionListener((ActionEvent e)->{
@@ -232,12 +288,66 @@ public class Controller implements Serializable, ActionListener {
 		JPanel difficultyPanel = new JPanel();
 		difficultyPanel.setLayout(new GridBagLayout());
 		
+		
+		
+//		GridBagConstraints constraints = constraintFactory();
+//		constraints.gridx = 1;
+//		constraints.weightx = 50;
+//		constraints.weighty = 50;
+//		
+//		JLabel holder1 = new JLabel(" ");
+//		
+//		JLabel pickDiff = new JLabel("Pick a Difficulty");
+//		pickDiff.setFont(new Font("Arial", Font.PLAIN, 50));
+//		
+//		JButton easyButton = new JButton("Easy");
+//		easyButton.setFont(new Font("Arial", Font.PLAIN, 30));
+//		easyButton.setVisible(true);
+//		
+//		JButton mediumButton = new JButton("Medium");
+//		mediumButton.setFont(new Font("Arial", Font.PLAIN, 30));
+//		mediumButton.setVisible(true);
+//		
+//		JButton hardButton = new JButton("Hard");
+//		hardButton.setFont(new Font("Arial", Font.PLAIN, 30));
+//		hardButton.setVisible(true);
+//		
+//		JLabel holder2 = new JLabel(" ");
+//		
+//		constraints.gridy = 0;
+//		
+//		difficultyPanel.add(holder1, constraints, 0);
+//		constraints.gridy = 1;
+//		difficultyPanel.add(pickDiff,constraints, 0);
+//		
+//		constraints.gridy = 0;
+//		constraints.gridheight = 6;
+//		JLabel backgroundImage = new JLabel(new ImageIcon("images/homeBackground169.png"));
+//		difficultyPanel.add(backgroundImage, constraints, 1);
+//		
+//		constraints.gridheight = 1;
+//		
+//		constraints.gridy = 2;
+//		//After a button is added add the width
+//		difficultyPanel.add(easyButton,constraints, 1);
+//		constraints.gridy = 3;
+//		difficultyPanel.add(mediumButton,constraints, 1);
+//		constraints.gridy = 4;
+//		difficultyPanel.add(hardButton,constraints, 1);
+//		constraints.gridy = 5;
+//		difficultyPanel.add(holder2, constraints, 1);
+		
+		
+		
 		GridBagConstraints constraints = constraintFactory();
 		constraints.gridx = 1;
 		constraints.weightx = 50;
 		constraints.weighty = 50;
 		
 		JLabel holder1 = new JLabel(" ");
+		JLabel holder2 = new JLabel(" ");
+		JLabel holder3 = new JLabel(" ");
+		
 		
 		JLabel pickDiff = new JLabel("Pick a Difficulty");
 		pickDiff.setFont(new Font("Arial", Font.PLAIN, 50));
@@ -254,34 +364,44 @@ public class Controller implements Serializable, ActionListener {
 		hardButton.setFont(new Font("Arial", Font.PLAIN, 30));
 		hardButton.setVisible(true);
 		
-		JLabel holder2 = new JLabel(" ");
+		JLabel holder4 = new JLabel(" ");
+		JLabel holder5 = new JLabel(" ");
+		JLabel holder6 = new JLabel(" ");
 		
 		constraints.gridy = 0;
-		
 		difficultyPanel.add(holder1, constraints, 0);
 		constraints.gridy = 1;
+		difficultyPanel.add(holder2, constraints, 0);
+		constraints.gridy = 2;
+		difficultyPanel.add(holder3, constraints, 0);
+		constraints.gridy = 3;
 		difficultyPanel.add(pickDiff,constraints, 0);
 		
 		constraints.gridy = 0;
-		constraints.gridheight = 6;
-//		ImageIcon background = new ImageIcon("images/homeBackground.png");
-//		Image backImage = background.getImage();
-//		Image resizedBack = backImage.getScaledInstance( 1600, 900,  java.awt.Image.SCALE_SMOOTH ) ; 
-//		JLabel backgroundImage = new JLabel(new ImageIcon(resizedBack));
-		JLabel backgroundImage = new JLabel(new ImageIcon("images/homeBackground169.png"));
+		constraints.gridheight = 10;
+		ImageIcon background = new ImageIcon("images/homeBackground.png");
+		Image backImage = background.getImage();
+		Image resizedBack = backImage.getScaledInstance( 1200, 900,  java.awt.Image.SCALE_SMOOTH ) ; 
+		JLabel backgroundImage = new JLabel(new ImageIcon(resizedBack));
 		difficultyPanel.add(backgroundImage, constraints, 1);
 		
 		constraints.gridheight = 1;
 		
-		constraints.gridy = 2;
+		constraints.gridy = 4;
 		//After a button is added add the width
 		difficultyPanel.add(easyButton,constraints, 1);
-		constraints.gridy = 3;
-		difficultyPanel.add(mediumButton,constraints, 1);
-		constraints.gridy = 4;
-		difficultyPanel.add(hardButton,constraints, 1);
 		constraints.gridy = 5;
-		difficultyPanel.add(holder2, constraints, 1);
+		difficultyPanel.add(mediumButton,constraints, 1);
+		constraints.gridy = 6;
+		difficultyPanel.add(hardButton,constraints, 1);
+		constraints.gridy = 7;
+		difficultyPanel.add(holder4, constraints, 1);
+		constraints.gridy = 8;
+		difficultyPanel.add(holder5, constraints, 0);
+		constraints.gridy = 9;
+		difficultyPanel.add(holder6, constraints, 0);
+		
+		
 		
 		cardPanel.add(difficultyPanel, "Difficulty");
 		screens.show(cardPanel, "Difficulty");
@@ -543,7 +663,14 @@ public class Controller implements Serializable, ActionListener {
 	        		boardPanel.add(chestButton, constraints);
 	        		
 	        		if (item == Item.EGG) {
-	        			birdMouse.incScoreSize();
+	        			int mult = player.getEggMultiplier();
+	        			animation.scoreImage(gridIndex[2], gridIndex[3], gridIndex[4], gridIndex[5], "plus", mult);
+	        			if (mult == 1) {
+	        				birdMouse.incScoreSize(10);
+	        			}
+	        			else if (mult == 2){
+	        				birdMouse.incScoreSize(20);
+	        			}
 		        		ateSome.setText("You Found and egg!! ");
 		        		ateSome.setFont(ateFont);
 		        		frame.getContentPane().add(ateSome, 0);
@@ -566,6 +693,7 @@ public class Controller implements Serializable, ActionListener {
 	        		}
 	        		else {
 	        			if (item == Item.TRASH) {
+	        				animation.scoreImage(gridIndex[2], gridIndex[3], gridIndex[4], gridIndex[5], "minus", 1);
 	        				birdMouse.decScoreSize();
 			        		ateSome.setText("Ate Some Trash :( ");
 			        		ateSome.setFont(ateFont);
@@ -808,22 +936,22 @@ public class Controller implements Serializable, ActionListener {
 		int imageXloc = boardImage.getX();
 		int imageYloc = boardImage.getY();
 		
-		int maggieX = 1;
-		int maggieY = 1;
-		int maggieXSize = 1;
-		int maggieYSize = 1;
+		int newX = 1;
+		int newY = 1;
+		int newXSize = 1;
+		int newYSize = 1;
 		
 		if ((xIndex != -1) && (yIndex != -1)){
 			double boxRatio = ((double) LineHeights[9] - (double) LineHeights[8])/((double) LineHeights[10] - (double) LineHeights[9]);
 			double gridSizeRatio = 1/Math.pow(boxRatio, yIndex);
-			maggieYSize = (int) Math.round(gridSizeRatio * (gridImageWidth/1000)*(LineHeights[1] - LineHeights[0]));
-			maggieY = (int) Math.round(imageYloc + LineHeights[yIndex] + ((gridImageWidth/1000.)*(LineHeights[yIndex+1] - LineHeights[yIndex])/2.) - (maggieYSize/2.) );
+			newYSize = (int) Math.round(gridSizeRatio * (gridImageWidth/1000)*(LineHeights[1] - LineHeights[0]));
+			newY = (int) Math.round(imageYloc + LineHeights[yIndex] + ((gridImageWidth/1000.)*(LineHeights[yIndex+1] - LineHeights[yIndex])/2.) - (newYSize/2.) );
 			
-			maggieX = (int) Math.round(imageXloc + (gridImageWidth/1000)*(LineTopX[xIndex] + LineSlopes[xIndex] * (LineHeights[yIndex] + LineHeights[yIndex+1])/2.));
-			maggieXSize = (int) ((gridImageWidth/1000)*((LineTopX[xIndex + 1]  + (LineSlopes[xIndex + 1] * (LineHeights[yIndex] + LineHeights[yIndex+1])/2.)) - (LineTopX[xIndex]  + (LineSlopes[xIndex] * (LineHeights[yIndex] + LineHeights[yIndex+1])/2.))));
+			newX = (int) Math.round(imageXloc + (gridImageWidth/1000)*(LineTopX[xIndex] + LineSlopes[xIndex] * (LineHeights[yIndex] + LineHeights[yIndex+1])/2.));
+			newXSize = (int) ((gridImageWidth/1000)*((LineTopX[xIndex + 1]  + (LineSlopes[xIndex + 1] * (LineHeights[yIndex] + LineHeights[yIndex+1])/2.)) - (LineTopX[xIndex]  + (LineSlopes[xIndex] * (LineHeights[yIndex] + LineHeights[yIndex+1])/2.))));
 		}
 		
-		int[] gridIndex = {maggieX, maggieY, maggieXSize, maggieYSize};
+		int[] gridIndex = {newX, newY, newXSize, newYSize};
 		
 		return gridIndex;
 		
@@ -850,8 +978,7 @@ public class Controller implements Serializable, ActionListener {
 	        }
 	    });
 
-		if (player.getScore() > 10) {
-			
+		if (player.getScore() > 20) {
 			Iterator<AniObject> itr = animation.getImages().iterator();
 			while (itr.hasNext()) {
 				AniObject aniObject = itr.next();
@@ -870,9 +997,22 @@ public class Controller implements Serializable, ActionListener {
 			tickStage = 3;
 		}
 		else {
+			Iterator<AniObject> itr = animation.getImages().iterator();
+			while (itr.hasNext()) {
+				AniObject aniObject = itr.next();
+				if (aniObject.toString().compareToIgnoreCase("bird") == 0) {
+					aniObject.setScoreSize(0);
+					aniObject.setSize(1);
+					aniObject.setY((int) Math.round(animation.contentPaneSize/3));
+					aniObject.setX(600);
+					aniObject.setVisible(true);
+				}
+			}
+			animation.migrationAnimation2();
 			aniLabel.setText("Your score was " + Integer.toString(player.getScore()) + ". Your bird will not make it to the Arctic :(");
 			aniLabel.setFont(new Font("Arial", Font.PLAIN, 50));
 			screens.show(cardPanel, "Blank");
+			tickStage = 5;
 		}
 
 		//Add and repaint
@@ -995,7 +1135,7 @@ public class Controller implements Serializable, ActionListener {
 	private void addCleaners() {
 		int count = 0;
 		int totTrash = 0;
-		for (int i = 0; i < 10; i++) {
+		for (int i = 0; i < 5; i++) {
 			for (int j = 0; j < 10; j++) {
 				GridSpace trySpace = gameBoard.getSpace(i,  j);
 				if (trySpace.getIsCovered() == true && trySpace.getItem() == Item.TRASH) {
@@ -1048,6 +1188,21 @@ public class Controller implements Serializable, ActionListener {
 			}
 			controller.buildBoard();
 		}
+		else if (controller.tickStage == 2) {
+			Iterator<AniObject> scoreImageItr = animation.getImages().iterator();
+			while (scoreImageItr.hasNext()) {
+				AniObject scoreImage = scoreImageItr.next();
+				if (scoreImage.toString().compareToIgnoreCase("plusOne") == 0 || scoreImage.toString().compareToIgnoreCase("minusOne") == 0 || scoreImage.toString().compareToIgnoreCase("plusTwo") == 0) {
+					if (scoreImage.getOrigY() - scoreImage.getY() < 30) {
+						scoreImage.setY(scoreImage.getY() - 2);
+					}
+					else {
+						scoreImage.setVisible(false);
+						scoreImage.setName("done");
+					}
+				}
+			}
+		}
 		else if (controller.tickStage == 3) {
 			Iterator<AniObject> itrMigration2 = animation.getImages().iterator();
 			while (itrMigration2.hasNext()) {
@@ -1055,10 +1210,75 @@ public class Controller implements Serializable, ActionListener {
 				if (aniObject.toString().compareToIgnoreCase("bird") == 0) {
 					aniObject.setY(aniObject.getY() - 3);
 					if (aniObject.getY() <= 65) {
+						Iterator<AniObject> itrRemove = animation.getImages().iterator();
+						while (itrRemove.hasNext()) {
+							AniObject aniObjectRemove = itrRemove.next();
+							if (aniObjectRemove.toString().compareToIgnoreCase("US") == 0) {
+								itrRemove.remove();
+							}
+							if (aniObjectRemove.toString().compareToIgnoreCase("bird") == 0) {
+								aniObjectRemove.setSize(2);
+								aniObjectRemove.setX(525);
+								aniObjectRemove.setY(100);
+							}
+						}
+						animation.layEgg();
 						controller.tickStage = 4;
 						break;
 					}
 				}
+			}
+		}
+		else if (controller.tickStage == 4) {
+			
+			Iterator<AniObject> itrEgg = animation.getImages().iterator();
+			while (itrEgg.hasNext()) {
+				AniObject egg = itrEgg.next();
+				if (egg.toString().compareToIgnoreCase("egg") == 0) {
+					if (egg.getY() < 450) {
+						egg.setY(egg.getY() + 3);
+					}
+				}
+			}
+		}
+		else if (controller.tickStage == 5) {
+			Iterator<AniObject> itrMigration2 = animation.getImages().iterator();
+			while (itrMigration2.hasNext()) {
+				AniObject aniObject = itrMigration2.next();
+				if (aniObject.toString().compareToIgnoreCase("bird") == 0) {
+					aniObject.setY(aniObject.getY() - 1);
+					if (aniObject.getY() <= 250) {
+						Iterator<AniObject> itrRemove = animation.getImages().iterator();
+						while (itrRemove.hasNext()) {
+							AniObject aniObjectRemove = itrRemove.next();
+							if (aniObjectRemove.toString().compareToIgnoreCase("US") == 0) {
+								itrRemove.remove();
+							}
+							if (aniObjectRemove.toString().compareToIgnoreCase("bird") == 0) {
+								itrRemove.remove();
+							}
+						}
+						animation.deadBird();
+						controller.tickStage = 6;
+						break;
+					}
+				}
+			}
+		}
+		else if (controller.tickStage == 6) {
+			boolean tombStoneAni = false;
+			Iterator<AniObject> itrDeadBird = animation.getImages().iterator();
+			while (itrDeadBird.hasNext()) {
+				AniObject deadBird = itrDeadBird.next();
+				if (deadBird.toString().compareToIgnoreCase("deadBird") == 0) {
+					if (animation.getFrame() - deadBird.getFirstFrame() < 100 && animation.getFrame() - deadBird.getFirstFrame() > 15) {
+						tombStoneAni = true;
+					}
+				}
+			}
+			if (tombStoneAni == true) {
+				animation.tombStone();
+				controller.tickStage = 7;
 			}
 		}
 		else {
@@ -1068,7 +1288,9 @@ public class Controller implements Serializable, ActionListener {
 	
 	private void showImages() {
 		for(AniObject object: animation.getImages()) {
-			object.setVisible(true);
+			if (object.toString().compareToIgnoreCase("done") != 0) {
+				object.setVisible(true);
+			}
 		}
 	}
 	
