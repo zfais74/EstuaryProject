@@ -14,19 +14,15 @@ public class PowerUpTimer implements ActionListener, Serializable {
 	
 	public PowerUpTimer() {
 		this.timeRemaining = 5;
-		this.setTimer();
+		this.timer = new Timer(1000, this);
 	}
 
 	public PowerUpTimer(int time) {
 		this.timeRemaining = time;
-		this.setTimer();
-	}
-	
-	public void setTimer() {
 		this.timer = new Timer(1000, this);
 	}
 	
-	private void decTime() {
+	  private void decTime() {
 		timeRemaining--;
 		if(timeRemaining <= 0) {
 			setTimesUp(true);

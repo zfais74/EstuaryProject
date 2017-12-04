@@ -5,6 +5,8 @@ import java.util.List;
 public class AniObject implements Serializable {
 	
 	private String name;
+	private int origX;
+	private int origY;
 	private int X;
 	private int Y;
 	private int origXSize;
@@ -14,9 +16,13 @@ public class AniObject implements Serializable {
 	private int scoreSize = 0;
 	private transient List<BufferedImage> images;
 	private boolean visible;
+	boolean repeat = true;
+	private int firstFrame;
 	
 	AniObject(String objName, int xLoc, int yLoc, int sizeX, int sizeY, List<BufferedImage> objImage){
 		name = objName;
+		origX = xLoc;
+		origY = yLoc;
 		X = xLoc;
 		Y = yLoc;
 		origXSize = sizeX;
@@ -27,8 +33,16 @@ public class AniObject implements Serializable {
 		visible = false;
 	}
 	
+	public void setRepeat(boolean repeatorNot) {
+		this.repeat = repeatorNot;
+	}
+	
 	public String toString() {
 		return name;
+	}
+	
+	public void setName(String newName) {
+		this.name = newName;
 	}
 	
 	public void setVisible(boolean isVisible) {
@@ -68,18 +82,6 @@ public class AniObject implements Serializable {
 		X = x;
 	}
 	
-	public void incScoreSize() {
-		scoreSize = scoreSize + 10;
-	}
-	
-	public void decScoreSize() {
-		scoreSize = scoreSize - 10;
-	}
-	
-	public void setScoreSize(int newSize) {
-		scoreSize = newSize;
-	}
-	
 	public int getY() {
 		return Y;
 	}
@@ -88,8 +90,45 @@ public class AniObject implements Serializable {
 		Y = y;
 	}
 	
+	public int getOrigX() {
+		return origX;
+	}
+	
+	public int getOrigY() {
+		return origY;
+	}
+	
+	public void incScoreSize(int rate) {
+		scoreSize +=rate;
+	}
+	
+	public void decScoreSize() {
+		scoreSize-=10;
+	}
+	
+	public void setScoreSize(int newSize) {
+		scoreSize = newSize;
+	}
+	
+	public int getFirstFrame() {
+		return this.firstFrame;
+	}
+	
 	public BufferedImage getImage(int frame) {
-		int imageNum = frame % images.size();
-		return images.get(imageNum);
+		if (this.repeat) {
+			int imageNum = frame % images.size();
+			return images.get(imageNum);
+		}
+		else {
+			if (this.firstFrame == 0) {
+				this.firstFrame = frame;
+			}
+			if (frame - firstFrame < images.size()) {
+				return images.get(frame - firstFrame);
+			}
+			else {
+				return images.get(images.size() - 1);
+			}
+		}
 	}
 }
