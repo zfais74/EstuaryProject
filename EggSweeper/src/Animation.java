@@ -49,14 +49,6 @@ public class Animation extends JPanel implements Serializable{
 		} catch (IOException e) {
 			System.out.println("Failed to load beach, trying bin folder");
 		}
-		try {
-			BufferedImage beach = ImageIO.read(new File("beach.png"));
-			List<BufferedImage> beachList = new ArrayList<BufferedImage>();
-			beachList.add(beach);
-			images.add(new AniObject("beach", 0, 0, 1200, 900, beachList));
-		} catch (IOException e) {
-			System.out.println("Failed to load beach");
-		}
 
 		try {
 			BufferedImage board = ImageIO.read(new File("images/board.png"));
@@ -67,17 +59,6 @@ public class Animation extends JPanel implements Serializable{
 			boardImage = boardImg;
 		} catch (IOException e) {
 			System.out.println("Failed to load board, trying bin folder");
-		}
-		
-		try {
-			BufferedImage board = ImageIO.read(new File("board.png"));
-			List<BufferedImage> boardList = new ArrayList<BufferedImage>();
-			boardList.add(board);
-			AniObject boardImg = new AniObject("board", 100,254, 1000, 646, boardList);
-			images.add(boardImg);
-			boardImage = boardImg;
-		} catch (IOException e) {
-			System.out.println("Failed to load board");
 		}
 		
 		try {
@@ -97,25 +78,6 @@ public class Animation extends JPanel implements Serializable{
 			images.add(new AniObject("grass10", 0, 600, (int) (size0*Controller.getSizeRatio(600, boardImage)), (int) (size0*Controller.getSizeRatio(600, boardImage)), grassList));
 		} catch (IOException e) {
 			System.out.println("Failed to load grass, trying bin folder");
-		}
-		
-		try {
-			BufferedImage grass = ImageIO.read(new File("grass.png"));
-			List<BufferedImage> grassList = new ArrayList<BufferedImage>();
-			grassList.add(grass);
-			int size0 = 250;
-			images.add(new AniObject("grass1", 180, 150, (int) (size0*Controller.getSizeRatio(150, boardImage)), (int) (size0*Controller.getSizeRatio(150, boardImage)), grassList));
-			images.add(new AniObject("grass2", 0, 150, (int) (size0*Controller.getSizeRatio(150, boardImage)), (int) (size0*Controller.getSizeRatio(150, boardImage)), grassList));
-			images.add(new AniObject("grass3", 130, 220, (int) (size0*Controller.getSizeRatio(220, boardImage)), (int) (size0*Controller.getSizeRatio(220, boardImage)), grassList));
-			images.add(new AniObject("grass4", - 25, 250, (int) (size0*Controller.getSizeRatio(250, boardImage)), (int) (size0*Controller.getSizeRatio(250, boardImage)), grassList));
-			images.add(new AniObject("grass5", 70, 300, (int) (size0*Controller.getSizeRatio(300, boardImage)), (int) (size0*Controller.getSizeRatio(300, boardImage)), grassList));
-			images.add(new AniObject("grass6", -15, 380, (int) (size0*Controller.getSizeRatio(380, boardImage)), (int) (size0*Controller.getSizeRatio(380, boardImage)), grassList));
-			images.add(new AniObject("grass7", 70, 400, (int) (size0*Controller.getSizeRatio(400, boardImage)), (int) (size0*Controller.getSizeRatio(400, boardImage)), grassList));
-			images.add(new AniObject("grass8", 45, 480, (int) (size0*Controller.getSizeRatio(480, boardImage)), (int) (size0*Controller.getSizeRatio(480, boardImage)), grassList));
-			images.add(new AniObject("grass9", -40, 520, (int) (size0*Controller.getSizeRatio(520, boardImage)), (int) (size0*Controller.getSizeRatio(520, boardImage)), grassList));
-			images.add(new AniObject("grass10", 0, 600, (int) (size0*Controller.getSizeRatio(600, boardImage)), (int) (size0*Controller.getSizeRatio(600, boardImage)), grassList));
-		} catch (IOException e) {
-			System.out.println("Failed to load grass");
 		}
 		
 		return;
@@ -158,29 +120,6 @@ public class Animation extends JPanel implements Serializable{
 			System.out.println("failed to load hole, trying bin folder");
 		}
 		
-		try {
-			BufferedImage hole = ImageIO.read(new File("hole2.png"));
-			List<BufferedImage> holeList = new ArrayList<BufferedImage>();
-			holeList.add(hole);
-			AniObject holeObject = new AniObject("hole", xLoc, yLoc, sizeX, sizeY, holeList);
-			holeObject.setVisible(true);
-			images.add(holeObject);
-			int i = images.size() - 1;
-			int j = 0;
-			Iterator<AniObject> holeBirdItr = images.iterator();
-			while (holeBirdItr.hasNext()) {
-				AniObject next = holeBirdItr.next();
-				if (next.toString().compareToIgnoreCase("bird") == 0) {
-					break;
-				}
-				j++;
-			}
-			Collections.swap(images, i, j);
-		} catch (IOException e1) {
-			System.out.println("failed to load hole");
-		}
-		
-		
 	}
 	
 	public void scoreImage(int xLoc, int yLoc, int sizeX, int sizeY, String plusOrMinus, int scoreMult) {
@@ -212,17 +151,6 @@ public class Animation extends JPanel implements Serializable{
 				scoreObject.setVisible(true);
 				images.add(scoreObject);
 			}
-//			int i = images.size() - 1;
-//			int j = 0;
-//			Iterator<AniObject> holeBirdItr = images.iterator();
-//			while (holeBirdItr.hasNext()) {
-//				AniObject next = holeBirdItr.next();
-//				if (next.toString().compareToIgnoreCase("bird") == 0) {
-//					break;
-//				}
-//				j++;
-//			}
-//			Collections.swap(images, i, j);
             return;
 		} catch (IOException e1) {
 			System.out.println("failed to load plusImage, trying bin folder");
@@ -241,18 +169,6 @@ public class Animation extends JPanel implements Serializable{
             return;
 		} catch (IOException e1) {
 			System.out.println("failed to load chest, trying bin folder");
-		}
-		
-		try {
-			BufferedImage chest = ImageIO.read(new File("chest.png"));
-			List<BufferedImage> chestList = new ArrayList<BufferedImage>();
-			chestList.add(chest);
-			AniObject chestObject = new AniObject("chest", 1410, 600, 200, 200, chestList);
-			chestObject.setVisible(false);
-			images.add(chestObject);
-            
-		} catch (IOException e1) {
-			System.out.println("failed to load chest");
 		}
 		
 		return;
@@ -280,27 +196,6 @@ public class Animation extends JPanel implements Serializable{
             return;
 		} catch (IOException e1) {
 			System.out.println("failed to load US or Bird, trying bin folder");
-		}
-		try {
-			BufferedImage US = ImageIO.read(new File("map.png"));
-			List<BufferedImage> USList = new ArrayList<BufferedImage>();
-			USList.add(US);
-			AniObject USObject = new AniObject("US", 100, 100, 450, 600, USList);
-			USObject.setVisible(true);
-			images.add(USObject);
-			
-			BufferedImage bird1 = ImageIO.read(new File("bird1.png"));
-			BufferedImage bird2 = ImageIO.read(new File("bird2.png"));
-			BufferedImage bird3 = ImageIO.read(new File("bird3.png"));
-			List<BufferedImage> birdList = new ArrayList<BufferedImage>();
-			birdList.add(bird1);
-			birdList.add(bird2);
-			birdList.add(bird3);
-			AniObject birdObject = new AniObject("bird", 600, 600, 100, 150, birdList);
-			birdObject.setVisible(true);
-			images.add(birdObject);
-		} catch (IOException e1) {
-			System.out.println("failed to load US or Bird");
 		}
 		return;
 	}
