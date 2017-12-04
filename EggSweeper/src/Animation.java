@@ -182,6 +182,52 @@ public class Animation extends JPanel implements Serializable{
 		
 		
 	}
+	
+	public void scoreImage(int xLoc, int yLoc, int sizeX, int sizeY, String plusOrMinus, int scoreMult) {
+		try {
+			if (plusOrMinus.compareToIgnoreCase("plus") == 0) {
+				if (scoreMult == 1) {
+					BufferedImage plusOne = ImageIO.read(new File("images/horseshoeEgg2.png"));
+					List<BufferedImage> scoreList = new ArrayList<BufferedImage>();
+					scoreList.add(plusOne);
+					AniObject scoreObject = new AniObject("plusOne", xLoc, yLoc, sizeX, sizeY, scoreList);
+					scoreObject.setVisible(true);
+					images.add(scoreObject);
+				}
+				else if (scoreMult == 2) {
+					BufferedImage plusTwo = ImageIO.read(new File("images/doubleEgg2.png"));
+					List<BufferedImage> scoreList = new ArrayList<BufferedImage>();
+					scoreList.add(plusTwo);
+					AniObject scoreObject = new AniObject("plusTwo", xLoc, yLoc, sizeX, sizeY, scoreList);
+					scoreObject.setVisible(true);
+					images.add(scoreObject);
+				}
+				
+			}
+			else if(plusOrMinus.compareToIgnoreCase("minus") == 0) {
+				BufferedImage minusOne = ImageIO.read(new File("images/bottle.png"));
+				List<BufferedImage> scoreList = new ArrayList<BufferedImage>();
+				scoreList.add(minusOne);
+				AniObject scoreObject = new AniObject("minusOne", xLoc, yLoc, sizeX, sizeY, scoreList);
+				scoreObject.setVisible(true);
+				images.add(scoreObject);
+			}
+//			int i = images.size() - 1;
+//			int j = 0;
+//			Iterator<AniObject> holeBirdItr = images.iterator();
+//			while (holeBirdItr.hasNext()) {
+//				AniObject next = holeBirdItr.next();
+//				if (next.toString().compareToIgnoreCase("bird") == 0) {
+//					break;
+//				}
+//				j++;
+//			}
+//			Collections.swap(images, i, j);
+            return;
+		} catch (IOException e1) {
+			System.out.println("failed to load plusImage, trying bin folder");
+		}
+	}
 
 
 	public void addChest() {
@@ -285,6 +331,114 @@ public class Animation extends JPanel implements Serializable{
 		}
 	}
 	
+	public void layEgg() {
+		BufferedImage egg;
+		BufferedImage nest;
+		try {
+			nest = ImageIO.read(new File("images/nest2.png"));
+			List<BufferedImage> nestList = new ArrayList<BufferedImage>();
+			nestList.add(nest);
+			AniObject nestObject = new AniObject("nest", 475, 450, 300, 200, nestList);
+			nestObject.setVisible(true);
+			images.add(nestObject);
+			
+			egg = ImageIO.read(new File("images/egg2.png"));
+			List<BufferedImage> eggList = new ArrayList<BufferedImage>();
+			eggList.add(egg);
+			AniObject eggObject = new AniObject("egg", 575, 280, 100, 100, eggList);
+			eggObject.setVisible(true);
+			images.add(eggObject);
+			
+			int i = images.size() - 1;
+			int j = 0;
+			Iterator<AniObject> eggBirdItr = images.iterator();
+			while (eggBirdItr.hasNext()) {
+				AniObject next = eggBirdItr.next();
+				if (next.toString().compareToIgnoreCase("bird") == 0) {
+					break;
+				}
+				j++;
+			}
+			Collections.swap(images, i, j);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void deadBird() {
+		BufferedImage deadBirdImage1;
+		BufferedImage deadBirdImage2;
+		BufferedImage deadBirdImage3;
+		BufferedImage deadBirdImage4;
+		BufferedImage deadBirdImage5;
+		BufferedImage deadBirdImage6;
+		BufferedImage deadBirdImage7;
+		BufferedImage deadBirdImage8;
+		BufferedImage deadBirdImage9;
+		BufferedImage deadBirdImage10;
+		BufferedImage deadBirdImage11;
+		BufferedImage deadBirdImage12;
+		BufferedImage deadBirdImage13;
+		BufferedImage deadBirdImage14;
+		BufferedImage deadBirdImage15;
+		try {
+			deadBirdImage1 = ImageIO.read(new File("images/deadbird1.png"));
+			deadBirdImage2 = ImageIO.read(new File("images/deadbird1.png"));
+			deadBirdImage3 = ImageIO.read(new File("images/deadbird1.png"));
+			deadBirdImage4 = ImageIO.read(new File("images/deadbird1.png"));
+			deadBirdImage5 = ImageIO.read(new File("images/deadbird1.png"));
+			deadBirdImage6 = ImageIO.read(new File("images/deadbird2.png"));
+			deadBirdImage7 = ImageIO.read(new File("images/deadbird2.png"));
+			deadBirdImage8 = ImageIO.read(new File("images/deadbird2.png"));
+			deadBirdImage9 = ImageIO.read(new File("images/deadbird2.png"));
+			deadBirdImage10 = ImageIO.read(new File("images/deadbird2.png"));
+			deadBirdImage11 = ImageIO.read(new File("images/deadbird3.png"));
+			deadBirdImage12 = ImageIO.read(new File("images/deadbird3.png"));
+			deadBirdImage13 = ImageIO.read(new File("images/deadbird3.png"));
+			deadBirdImage14 = ImageIO.read(new File("images/deadbird3.png"));
+			deadBirdImage15 = ImageIO.read(new File("images/deadbird3.png"));
+			List<BufferedImage> deadBirdList = new ArrayList<BufferedImage>();
+			deadBirdList.add(deadBirdImage1);
+			deadBirdList.add(deadBirdImage2);
+			deadBirdList.add(deadBirdImage3);
+			deadBirdList.add(deadBirdImage4);
+			deadBirdList.add(deadBirdImage5);
+			deadBirdList.add(deadBirdImage6);
+			deadBirdList.add(deadBirdImage7);
+			deadBirdList.add(deadBirdImage8);
+			deadBirdList.add(deadBirdImage9);
+			deadBirdList.add(deadBirdImage10);
+			deadBirdList.add(deadBirdImage11);
+			deadBirdList.add(deadBirdImage12);
+			deadBirdList.add(deadBirdImage13);
+			deadBirdList.add(deadBirdImage14);
+			deadBirdList.add(deadBirdImage15);
+			AniObject deadBirdObject = new AniObject("deadBird", 525, 450, 100, 100, deadBirdList);
+			deadBirdObject.setVisible(true);
+			images.add(deadBirdObject);
+			deadBirdObject.setSize(2);
+			deadBirdObject.setRepeat(false);
+		}
+		catch(IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void tombStone() {
+		BufferedImage tomb;
+		try {			
+			tomb = ImageIO.read(new File("images/tomb.png"));
+			List<BufferedImage> tombList = new ArrayList<BufferedImage>();
+			tombList.add(tomb);
+			AniObject tombObject = new AniObject("tomb", 525, 200, 200, 250, tombList);
+			tombObject.setVisible(true);
+			images.add(tombObject);
+		}
+		catch(IOException e){
+			e.printStackTrace();
+		}
+	}
+	
 	void addMaggie(int xLoc, int yLoc, int sizeX, int sizeY) {
 		try {
 			BufferedImage maggie1 = ImageIO.read(new File("images/maggie1.png"));
@@ -360,6 +514,10 @@ public class Animation extends JPanel implements Serializable{
 		Image chestImage = chest.getImage();
 		Image resizedChest = chestImage.getScaledInstance( 200, 200,  java.awt.Image.SCALE_SMOOTH ) ;  
 		return new ImageIcon(resizedChest);
+	}
+	
+	public int getFrame() {
+		return this.frame;
 	}
 
 }

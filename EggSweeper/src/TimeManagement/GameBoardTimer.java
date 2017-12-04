@@ -59,7 +59,6 @@ public class GameBoardTimer implements ActionListener, Serializable {
 		currentTime /= 1000;
 		StringBuilder sb = new StringBuilder();
 		sb.append("Time remaining: 0:").append(currentTime);
-		System.out.println(currentTime);
 		}
 	}
 

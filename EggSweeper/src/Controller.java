@@ -663,7 +663,14 @@ public class Controller implements Serializable, ActionListener {
 	        		boardPanel.add(chestButton, constraints);
 	        		
 	        		if (item == Item.EGG) {
-	        			birdMouse.incScoreSize();
+	        			int mult = player.getEggMultiplier();
+	        			animation.scoreImage(gridIndex[2], gridIndex[3], gridIndex[4], gridIndex[5], "plus", mult);
+	        			if (mult == 1) {
+	        				birdMouse.incScoreSize(10);
+	        			}
+	        			else if (mult == 2){
+	        				birdMouse.incScoreSize(20);
+	        			}
 		        		ateSome.setText("You Found and egg!! ");
 		        		ateSome.setFont(ateFont);
 		        		frame.getContentPane().add(ateSome, 0);
@@ -686,6 +693,7 @@ public class Controller implements Serializable, ActionListener {
 	        		}
 	        		else {
 	        			if (item == Item.TRASH) {
+	        				animation.scoreImage(gridIndex[2], gridIndex[3], gridIndex[4], gridIndex[5], "minus", 1);
 	        				birdMouse.decScoreSize();
 			        		ateSome.setText("Ate Some Trash :( ");
 			        		ateSome.setFont(ateFont);
@@ -928,22 +936,22 @@ public class Controller implements Serializable, ActionListener {
 		int imageXloc = boardImage.getX();
 		int imageYloc = boardImage.getY();
 		
-		int maggieX = 1;
-		int maggieY = 1;
-		int maggieXSize = 1;
-		int maggieYSize = 1;
+		int newX = 1;
+		int newY = 1;
+		int newXSize = 1;
+		int newYSize = 1;
 		
 		if ((xIndex != -1) && (yIndex != -1)){
 			double boxRatio = ((double) LineHeights[9] - (double) LineHeights[8])/((double) LineHeights[10] - (double) LineHeights[9]);
 			double gridSizeRatio = 1/Math.pow(boxRatio, yIndex);
-			maggieYSize = (int) Math.round(gridSizeRatio * (gridImageWidth/1000)*(LineHeights[1] - LineHeights[0]));
-			maggieY = (int) Math.round(imageYloc + LineHeights[yIndex] + ((gridImageWidth/1000.)*(LineHeights[yIndex+1] - LineHeights[yIndex])/2.) - (maggieYSize/2.) );
+			newYSize = (int) Math.round(gridSizeRatio * (gridImageWidth/1000)*(LineHeights[1] - LineHeights[0]));
+			newY = (int) Math.round(imageYloc + LineHeights[yIndex] + ((gridImageWidth/1000.)*(LineHeights[yIndex+1] - LineHeights[yIndex])/2.) - (newYSize/2.) );
 			
-			maggieX = (int) Math.round(imageXloc + (gridImageWidth/1000)*(LineTopX[xIndex] + LineSlopes[xIndex] * (LineHeights[yIndex] + LineHeights[yIndex+1])/2.));
-			maggieXSize = (int) ((gridImageWidth/1000)*((LineTopX[xIndex + 1]  + (LineSlopes[xIndex + 1] * (LineHeights[yIndex] + LineHeights[yIndex+1])/2.)) - (LineTopX[xIndex]  + (LineSlopes[xIndex] * (LineHeights[yIndex] + LineHeights[yIndex+1])/2.))));
+			newX = (int) Math.round(imageXloc + (gridImageWidth/1000)*(LineTopX[xIndex] + LineSlopes[xIndex] * (LineHeights[yIndex] + LineHeights[yIndex+1])/2.));
+			newXSize = (int) ((gridImageWidth/1000)*((LineTopX[xIndex + 1]  + (LineSlopes[xIndex + 1] * (LineHeights[yIndex] + LineHeights[yIndex+1])/2.)) - (LineTopX[xIndex]  + (LineSlopes[xIndex] * (LineHeights[yIndex] + LineHeights[yIndex+1])/2.))));
 		}
 		
-		int[] gridIndex = {maggieX, maggieY, maggieXSize, maggieYSize};
+		int[] gridIndex = {newX, newY, newXSize, newYSize};
 		
 		return gridIndex;
 		
@@ -970,8 +978,7 @@ public class Controller implements Serializable, ActionListener {
 	        }
 	    });
 
-		if (player.getScore() > 10) {
-			
+		if (player.getScore() > 20) {
 			Iterator<AniObject> itr = animation.getImages().iterator();
 			while (itr.hasNext()) {
 				AniObject aniObject = itr.next();
@@ -990,9 +997,22 @@ public class Controller implements Serializable, ActionListener {
 			tickStage = 3;
 		}
 		else {
+			Iterator<AniObject> itr = animation.getImages().iterator();
+			while (itr.hasNext()) {
+				AniObject aniObject = itr.next();
+				if (aniObject.toString().compareToIgnoreCase("bird") == 0) {
+					aniObject.setScoreSize(0);
+					aniObject.setSize(1);
+					aniObject.setY((int) Math.round(animation.contentPaneSize/3));
+					aniObject.setX(600);
+					aniObject.setVisible(true);
+				}
+			}
+			animation.migrationAnimation2();
 			aniLabel.setText("Your score was " + Integer.toString(player.getScore()) + ". Your bird will not make it to the Arctic :(");
 			aniLabel.setFont(new Font("Arial", Font.PLAIN, 50));
 			screens.show(cardPanel, "Blank");
+			tickStage = 5;
 		}
 
 		//Add and repaint
@@ -1168,6 +1188,21 @@ public class Controller implements Serializable, ActionListener {
 			}
 			controller.buildBoard();
 		}
+		else if (controller.tickStage == 2) {
+			Iterator<AniObject> scoreImageItr = animation.getImages().iterator();
+			while (scoreImageItr.hasNext()) {
+				AniObject scoreImage = scoreImageItr.next();
+				if (scoreImage.toString().compareToIgnoreCase("plusOne") == 0 || scoreImage.toString().compareToIgnoreCase("minusOne") == 0 || scoreImage.toString().compareToIgnoreCase("plusTwo") == 0) {
+					if (scoreImage.getOrigY() - scoreImage.getY() < 30) {
+						scoreImage.setY(scoreImage.getY() - 2);
+					}
+					else {
+						scoreImage.setVisible(false);
+						scoreImage.setName("done");
+					}
+				}
+			}
+		}
 		else if (controller.tickStage == 3) {
 			Iterator<AniObject> itrMigration2 = animation.getImages().iterator();
 			while (itrMigration2.hasNext()) {
@@ -1175,10 +1210,75 @@ public class Controller implements Serializable, ActionListener {
 				if (aniObject.toString().compareToIgnoreCase("bird") == 0) {
 					aniObject.setY(aniObject.getY() - 3);
 					if (aniObject.getY() <= 65) {
+						Iterator<AniObject> itrRemove = animation.getImages().iterator();
+						while (itrRemove.hasNext()) {
+							AniObject aniObjectRemove = itrRemove.next();
+							if (aniObjectRemove.toString().compareToIgnoreCase("US") == 0) {
+								itrRemove.remove();
+							}
+							if (aniObjectRemove.toString().compareToIgnoreCase("bird") == 0) {
+								aniObjectRemove.setSize(2);
+								aniObjectRemove.setX(525);
+								aniObjectRemove.setY(100);
+							}
+						}
+						animation.layEgg();
 						controller.tickStage = 4;
 						break;
 					}
 				}
+			}
+		}
+		else if (controller.tickStage == 4) {
+			
+			Iterator<AniObject> itrEgg = animation.getImages().iterator();
+			while (itrEgg.hasNext()) {
+				AniObject egg = itrEgg.next();
+				if (egg.toString().compareToIgnoreCase("egg") == 0) {
+					if (egg.getY() < 450) {
+						egg.setY(egg.getY() + 3);
+					}
+				}
+			}
+		}
+		else if (controller.tickStage == 5) {
+			Iterator<AniObject> itrMigration2 = animation.getImages().iterator();
+			while (itrMigration2.hasNext()) {
+				AniObject aniObject = itrMigration2.next();
+				if (aniObject.toString().compareToIgnoreCase("bird") == 0) {
+					aniObject.setY(aniObject.getY() - 1);
+					if (aniObject.getY() <= 250) {
+						Iterator<AniObject> itrRemove = animation.getImages().iterator();
+						while (itrRemove.hasNext()) {
+							AniObject aniObjectRemove = itrRemove.next();
+							if (aniObjectRemove.toString().compareToIgnoreCase("US") == 0) {
+								itrRemove.remove();
+							}
+							if (aniObjectRemove.toString().compareToIgnoreCase("bird") == 0) {
+								itrRemove.remove();
+							}
+						}
+						animation.deadBird();
+						controller.tickStage = 6;
+						break;
+					}
+				}
+			}
+		}
+		else if (controller.tickStage == 6) {
+			boolean tombStoneAni = false;
+			Iterator<AniObject> itrDeadBird = animation.getImages().iterator();
+			while (itrDeadBird.hasNext()) {
+				AniObject deadBird = itrDeadBird.next();
+				if (deadBird.toString().compareToIgnoreCase("deadBird") == 0) {
+					if (animation.getFrame() - deadBird.getFirstFrame() < 100 && animation.getFrame() - deadBird.getFirstFrame() > 15) {
+						tombStoneAni = true;
+					}
+				}
+			}
+			if (tombStoneAni == true) {
+				animation.tombStone();
+				controller.tickStage = 7;
 			}
 		}
 		else {
@@ -1188,7 +1288,9 @@ public class Controller implements Serializable, ActionListener {
 	
 	private void showImages() {
 		for(AniObject object: animation.getImages()) {
-			object.setVisible(true);
+			if (object.toString().compareToIgnoreCase("done") != 0) {
+				object.setVisible(true);
+			}
 		}
 	}
 	
