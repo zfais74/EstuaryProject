@@ -1177,6 +1177,7 @@ public class Controller implements Serializable, ActionListener {
 				}
 			}
 		}
+		//removes us from board
 		else if (controller.tickStage == 1) {
 			controller.tickStage = 2;
 			Iterator<AniObject> itrRemove = animation.getImages().iterator();
@@ -1188,6 +1189,7 @@ public class Controller implements Serializable, ActionListener {
 			}
 			controller.buildBoard();
 		}
+		//bottle and horseshoe crab animation
 		else if (controller.tickStage == 2) {
 			Iterator<AniObject> scoreImageItr = animation.getImages().iterator();
 			while (scoreImageItr.hasNext()) {
@@ -1203,6 +1205,7 @@ public class Controller implements Serializable, ActionListener {
 				}
 			}
 		}
+		//second migration animation stuff
 		else if (controller.tickStage == 3) {
 			Iterator<AniObject> itrMigration2 = animation.getImages().iterator();
 			while (itrMigration2.hasNext()) {
@@ -1229,6 +1232,7 @@ public class Controller implements Serializable, ActionListener {
 				}
 			}
 		}
+		//won
 		else if (controller.tickStage == 4) {
 			
 			Iterator<AniObject> itrEgg = animation.getImages().iterator();
@@ -1241,6 +1245,7 @@ public class Controller implements Serializable, ActionListener {
 				}
 			}
 		}
+		//lost
 		else if (controller.tickStage == 5) {
 			Iterator<AniObject> itrMigration2 = animation.getImages().iterator();
 			while (itrMigration2.hasNext()) {
@@ -1265,6 +1270,7 @@ public class Controller implements Serializable, ActionListener {
 				}
 			}
 		}
+		//lose
 		else if (controller.tickStage == 6) {
 			boolean tombStoneAni = false;
 			Iterator<AniObject> itrDeadBird = animation.getImages().iterator();
@@ -1276,6 +1282,7 @@ public class Controller implements Serializable, ActionListener {
 					}
 				}
 			}
+			//stop
 			if (tombStoneAni == true) {
 				animation.tombStone();
 				controller.tickStage = 7;
@@ -1373,6 +1380,7 @@ public class Controller implements Serializable, ActionListener {
        	cont.frame = new JFrame();
        	//cont.frame.setPreferredSize(new Dimension(1000,1000));
        	cont.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+       	cont.frame.setResizable(true);
 	  	cont.animation = new Animation();
 	  	cont.animation.setVisible(true);
 	  	cont.frame.getContentPane().add(cont.animation);
