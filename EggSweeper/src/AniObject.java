@@ -48,6 +48,8 @@ public class AniObject implements Serializable {
 	}
 	
 	/**
+	 * Set repeat to repeatorNot
+	 * 
 	 * @param repeatorNot
 	 */
 	public void setRepeat(boolean repeatorNot) {
