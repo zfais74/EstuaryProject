@@ -42,7 +42,7 @@ public class Animation extends JPanel implements Serializable{
 		images = new ArrayList<AniObject>();
 		this.setPreferredSize(new Dimension(ratioW, ratioH));
 		try {
-			BufferedImage beach = ImageIO.read(new File("images/beach.png"));
+			BufferedImage beach = ImageIO.read(new File("images/beach5.png"));
 			List<BufferedImage> beachList = new ArrayList<BufferedImage>();
 			beachList.add(beach);
 			images.add(new AniObject("beach", 0, 0, 1200, 900, beachList));
@@ -82,6 +82,54 @@ public class Animation extends JPanel implements Serializable{
 		
 		return;
 		
+	}
+	
+	public BufferedImage getTutorialImage(int num) {
+		if (num == 1) {
+			BufferedImage beach1 = null;
+			try {
+				beach1 = ImageIO.read(new File("images/beach1.png"));
+			} catch (IOException e) {
+				System.out.println("Failed to load beach, trying bin folder");
+			}
+			return beach1;
+		}
+		else if (num == 2) {
+			BufferedImage beach2 = null;
+			try {
+				beach2 = ImageIO.read(new File("images/beach2.png"));
+			} catch (IOException e) {
+				System.out.println("Failed to load beach, trying bin folder");
+			}
+			return beach2;
+		}
+		else if (num == 3) {
+			BufferedImage beach3 = null;
+			try {
+				beach3 = ImageIO.read(new File("images/beach3.png"));
+			} catch (IOException e) {
+				System.out.println("Failed to load beach, trying bin folder");
+			}
+			return beach3;
+		}
+		else if (num == 4){
+			BufferedImage beach4 = null;
+			try {
+				beach4 = ImageIO.read(new File("images/beach4.png"));
+			} catch (IOException e) {
+				System.out.println("Failed to load beach, trying bin folder");
+			}
+			return beach4;
+		}
+		else {
+			BufferedImage beach5 = null;
+			try {
+				beach5 = ImageIO.read(new File("images/beach5.png"));
+			} catch (IOException e) {
+				System.out.println("Failed to load beach, trying bin folder");
+			}
+			return beach5;
+		}
 	}
 	
 	public void paint(Graphics g) {
@@ -406,6 +454,13 @@ public class Animation extends JPanel implements Serializable{
 	
 	public ImageIcon getChestIcon(){
 		ImageIcon chest = new ImageIcon("images/chest.png");
+		Image chestImage = chest.getImage();
+		Image resizedChest = chestImage.getScaledInstance( 200, 200,  java.awt.Image.SCALE_SMOOTH ) ;  
+		return new ImageIcon(resizedChest);
+	}
+	
+	public ImageIcon getTransChestIcon(){
+		ImageIcon chest = new ImageIcon("images/chestTrans.png");
 		Image chestImage = chest.getImage();
 		Image resizedChest = chestImage.getScaledInstance( 200, 200,  java.awt.Image.SCALE_SMOOTH ) ;  
 		return new ImageIcon(resizedChest);
