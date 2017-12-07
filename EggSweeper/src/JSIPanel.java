@@ -13,7 +13,7 @@ public class JSIPanel extends JPanel{
 
         super.paintComponent(g);
         try {
-            g.drawImage(ImageIO.read(new File("beach-Yat.png")), 0, 0, null);
+            g.drawImage(ImageIO.read(new File("homeBackground169.png")), 0, 0, null);
         } catch (IOException e) {
             e.printStackTrace();
         }

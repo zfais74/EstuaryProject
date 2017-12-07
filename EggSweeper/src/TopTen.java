@@ -3,30 +3,41 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 public class TopTen {
     public static LinkedList<Player> scores = new LinkedList<>();
+    LinkedList<Player> winners = scores
+            .stream()
+            .limit(10)
+            .collect(Collectors.toCollection(LinkedList::new));
 
 
     public static void checkTopTen(Player p){
         Iterator<Player> x =scores.descendingIterator();
         int index =10;
-        while (x.hasNext()) {
-            if(p.getScore()>x.next().getScore()){
-                index = scores.indexOf(x.next());
+        try {
+            while (x.hasNext()) {
+                if (p.getScore() > x.next().getScore()) {
+                    index = scores.indexOf(x.next());
 
+                }
+            }
         }
-        else{
-                break;
+        catch(Exception e){
+            scores.add(p);
+
             }
 
-    }
+
         try {
             scores.add(index, p);
         }
         catch (Exception e){
             scores.add(p);
         }
+        System.out.println("Score Recorded");
 
     }
 
@@ -67,5 +78,8 @@ public class TopTen {
         {
             System.out.print("Exception thrown while saving high scores" + ex.toString());
         }
+    }
+    public static void DisplayTopTen(){
+
     }
 }
