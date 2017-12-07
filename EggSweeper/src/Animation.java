@@ -126,7 +126,7 @@ public class Animation extends JPanel implements Serializable{
 		if (num == 1) {
 			BufferedImage beach1 = null;
 			try {
-				beach1 = ImageIO.read(new File("images/beach1.png"));
+				beach1 = ImageIO.read(new File("beach1.png"));
 			} catch (IOException e) {
 				System.out.println("Failed to load beach, trying bin folder");
 			}
@@ -135,7 +135,7 @@ public class Animation extends JPanel implements Serializable{
 		else if (num == 2) {
 			BufferedImage beach2 = null;
 			try {
-				beach2 = ImageIO.read(new File("images/beach2.png"));
+				beach2 = ImageIO.read(new File("beach2.png"));
 			} catch (IOException e) {
 				System.out.println("Failed to load beach, trying bin folder");
 			}
@@ -144,7 +144,7 @@ public class Animation extends JPanel implements Serializable{
 		else if (num == 3) {
 			BufferedImage beach3 = null;
 			try {
-				beach3 = ImageIO.read(new File("images/beach3.png"));
+				beach3 = ImageIO.read(new File("beach3.png"));
 			} catch (IOException e) {
 				System.out.println("Failed to load beach, trying bin folder");
 			}
@@ -153,7 +153,7 @@ public class Animation extends JPanel implements Serializable{
 		else if (num == 4){
 			BufferedImage beach4 = null;
 			try {
-				beach4 = ImageIO.read(new File("images/beach4.png"));
+				beach4 = ImageIO.read(new File("beach4.png"));
 			} catch (IOException e) {
 				System.out.println("Failed to load beach, trying bin folder");
 			}
@@ -162,7 +162,7 @@ public class Animation extends JPanel implements Serializable{
 		else {
 			BufferedImage beach5 = null;
 			try {
-				beach5 = ImageIO.read(new File("images/beach5.png"));
+				beach5 = ImageIO.read(new File("beach5.png"));
 			} catch (IOException e) {
 				System.out.println("Failed to load beach, trying bin folder");
 			}

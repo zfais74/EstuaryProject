@@ -1716,10 +1716,15 @@ public class Controller implements Serializable, ActionListener {
 				controller.tickStage = 7;
 			}
 		}
-		else {
+		else if(controller.tickStage==7){
 			TopTen.getTopTenList();
 			TopTen.checkTopTen(controller.player);
 			TopTen.SaveTopTenList();
+			controller.tickStage=8;
+		}
+
+		else {
+
 		}
 	}
 	
