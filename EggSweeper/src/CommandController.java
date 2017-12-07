@@ -9,6 +9,7 @@ import java.util.Scanner;
 import javax.imageio.ImageIO;
 
 import enums.Bird;
+import enums.Difficulty;
 
 public class CommandController {
 	
@@ -16,7 +17,7 @@ public class CommandController {
 	Player player;
 	Board gameBoard;
 	
-	public void startGame(Board.Difficulty difficulty) {
+	public void startGame(Difficulty difficulty) {
 		gameBoard = new Board(difficulty);
     	player = new Player(Bird.SANDPIPER); 
     	try {
@@ -53,13 +54,13 @@ public class CommandController {
 		Scanner scanner = new Scanner(System.in);
 		int diff = scanner.nextInt();
 		if (diff == 1) {
-			cont.startGame(Board.Difficulty.EASY);
+			cont.startGame(Difficulty.EASY);
 		}
 		else if (diff == 2) {
-			cont.startGame(Board.Difficulty.MEDIUM);
+			cont.startGame(Difficulty.MEDIUM);
 		}
 		else if (diff == 3) {
-			cont.startGame(Board.Difficulty.HARD);
+			cont.startGame(Difficulty.HARD);
 		}
 		
 		cont.playGame();
