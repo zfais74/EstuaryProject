@@ -427,5 +427,9 @@ public class Board implements Serializable {
 		public void setCorrectAnswer(String answer) {
 			this.correctAnswer = answer;
 		}
+		
+		public Difficulty getDifficulty() {
+			return this.difficulty;
+		}
 }
 	
