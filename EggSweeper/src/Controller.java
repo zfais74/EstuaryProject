@@ -1612,6 +1612,7 @@ public class Controller implements Serializable, ActionListener {
 					}
 				}
 			}
+			controller.tickStage=7;
 		}
 		//lost
 		else if (controller.tickStage == 5) {
@@ -1657,7 +1658,9 @@ public class Controller implements Serializable, ActionListener {
 			}
 		}
 		else {
-			return;
+			TopTen.getTopTenList();
+			TopTen.checkTopTen(controller.player);
+			TopTen.SaveTopTenList();
 		}
 	}
 	
