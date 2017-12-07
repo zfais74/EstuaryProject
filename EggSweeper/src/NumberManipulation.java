@@ -1,5 +1,5 @@
 /**
- * A utility class used to generate random numbers
+ * A utility class used to manipulate numbers
  * @author zeke
  *
  */
