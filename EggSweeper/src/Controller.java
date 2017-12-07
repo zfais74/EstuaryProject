@@ -681,7 +681,7 @@ public class Controller implements Serializable, ActionListener {
 	        			else if (mult == 2){
 	        				birdMouse.incScoreSize(20);
 	        			}
-		        		ateSome.setText("You Found and egg!! ");
+		        		ateSome.setText("You Found an egg!! ");
 		        		ateSome.setFont(ateFont);
 		        		frame.getContentPane().add(ateSome, 0);
 		        		constraints.gridx = 1;
@@ -691,6 +691,11 @@ public class Controller implements Serializable, ActionListener {
 		        		if (NumberManipulation.generateNum(10) < 6 && player.hasPowerUp() == false) {
 		        			chestButton.setIcon(animation.getChestIcon());
 		                	chestButton.setEnabled(true);
+		        		}
+		        		System.out.println(player.getEggsFound());
+		        		System.out.println(gameBoard.getTotEggs());
+		        		if (player.getEggsFound() == gameBoard.getTotEggs()) {
+		        			endScreen();
 		        		}
 	        		}
 	        		else if (item == Item.ALREADYCHECKED) {
@@ -999,7 +1004,7 @@ public class Controller implements Serializable, ActionListener {
 	        		chestButton.setContentAreaFilled(false);
 	        		chestButton.setBorderPainted(false);
 	        		chestButton.setVisible(true);
-	        		chestButton.setIcon(animation.getTransChestIcon());
+	        		//chestButton.setIcon(animation.getTransChestIcon());
                 	chestButton.setEnabled(false);
 	        		chestButton.addActionListener((ActionEvent a) -> {
 	        			String explanation = "<html>Power up chests randomly pop up when you find eggs. This is the question screen<br/>which gives you the chance to get power ups if you answer the question correctly</html>";
@@ -1083,7 +1088,7 @@ public class Controller implements Serializable, ActionListener {
 	        			else if (mult == 2){
 	        				birdMouse.incScoreSize(20);
 	        			}
-		        		ateSome.setText("You Found and egg!! ");
+		        		ateSome.setText("You Found an egg!! ");
 		        		ateSome.setFont(ateFont);
 		        		constraints.gridx = 1;
 		        		constraints.gridy = 4;
@@ -1371,6 +1376,9 @@ public class Controller implements Serializable, ActionListener {
 		frame.getContentPane().removeMouseMotionListener(frame.getContentPane().getMouseMotionListeners()[0]);
 		
 		hideImages();
+		if (this.gameBoardTimer != null) {
+			this.gameBoardTimer.getTimer().stop();
+		}
 		this.checkTimersTimer.stop();
 		
 		JButton quitButton = new JButton("Quit");
@@ -1385,7 +1393,7 @@ public class Controller implements Serializable, ActionListener {
 	        }
 	    });
 
-		if (player.getScore() > 20) {
+		if (player.getScore() > 10) {
 			Iterator<AniObject> itr = animation.getImages().iterator();
 			while (itr.hasNext()) {
 				AniObject aniObject = itr.next();
@@ -1398,7 +1406,7 @@ public class Controller implements Serializable, ActionListener {
 				}
 			}
 			animation.migrationAnimation2();
-			aniLabel.setText("Your score was " + Integer.toString(player.getScore()) + ". Your bird will make it to the Arctic!!!");
+			aniLabel.setText("Your score was " + Integer.toString(player.getScore()) + ". Your Red Knot will make it to the Arctic!!!");
 			aniLabel.setFont(new Font("Arial", Font.PLAIN, 50));
 			screens.show(cardPanel, "Blank");
 			tickStage = 3;
@@ -1416,7 +1424,7 @@ public class Controller implements Serializable, ActionListener {
 				}
 			}
 			animation.migrationAnimation2();
-			aniLabel.setText("Your score was " + Integer.toString(player.getScore()) + ". Your bird will not make it to the Arctic :(");
+			aniLabel.setText("Your score was " + Integer.toString(player.getScore()) + ". Your Red Knot will not make it to the Arctic :(");
 			aniLabel.setFont(new Font("Arial", Font.PLAIN, 50));
 			screens.show(cardPanel, "Blank");
 			tickStage = 5;
@@ -1839,7 +1847,9 @@ public class Controller implements Serializable, ActionListener {
        	cont.frame = new JFrame();
        	//cont.frame.setPreferredSize(new Dimension(1000,1000));
        	cont.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-       	cont.frame.setResizable(true);
+       	//cont.frame.setResizable(true);
+       	cont.frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+       	cont.frame.setUndecorated(true);
 	  	cont.animation = new Animation();
 	  	cont.animation.setVisible(true);
 	  	cont.frame.add(cont.animation);
