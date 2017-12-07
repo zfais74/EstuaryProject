@@ -136,7 +136,7 @@ public class Animation extends JPanel implements Serializable{
 
 	public void addHole(int xLoc, int yLoc, int sizeX, int sizeY) {
 		try {
-            BufferedImage hole = ImageIO.read(new File("images/hole2.png"));
+            BufferedImage hole = ImageIO.read(new File("hole2.png"));
 			List<BufferedImage> holeList = new ArrayList<BufferedImage>();
 			holeList.add(hole);
 			AniObject holeObject = new AniObject("hole", xLoc, yLoc, sizeX, sizeY, holeList);
@@ -164,7 +164,7 @@ public class Animation extends JPanel implements Serializable{
 		try {
 			if (plusOrMinus.compareToIgnoreCase("plus") == 0) {
 				if (scoreMult == 1) {
-					BufferedImage plusOne = ImageIO.read(new File("images/horseshoeEgg2.png"));
+					BufferedImage plusOne = ImageIO.read(new File("horseshoeEgg2.png"));
 					List<BufferedImage> scoreList = new ArrayList<BufferedImage>();
 					scoreList.add(plusOne);
 					AniObject scoreObject = new AniObject("plusOne", xLoc, yLoc, sizeX, sizeY, scoreList);
@@ -172,7 +172,7 @@ public class Animation extends JPanel implements Serializable{
 					images.add(scoreObject);
 				}
 				else if (scoreMult == 2) {
-					BufferedImage plusTwo = ImageIO.read(new File("images/doubleEgg2.png"));
+					BufferedImage plusTwo = ImageIO.read(new File("doubleEgg2.png"));
 					List<BufferedImage> scoreList = new ArrayList<BufferedImage>();
 					scoreList.add(plusTwo);
 					AniObject scoreObject = new AniObject("plusTwo", xLoc, yLoc, sizeX, sizeY, scoreList);
@@ -182,7 +182,7 @@ public class Animation extends JPanel implements Serializable{
 
 			}
 			else if(plusOrMinus.compareToIgnoreCase("minus") == 0) {
-				BufferedImage minusOne = ImageIO.read(new File("images/bottle.png"));
+				BufferedImage minusOne = ImageIO.read(new File("bottle.png"));
 				List<BufferedImage> scoreList = new ArrayList<BufferedImage>();
 				scoreList.add(minusOne);
 				AniObject scoreObject = new AniObject("minusOne", xLoc, yLoc, sizeX, sizeY, scoreList);
@@ -200,7 +200,7 @@ public class Animation extends JPanel implements Serializable{
 
 	public void addChest() {
 		try {
-			BufferedImage chest = ImageIO.read(new File("images/chest.png"));
+			BufferedImage chest = ImageIO.read(new File("chest.png"));
 			List<BufferedImage> chestList = new ArrayList<BufferedImage>();
 			chestList.add(chest);
 			AniObject chestObject = new AniObject("chest", 1410, 600, 200, 200, chestList);
@@ -275,7 +275,7 @@ public class Animation extends JPanel implements Serializable{
 	
 	public void migrationAnimation2() {
 		try {			
-			BufferedImage US = ImageIO.read(new File("images/map.png"));
+			BufferedImage US = ImageIO.read(new File("map.png"));
 			List<BufferedImage> USList = new ArrayList<BufferedImage>();
 			USList.add(US);
 			AniObject USObject = new AniObject("US", 350, 100, 450, 600, USList);
@@ -303,14 +303,14 @@ public class Animation extends JPanel implements Serializable{
 		BufferedImage egg;
 		BufferedImage nest;
 		try {
-			nest = ImageIO.read(new File("images/nest2.png"));
+			nest = ImageIO.read(new File("nest2.png"));
 			List<BufferedImage> nestList = new ArrayList<BufferedImage>();
 			nestList.add(nest);
 			AniObject nestObject = new AniObject("nest", 475, 450, 300, 200, nestList);
 			nestObject.setVisible(true);
 			images.add(nestObject);
 
-			egg = ImageIO.read(new File("images/egg2.png"));
+			egg = ImageIO.read(new File("egg2.png"));
 			List<BufferedImage> eggList = new ArrayList<BufferedImage>();
 			eggList.add(egg);
 			AniObject eggObject = new AniObject("egg", 575, 280, 100, 100, eggList);
@@ -350,21 +350,21 @@ public class Animation extends JPanel implements Serializable{
 		BufferedImage deadBirdImage14;
 		BufferedImage deadBirdImage15;
 		try {
-			deadBirdImage1 = ImageIO.read(new File("images/deadbird1.png"));
-			deadBirdImage2 = ImageIO.read(new File("images/deadbird1.png"));
-			deadBirdImage3 = ImageIO.read(new File("images/deadbird1.png"));
-			deadBirdImage4 = ImageIO.read(new File("images/deadbird1.png"));
-			deadBirdImage5 = ImageIO.read(new File("images/deadbird1.png"));
-			deadBirdImage6 = ImageIO.read(new File("images/deadbird2.png"));
-			deadBirdImage7 = ImageIO.read(new File("images/deadbird2.png"));
-			deadBirdImage8 = ImageIO.read(new File("images/deadbird2.png"));
-			deadBirdImage9 = ImageIO.read(new File("images/deadbird2.png"));
-			deadBirdImage10 = ImageIO.read(new File("images/deadbird2.png"));
-			deadBirdImage11 = ImageIO.read(new File("images/deadbird3.png"));
-			deadBirdImage12 = ImageIO.read(new File("images/deadbird3.png"));
-			deadBirdImage13 = ImageIO.read(new File("images/deadbird3.png"));
-			deadBirdImage14 = ImageIO.read(new File("images/deadbird3.png"));
-			deadBirdImage15 = ImageIO.read(new File("images/deadbird3.png"));
+			deadBirdImage1 = ImageIO.read(new File("deadbird1.png"));
+			deadBirdImage2 = ImageIO.read(new File("deadbird1.png"));
+			deadBirdImage3 = ImageIO.read(new File("deadbird1.png"));
+			deadBirdImage4 = ImageIO.read(new File("deadbird1.png"));
+			deadBirdImage5 = ImageIO.read(new File("deadbird1.png"));
+			deadBirdImage6 = ImageIO.read(new File("deadbird2.png"));
+			deadBirdImage7 = ImageIO.read(new File("deadbird2.png"));
+			deadBirdImage8 = ImageIO.read(new File("deadbird2.png"));
+			deadBirdImage9 = ImageIO.read(new File("deadbird2.png"));
+			deadBirdImage10 = ImageIO.read(new File("deadbird2.png"));
+			deadBirdImage11 = ImageIO.read(new File("deadbird3.png"));
+			deadBirdImage12 = ImageIO.read(new File("deadbird3.png"));
+			deadBirdImage13 = ImageIO.read(new File("deadbird3.png"));
+			deadBirdImage14 = ImageIO.read(new File("deadbird3.png"));
+			deadBirdImage15 = ImageIO.read(new File("deadbird3.png"));
 			List<BufferedImage> deadBirdList = new ArrayList<BufferedImage>();
 			deadBirdList.add(deadBirdImage1);
 			deadBirdList.add(deadBirdImage2);
@@ -395,7 +395,7 @@ public class Animation extends JPanel implements Serializable{
 	public void tombStone() {
 		BufferedImage tomb;
 		try {
-			tomb = ImageIO.read(new File("images/tomb.png"));
+			tomb = ImageIO.read(new File("tomb.png"));
 			List<BufferedImage> tombList = new ArrayList<BufferedImage>();
 			tombList.add(tomb);
 			AniObject tombObject = new AniObject("tomb", 525, 200, 200, 250, tombList);
@@ -409,12 +409,12 @@ public class Animation extends JPanel implements Serializable{
 
 	void addMaggie(int xLoc, int yLoc, int sizeX, int sizeY) {
 		try {
-			BufferedImage maggie1 = ImageIO.read(new File("images/maggie1.png"));
-			BufferedImage maggie2 = ImageIO.read(new File("images/maggie2.png"));
-			BufferedImage maggie3 = ImageIO.read(new File("images/maggie3.png"));
-			BufferedImage maggie4 = ImageIO.read(new File("images/maggie4.png"));
-			BufferedImage maggie5 = ImageIO.read(new File("images/maggie5.png"));
-			BufferedImage maggie6 = ImageIO.read(new File("images/maggie6.png"));
+			BufferedImage maggie1 = ImageIO.read(new File("maggie1.png"));
+			BufferedImage maggie2 = ImageIO.read(new File("maggie2.png"));
+			BufferedImage maggie3 = ImageIO.read(new File("maggie3.png"));
+			BufferedImage maggie4 = ImageIO.read(new File("maggie4.png"));
+			BufferedImage maggie5 = ImageIO.read(new File("maggie5.png"));
+			BufferedImage maggie6 = ImageIO.read(new File("maggie6.png"));
 			List<BufferedImage> maggieList = new ArrayList<BufferedImage>();
 			maggieList.add(maggie1);
 			maggieList.add(maggie1);
@@ -452,7 +452,7 @@ public class Animation extends JPanel implements Serializable{
 	
 	void addQuestionmark(int xLoc, int yLoc, int sizeX, int sizeY) {
 		try {
-			BufferedImage questionmark = ImageIO.read(new File("images/questionMark2.png"));
+			BufferedImage questionmark = ImageIO.read(new File("questionMark2.png"));
 			List<BufferedImage> qmList = new ArrayList<BufferedImage>();
 			qmList.add(questionmark);
 			AniObject qmObject = new AniObject("qm", xLoc, yLoc, sizeX, sizeY, qmList);
@@ -478,7 +478,7 @@ public class Animation extends JPanel implements Serializable{
 	}
 	
 	public ImageIcon getChestIcon(){
-		ImageIcon chest = new ImageIcon("images/chest.png");
+		ImageIcon chest = new ImageIcon("chest.png");
 		Image chestImage = chest.getImage();
 		Image resizedChest = chestImage.getScaledInstance( 200, 200,  java.awt.Image.SCALE_SMOOTH ) ;  
 		return new ImageIcon(resizedChest);

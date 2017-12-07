@@ -85,7 +85,7 @@ public class Controller implements Serializable, ActionListener {
 		checkTimersTimer = new Timer(1000, this);
 		checkTimersTimer.start();
 		//Declare a new JPanel
-		JPanel startPanel = new JPanel();
+		JPanel startPanel = new JSIPanel();
 		//Set its layout manager to GridBag
 		startPanel.setLayout(new GridBagLayout());
 		
@@ -239,7 +239,7 @@ public class Controller implements Serializable, ActionListener {
 	}
 	
 	public void DisplayInstructions(){
-		JPanel instructionPanel = new JPanel();
+		JPanel instructionPanel = new JSIPanel();
 		instructionPanel.setLayout(new GridBagLayout());
 		GridBagConstraints constraints = constraintFactory();
 		
@@ -285,7 +285,7 @@ public class Controller implements Serializable, ActionListener {
 				itrRemove.remove();
 			}
 		}
-		JPanel difficultyPanel = new JPanel();
+		JPanel difficultyPanel = new JSIPanel();
 		difficultyPanel.setLayout(new GridBagLayout());
 		
 		

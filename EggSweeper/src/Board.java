@@ -298,7 +298,7 @@ public class Board implements Serializable {
 			String question = "";
 			StringBuilder qNum = new StringBuilder(); // string builder for the question number
 			qNum.append("Q"); //marker for questions
-			File questionsFile = new File("questions/powerQuestions.txt");
+			File questionsFile = new File("powerQuestions.txt");
 			int questionNum = generateQuestionNum(totalQuestions);
 			while (questionNumsAsked.contains(questionNum)) {
 				questionNum = generateQuestionNum(totalQuestions);
@@ -358,7 +358,7 @@ public class Board implements Serializable {
 			caNum.append("CA"); //marker for questions
 			caNum.append(questionNum);
 			caNum.append(":");
-			File questionsFile = new File("questions/answers.txt");
+			File questionsFile = new File("answers.txt");
 			try {
 				Scanner fn = new Scanner (questionsFile);
 				while(fn.hasNextLine()) {
