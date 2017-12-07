@@ -261,10 +261,13 @@ public class Controller implements Serializable, ActionListener {
 	        }
 	    );
 		
-		JTextArea instructions = new JTextArea("Help the Red Knot find Horseshoe Crab eggs on the\nbeach so it has enough energy to make it to the arctic\ncirlce to have babies!\n\n"
-				+ "Follow the question marks to find items and click\n the treasure chest to answer questions for a power up!");
-		instructions.setFont(new Font("Arial", Font.PLAIN, 40));
-		instructions.setEditable(false);
+		ImageIcon i = new ImageIcon("images/instructions.png");
+		Image image = i.getImage();
+		Image newimg = image.getScaledInstance(frame.getWidth()/2, frame.getHeight()/2, Image.SCALE_SMOOTH);
+		i = new ImageIcon(newimg);
+		JLabel instructions = new JLabel();
+		instructions.setIcon(i);
+		instructions.setSize(new Dimension(100,100));
 		
 		constraints.gridx = 0;
 		constraints.gridy = 0;
