@@ -46,6 +46,7 @@ public class Controller implements Serializable, ActionListener {
 	PowerUpTimer powerUpTimer;
 	GameBoardTimer gameBoardTimer;
 	Timer checkTimersTimer;
+	Board dummyBoard;
 	
 	// The View
 	JFrame frame;
@@ -60,6 +61,9 @@ public class Controller implements Serializable, ActionListener {
 	JLabel aniLabel = new JLabel("A Red Knot migrating from South America to the Arctic stops in the Delaware Bay to refuel on Horseshoe Crab eggs. ");
 	JLabel timerLabel = new JLabel("");
 	List<Helper> helpers;
+	boolean tutorialFoundTrash = false;
+	boolean tutorialFoundEgg = false;
+	boolean finishedTutorial = false;
 	
 	
 	private GridBagConstraints constraintFactory() {
@@ -162,7 +166,7 @@ public class Controller implements Serializable, ActionListener {
 		
 		ImageIcon background = new ImageIcon("images/homeBackground.png");
 		Image backImage = background.getImage();
-		Image resizedBack = backImage.getScaledInstance( 1200, 900,  java.awt.Image.SCALE_SMOOTH ) ; 
+		Image resizedBack = backImage.getScaledInstance( frame.getWidth(), frame.getHeight(),  java.awt.Image.SCALE_SMOOTH ) ; 
 		JLabel backgroundImage = new JLabel(new ImageIcon(resizedBack));
 		startPanel.add(backgroundImage, constraints, 1);
 		
@@ -415,6 +419,7 @@ public class Controller implements Serializable, ActionListener {
 	        	frame.getContentPane().repaint();
         		// when clicked picks character and difficulty
         		gameBoard = new Board(Difficulty.EASY);
+        		dummyBoard = new Board(Difficulty.EASY);
         		player = new Player(Bird.DUNLIN);
         		animation.migrationAnimation();
 	        }
@@ -425,6 +430,7 @@ public class Controller implements Serializable, ActionListener {
 	        	frame.getContentPane().revalidate();
 	        	frame.getContentPane().repaint();
 	        	gameBoard = new Board(Difficulty.MEDIUM);
+	        	dummyBoard = new Board(Difficulty.MEDIUM);
 	        	player = new Player(Bird.SANDPIPER); 
 	        	animation.migrationAnimation();
 	        }
@@ -436,6 +442,7 @@ public class Controller implements Serializable, ActionListener {
 	        	frame.getContentPane().revalidate();
 	        	frame.getContentPane().repaint();
 	        	gameBoard = new Board(Difficulty.HARD);
+	        	dummyBoard = new Board(Difficulty.HARD);
 	        	player = new Player(Bird.REDKNOT);
 	        	animation.migrationAnimation();
 	        }
@@ -776,6 +783,344 @@ public class Controller implements Serializable, ActionListener {
 		});
 		
 	}
+	//-----------------------------------------------------------------------------------------------------------------------------------
+	void tutorial() {
+		JPanel tutorialPanel = new JPanel();
+		tutorialPanel.setLayout(new GridBagLayout());
+		GridBagConstraints constraints = constraintFactory();
+		
+		constraints.gridx = 1;
+		constraints.gridy = 1;
+		constraints.anchor = GridBagConstraints.EAST;
+		
+		JButton skipButton = new JButton("Skip Tutorial");
+		skipButton.addActionListener((ActionEvent a)->{
+			buildBoard();
+		});
+		tutorialPanel.add(skipButton, constraints, 0);
+		
+		constraints.gridx = 1;
+		constraints.gridy = 2;
+		constraints.anchor = GridBagConstraints.EAST;
+		
+		JLabel score = new JLabel("Press any square to find eggs!");
+		score.setFont(new Font("Arial", Font.PLAIN, 40));
+		tutorialPanel.add(score, constraints);
+		
+		constraints.gridx = 1;
+		constraints.gridy = 3;
+		constraints.anchor = GridBagConstraints.EAST;
+		
+		timerLabel.setFont(new Font("Arial", Font.PLAIN, 40));
+		timerLabel.setText("EggSweeper");
+		tutorialPanel.add(timerLabel, constraints);
+		
+//		JButton save = new JButton("Save");
+//		save.setFont(new Font("Arial", Font.PLAIN, 30));
+//		save.setFocusable(false);
+//		save.setVisible(true);
+//		boardPanel.add(save,constraints);
+//		save.addActionListener((ActionEvent a)->{
+//			Load.SaveGame(this);
+//		});
+		
+		AniObject bird = null;
+		AniObject board = null;
+		Iterator<AniObject> boardItr = animation.getImages().iterator();
+		while (boardItr.hasNext()) {
+			AniObject next = boardItr.next();
+			if (next.toString().compareToIgnoreCase("board") == 0  || next.toString().compareToIgnoreCase("beach") == 0 || 
+					next.toString().compareToIgnoreCase("grass1") == 0 || next.toString().compareToIgnoreCase("grass2") == 0 ||
+					next.toString().compareToIgnoreCase("grass3") == 0 || next.toString().compareToIgnoreCase("grass4") == 0 || 
+					next.toString().compareToIgnoreCase("grass5") == 0 || next.toString().compareToIgnoreCase("grass6") == 0 || 
+					next.toString().compareToIgnoreCase("grass7") == 0 || next.toString().compareToIgnoreCase("grass8") == 0 || 
+					next.toString().compareToIgnoreCase("grass9") == 0 || next.toString().compareToIgnoreCase("grass10") == 0) { 
+				next.setVisible(true);
+			}
+			if (next.toString().compareToIgnoreCase("bird") == 0) {
+				bird = next;
+			}
+			if (next.toString().compareToIgnoreCase("board") == 0) {
+				board = next;
+			}
+		}
+		
+		double birdRatio = getSizeRatio(bird.getY(), board);
+		bird.setSize(birdRatio);
+		Point mouseLoc = MouseInfo.getPointerInfo().getLocation();
+		bird.setX((int) Math.round(mouseLoc.getX() + 3 - bird.getYSize()/4.5));
+		bird.setY((int) Math.round(mouseLoc.getY() - 31 - bird.getYSize()/1.8));
+		
+		final AniObject birdMouse = bird;
+		final AniObject boardMouse = board;
+		
+		constraints.gridx = 1;
+		constraints.gridy = 4;
+		constraints.anchor = GridBagConstraints.EAST;
+    		
+		JLabel ateSomeHolder = new JLabel(" ");
+		ateSomeHolder.setFont(new Font("Arial", Font.PLAIN, 40));
+		tutorialPanel.add(ateSomeHolder, constraints);
+		
+		constraints.gridx = 1;
+		constraints.gridy = 5;
+		constraints.anchor = GridBagConstraints.EAST;
+		JButton chestButton = new JButton();
+		chestButton.setPreferredSize(new Dimension(200, 200));
+		chestButton.setContentAreaFilled(false);
+		chestButton.setVisible(true);
+		chestButton.setBorderPainted(false);
+		chestButton.addMouseMotionListener(new MouseMotionListener() {
+
+			@Override
+			public void mouseDragged(MouseEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void mouseMoved(MouseEvent e) {
+				birdMouse.setX( (int) Math.round(e.getX() + 5 - birdMouse.getYSize()/6.) + chestButton.getX());
+				birdMouse.setY((int) Math.round(e.getY() - birdMouse.getYSize()/1.8) + chestButton.getY());
+				double newBirdRatio = getSizeRatio(birdMouse.getY(), boardMouse);
+				birdMouse.setSize(newBirdRatio);
+				frame.repaint();
+				
+			}
+			
+		});
+		chestButton.setEnabled(false);
+		tutorialPanel.add(chestButton, constraints, 0);
+		
+		cardPanel.add(tutorialPanel, "Tutorial");
+		screens.show(cardPanel, "Tutorial");
+		frame.validate();
+		frame.repaint();
+		
+		
+		frame.getContentPane().addMouseListener(new MouseListener() {
+		    @Override
+		    public void mouseClicked(MouseEvent e) {
+		    		int xLoc = e.getX();
+		        int yLoc = e.getY();
+		        int[] gridIndex = windowToGrid(xLoc, yLoc);
+		        int xIndex = gridIndex[0];
+		        int yIndex = gridIndex[1];
+		        if ((xIndex == -1) || (yIndex == -1)){
+		        	return;
+		        }
+		        else {
+		        	Item item = player.checkSpace(xIndex, yIndex, dummyBoard);
+		        	animation.addHole(gridIndex[2], gridIndex[3], gridIndex[4], gridIndex[5]);
+		        	
+		        	tutorialPanel.removeAll();
+		        	frame.validate();
+		        	frame.repaint();
+	                
+		        	constraints.gridx = 1;
+		    		constraints.gridy = 1;
+		    		constraints.anchor = GridBagConstraints.EAST;
+		    		
+		    		tutorialPanel.add(powerUpLabel, constraints);
+	                
+	        		constraints.gridx = 1;
+	        		constraints.gridy = 2;
+	        		constraints.anchor = GridBagConstraints.EAST;
+	        		
+	        		JLabel newScore = new JLabel("Play!");
+	        		newScore.setFont(new Font("Arial", Font.PLAIN, 40));
+	        		tutorialPanel.add(newScore, constraints);
+	        		
+	        		constraints.gridx = 1;
+	        		constraints.gridy = 3;
+	        		constraints.anchor = GridBagConstraints.EAST;
+
+	        		timerLabel.setFont(new Font("Arial", Font.PLAIN, 40));
+	        		tutorialPanel.add(timerLabel, constraints);
+	        		
+//	        		JButton save = new JButton("Save");
+//	        		save.setFocusable(false);
+//	        		save.setFont(new Font("Arial", Font.PLAIN, 30));
+//	        		save.setVisible(true);
+//	        		boardPanel.add(save,constraints);
+//	        		save.addActionListener((ActionEvent a)->{
+//	        			Load.SaveGame(thisController);
+//	        		});
+	        		
+	        		JLabel ateSome = new JLabel(" ");
+	        		Font ateFont = new Font("Arial", Font.PLAIN, 40);
+	        		final JLabel ateSomeRef = ateSome;
+	        		
+	        		constraints.gridx = 1;
+	        		constraints.gridy = 5;
+	        		constraints.anchor = GridBagConstraints.EAST;
+	        		
+	        		JButton chestButton = new JButton();
+	        		chestButton.addActionListener((ActionEvent a) -> {
+	        			String explanation = "Power up chests randomly pop up when you find eggs. This is the question screen which gives you the chance to get power ups if you answer the question correctly";
+	        			List<String> skips = new ArrayList<>();
+	        			skips.add("Press to start game");
+	        			skips.add("Press to start game");
+	        			skips.add("Press to start game");
+	        			skips.add("Press to start game");
+	        			questionScreenTutorial(explanation, skips);
+	        		});
+	        		chestButton.setPreferredSize(new Dimension(200, 200));
+	        		chestButton.setContentAreaFilled(false);
+	        		chestButton.setBorderPainted(false);
+	        		chestButton.setVisible(true);
+	        		
+	        		
+	        		chestButton.addMouseMotionListener(new MouseMotionListener() {
+
+	        			@Override
+	        			public void mouseDragged(MouseEvent arg0) {
+	        				// TODO Auto-generated method stub
+	        				
+	        			}
+
+	        			@Override
+	        			public void mouseMoved(MouseEvent e) {
+	        				birdMouse.setX( (int) Math.round(e.getX() + 5 - birdMouse.getYSize()/6.) + chestButton.getX());
+	        				birdMouse.setY((int) Math.round(e.getY() - birdMouse.getYSize()/1.8) + chestButton.getY());
+	        				double newBirdRatio = getSizeRatio(birdMouse.getY(), boardMouse);
+	        				birdMouse.setSize(newBirdRatio);
+	        				frame.repaint();
+	        				
+	        			}
+	        			
+	        		});
+	        		
+	        		tutorialPanel.add(chestButton, constraints);
+	        		if(!tutorialFoundTrash) {
+	        			item = Item.TRASH;
+	        			tutorialFoundTrash = true;
+	        		} 
+	        		else if(tutorialFoundTrash && !tutorialFoundEgg) {
+	        			item = Item.EGG;
+	        			tutorialFoundEgg = true;
+	        		}
+	        		if(tutorialFoundTrash == true && tutorialFoundEgg == true) {
+	        			item = Item.EGG;
+	        			chestButton.setEnabled(true);
+	        			newScore.setText("A power up chest appeared. Click on it!");
+	        		}
+	        		if (item == Item.EGG) {
+	        			int mult = player.getEggMultiplier();
+	        			animation.scoreImage(gridIndex[2], gridIndex[3], gridIndex[4], gridIndex[5], "plus", mult);
+	        			if (mult == 1) {
+	        				birdMouse.incScoreSize(10);
+	        			}
+	        			else if (mult == 2){
+	        				birdMouse.incScoreSize(20);
+	        			}
+	        			newScore.setText("Congrats! You gain points for finding eggs. Click another square.");
+		        		ateSome.setText("You Found and egg!! ");
+		        		ateSome.setFont(ateFont);
+		        		frame.getContentPane().add(ateSome, 0);
+		        		constraints.gridx = 1;
+		        		constraints.gridy = 4;
+		        		constraints.anchor = GridBagConstraints.EAST;
+		        		tutorialPanel.add(ateSome, constraints);
+		        		if (5 < 6 && player.hasPowerUp() == false) {
+		        			chestButton.setIcon(animation.getChestIcon());
+		                	chestButton.setEnabled(true);
+		        		}
+	        		}
+	        		else if (item == Item.ALREADYCHECKED) {
+		        		ateSome = new JLabel("Already looked there ");
+		        		ateSome.setFont(ateFont);
+		        		constraints.gridx = 1;
+		        		constraints.gridy = 4;
+		        		constraints.anchor = GridBagConstraints.EAST;
+		        		tutorialPanel.add(ateSome, constraints);
+	        		}
+	        		else {
+	        			if (item == Item.TRASH) {
+	        				newScore.setText("Ooops you lose points for eating trash. Click on one of the '?' squares. They will have either an egg or trash.");
+	        				animation.scoreImage(gridIndex[2], gridIndex[3], gridIndex[4], gridIndex[5], "minus", 1);
+	        				birdMouse.decScoreSize();
+			        		ateSome.setText("Ate Some Trash :( ");
+			        		ateSome.setFont(ateFont);
+			        		constraints.gridx = 1;
+			        		constraints.gridy = 4;
+			        		constraints.anchor = GridBagConstraints.EAST;
+			        		tutorialPanel.add(ateSome, constraints);
+		        		}
+		        		
+	        			else if (item == Item.EMPTY) {
+	        				newScore.setText("You did not lose any points. Click on one of the '?' squares. They will have either an egg or trash.");
+			        		ateSome.setText("Nothing there ");
+			        		ateSome.setFont(ateFont);
+			        		constraints.gridx = 1;
+			        		constraints.gridy = 4;
+			        		constraints.anchor = GridBagConstraints.EAST;
+			        		tutorialPanel.add(ateSome, constraints);
+		        		}
+	        			
+	        			List<Direction> dirList = gameBoard.getAdjacentItemGridDirections(xIndex, yIndex);
+	        			Collections.shuffle(dirList);
+	        			for(int count = 0; count < dirList.size() && count < 3; count++) {
+	        				Direction d = dirList.get(count);
+	        				System.out.println(String.format("Item at Direction:%s", d.name()));
+	        				String loc_disp = String.format("This Location: (%d,%d) That Location: (%d,%d)", xIndex, yIndex, xIndex + gameBoard.convertXDim(d), yIndex + gameBoard.convertYDim(d));
+	        				System.out.println(loc_disp);
+	        				int[] dims = indexSizePos(xIndex + gameBoard.convertXDim(d),yIndex + gameBoard.convertYDim(d));
+	        				animation.addQuestionmark(dims[0], dims[1], dims[2], dims[3]);
+	        			}
+	        			
+	        		}      		
+
+	        		frame.validate();
+		        }
+		        
+		    }
+
+			@Override
+			public void mouseEntered(MouseEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void mouseExited(MouseEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void mousePressed(MouseEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void mouseReleased(MouseEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
+		
+		frame.getContentPane().addMouseMotionListener(new MouseMotionListener() {
+
+			@Override
+			public void mouseDragged(MouseEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void mouseMoved(MouseEvent e) {
+				birdMouse.setX( (int) Math.round(e.getX() + 5 - birdMouse.getYSize()/6.));
+				birdMouse.setY((int) Math.round(e.getY() - birdMouse.getYSize()/1.8));
+				double newBirdRatio = getSizeRatio(birdMouse.getY(), boardMouse);
+				birdMouse.setSize(newBirdRatio);
+				frame.repaint();
+				
+			}
+			
+		});
+	}
 	
 	static double getSizeRatio(int yLoc, AniObject boardImage) {
 		double ratio;
@@ -1044,6 +1389,29 @@ public class Controller implements Serializable, ActionListener {
 
 	}
 	
+	private void questionScreenTutorial(String question, List<String> possibleAns) {
+		JPanel questionPanel = new JPanel();
+		questionPanel.setLayout(new GridLayout(6,0));
+		
+		JLabel questionLabel = new JLabel(question);
+		questionLabel.setFont(new Font("Arial", Font.PLAIN, 40));
+		questionLabel.setHorizontalAlignment(JLabel.CENTER);
+		
+		questionPanel.add(questionLabel);
+		for(String answer: possibleAns) {
+			JButton possibleAnswerButton = createAnswerButtonTutorial(answer);
+			possibleAnswerButton.setFont(new Font("Arial", Font.PLAIN, 30));
+			possibleAnswerButton.setFocusable(false);
+			questionPanel.add(possibleAnswerButton);
+		}
+		cardPanel.add(questionPanel, "PowerUpTutorial");
+		screens.show(cardPanel, "PowerUpTutorial");
+		hideImages();
+		frame.validate();
+		frame.repaint();
+
+	}
+	
 	private void checkTimers() {
 		if(powerUpTimer != null) {
 			boolean timeElapsed = powerUpTimer.isTimesUp();
@@ -1177,6 +1545,7 @@ public class Controller implements Serializable, ActionListener {
 				}
 			}
 		}
+		//removes us from board
 		else if (controller.tickStage == 1) {
 			controller.tickStage = 2;
 			Iterator<AniObject> itrRemove = animation.getImages().iterator();
@@ -1186,8 +1555,9 @@ public class Controller implements Serializable, ActionListener {
 					itrRemove.remove();
 				}
 			}
-			controller.buildBoard();
+			controller.tutorial();
 		}
+		//bottle and horseshoe crab animation
 		else if (controller.tickStage == 2) {
 			Iterator<AniObject> scoreImageItr = animation.getImages().iterator();
 			while (scoreImageItr.hasNext()) {
@@ -1203,6 +1573,7 @@ public class Controller implements Serializable, ActionListener {
 				}
 			}
 		}
+		//second migration animation stuff
 		else if (controller.tickStage == 3) {
 			Iterator<AniObject> itrMigration2 = animation.getImages().iterator();
 			while (itrMigration2.hasNext()) {
@@ -1229,6 +1600,7 @@ public class Controller implements Serializable, ActionListener {
 				}
 			}
 		}
+		//won
 		else if (controller.tickStage == 4) {
 			
 			Iterator<AniObject> itrEgg = animation.getImages().iterator();
@@ -1241,6 +1613,7 @@ public class Controller implements Serializable, ActionListener {
 				}
 			}
 		}
+		//lost
 		else if (controller.tickStage == 5) {
 			Iterator<AniObject> itrMigration2 = animation.getImages().iterator();
 			while (itrMigration2.hasNext()) {
@@ -1265,6 +1638,7 @@ public class Controller implements Serializable, ActionListener {
 				}
 			}
 		}
+		//lose
 		else if (controller.tickStage == 6) {
 			boolean tombStoneAni = false;
 			Iterator<AniObject> itrDeadBird = animation.getImages().iterator();
@@ -1276,6 +1650,7 @@ public class Controller implements Serializable, ActionListener {
 					}
 				}
 			}
+			//stop
 			if (tombStoneAni == true) {
 				animation.tombStone();
 				controller.tickStage = 7;
@@ -1297,6 +1672,14 @@ public class Controller implements Serializable, ActionListener {
 	private void hideImages() {
 		for(AniObject object: animation.getImages()) {
 			object.setVisible(false);
+		}
+	}
+	
+	private void showBird() {
+		for (AniObject object: animation.getImages()) {
+			if(object.toString().equalsIgnoreCase("bird")) {
+				object.setVisible(true);
+			}
 		}
 	}
 	
@@ -1343,6 +1726,18 @@ public class Controller implements Serializable, ActionListener {
 		return possibleAnswer;
 	}
 	
+	private JButton createAnswerButtonTutorial(String answer) {
+		JButton possibleAnswer = new JButton(answer);
+		possibleAnswer.addActionListener((ActionEvent a)->{
+			showBird();
+			player = new Player(Bird.REDKNOT);
+			gameBoard = new Board(gameBoard.getDifficulty());
+			buildBoard();
+			
+		});
+		return possibleAnswer;
+	}
+	
 	private JPanel setUpCorrectAnswerPanel() {
 		JPanel correctAnswerPanel = new JPanel();
 		correctAnswerPanel.setLayout(new GridLayout(3,1));
@@ -1373,9 +1768,10 @@ public class Controller implements Serializable, ActionListener {
        	cont.frame = new JFrame();
        	//cont.frame.setPreferredSize(new Dimension(1000,1000));
        	cont.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+       	cont.frame.setResizable(true);
 	  	cont.animation = new Animation();
 	  	cont.animation.setVisible(true);
-	  	cont.frame.getContentPane().add(cont.animation);
+	  	cont.frame.add(cont.animation);
 	  	cont.frame.pack();
 	  	cont.frame.setVisible(true);
 	  	cont.cardPanel = new JPanel();
