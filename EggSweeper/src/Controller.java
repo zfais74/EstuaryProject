@@ -385,7 +385,7 @@ public class Controller implements Serializable, ActionListener {
 		constraints.gridheight = 10;
 		ImageIcon background = new ImageIcon("images/homeBackground.png");
 		Image backImage = background.getImage();
-		Image resizedBack = backImage.getScaledInstance( 1200, 900,  java.awt.Image.SCALE_SMOOTH ) ; 
+		Image resizedBack = backImage.getScaledInstance(frame.getWidth(), frame.getHeight(),  java.awt.Image.SCALE_SMOOTH ) ; 
 		JLabel backgroundImage = new JLabel(new ImageIcon(resizedBack));
 		difficultyPanel.add(backgroundImage, constraints, 1);
 		
@@ -794,7 +794,20 @@ public class Controller implements Serializable, ActionListener {
 		constraints.anchor = GridBagConstraints.EAST;
 		
 		JButton skipButton = new JButton("Skip Tutorial");
+		skipButton.setFont(new Font("Arial", Font.PLAIN, 40));
 		skipButton.addActionListener((ActionEvent a)->{
+			Iterator<AniObject> itrRemove = animation.getImages().iterator();
+			while (itrRemove.hasNext()) {
+				AniObject aniObjectRemove = itrRemove.next();
+				if (aniObjectRemove.toString().compareToIgnoreCase("hole") == 0 || aniObjectRemove.toString().compareToIgnoreCase("qm") == 0) {
+					itrRemove.remove();
+				}
+				if (aniObjectRemove.toString().compareToIgnoreCase("beach") == 0) {
+					aniObjectRemove.setImage(animation.getTutorialImage(5));
+				}
+			}
+			frame.getContentPane().removeMouseListener(frame.getContentPane().getMouseListeners()[0]);
+			frame.getContentPane().removeMouseMotionListener(frame.getContentPane().getMouseMotionListeners()[0]);
 			buildBoard();
 		});
 		tutorialPanel.add(skipButton, constraints, 0);
@@ -803,7 +816,7 @@ public class Controller implements Serializable, ActionListener {
 		constraints.gridy = 2;
 		constraints.anchor = GridBagConstraints.EAST;
 		
-		JLabel score = new JLabel("Press any square to find eggs!");
+		JLabel score = new JLabel(" ");
 		score.setFont(new Font("Arial", Font.PLAIN, 40));
 		tutorialPanel.add(score, constraints);
 		
@@ -836,6 +849,9 @@ public class Controller implements Serializable, ActionListener {
 					next.toString().compareToIgnoreCase("grass7") == 0 || next.toString().compareToIgnoreCase("grass8") == 0 || 
 					next.toString().compareToIgnoreCase("grass9") == 0 || next.toString().compareToIgnoreCase("grass10") == 0) { 
 				next.setVisible(true);
+			if (next.toString().compareToIgnoreCase("beach") == 0) {
+				next.setImage(animation.getTutorialImage(1));
+			}
 			}
 			if (next.toString().compareToIgnoreCase("bird") == 0) {
 				bird = next;
@@ -910,7 +926,6 @@ public class Controller implements Serializable, ActionListener {
 		        	return;
 		        }
 		        else {
-		        	Item item = player.checkSpace(xIndex, yIndex, dummyBoard);
 		        	animation.addHole(gridIndex[2], gridIndex[3], gridIndex[4], gridIndex[5]);
 		        	
 		        	tutorialPanel.removeAll();
@@ -921,13 +936,34 @@ public class Controller implements Serializable, ActionListener {
 		    		constraints.gridy = 1;
 		    		constraints.anchor = GridBagConstraints.EAST;
 		    		
-		    		tutorialPanel.add(powerUpLabel, constraints);
+		    		constraints.gridx = 1;
+		    		constraints.gridy = 1;
+		    		constraints.anchor = GridBagConstraints.EAST;
+		    		
+		    		JButton skipButton = new JButton("Skip Tutorial");
+		    		skipButton.setFont(new Font("Arial", Font.PLAIN, 40));
+		    		skipButton.addActionListener((ActionEvent a)->{
+		    			Iterator<AniObject> itrRemove = animation.getImages().iterator();
+		    			while (itrRemove.hasNext()) {
+		    				AniObject aniObjectRemove = itrRemove.next();
+		    				if (aniObjectRemove.toString().compareToIgnoreCase("hole") == 0 || aniObjectRemove.toString().compareToIgnoreCase("qm") == 0) {
+		    					itrRemove.remove();
+		    				}
+		    				if (aniObjectRemove.toString().compareToIgnoreCase("beach") == 0) {
+		    					aniObjectRemove.setImage(animation.getTutorialImage(5));
+		    				}
+		    			}
+		    			frame.getContentPane().removeMouseListener(frame.getContentPane().getMouseListeners()[0]);
+		    			frame.getContentPane().removeMouseMotionListener(frame.getContentPane().getMouseMotionListeners()[0]);
+		    			buildBoard();
+		    		});
+		    		tutorialPanel.add(skipButton, constraints, 0);
 	                
 	        		constraints.gridx = 1;
 	        		constraints.gridy = 2;
 	        		constraints.anchor = GridBagConstraints.EAST;
 	        		
-	        		JLabel newScore = new JLabel("Play!");
+	        		JLabel newScore = new JLabel(" ");
 	        		newScore.setFont(new Font("Arial", Font.PLAIN, 40));
 	        		tutorialPanel.add(newScore, constraints);
 	        		
@@ -956,8 +992,14 @@ public class Controller implements Serializable, ActionListener {
 	        		constraints.anchor = GridBagConstraints.EAST;
 	        		
 	        		JButton chestButton = new JButton();
+	        		chestButton.setPreferredSize(new Dimension(200, 200));
+	        		chestButton.setContentAreaFilled(false);
+	        		chestButton.setBorderPainted(false);
+	        		chestButton.setVisible(true);
+	        		chestButton.setIcon(animation.getTransChestIcon());
+                	chestButton.setEnabled(false);
 	        		chestButton.addActionListener((ActionEvent a) -> {
-	        			String explanation = "Power up chests randomly pop up when you find eggs. This is the question screen which gives you the chance to get power ups if you answer the question correctly";
+	        			String explanation = "<html>Power up chests randomly pop up when you find eggs. This is the question screen<br/>which gives you the chance to get power ups if you answer the question correctly</html>";
 	        			List<String> skips = new ArrayList<>();
 	        			skips.add("Press to start game");
 	        			skips.add("Press to start game");
@@ -965,12 +1007,7 @@ public class Controller implements Serializable, ActionListener {
 	        			skips.add("Press to start game");
 	        			questionScreenTutorial(explanation, skips);
 	        		});
-	        		chestButton.setPreferredSize(new Dimension(200, 200));
-	        		chestButton.setContentAreaFilled(false);
-	        		chestButton.setBorderPainted(false);
-	        		chestButton.setVisible(true);
-	        		
-	        		
+        		
 	        		chestButton.addMouseMotionListener(new MouseMotionListener() {
 
 	        			@Override
@@ -992,18 +1029,47 @@ public class Controller implements Serializable, ActionListener {
 	        		});
 	        		
 	        		tutorialPanel.add(chestButton, constraints);
-	        		if(!tutorialFoundTrash) {
-	        			item = Item.TRASH;
-	        			tutorialFoundTrash = true;
-	        		} 
-	        		else if(tutorialFoundTrash && !tutorialFoundEgg) {
-	        			item = Item.EGG;
-	        			tutorialFoundEgg = true;
+	        		
+	        		Item item = null;
+	        		if (gameBoard.getSpace(xIndex, yIndex).getItem() == Item.ALREADYCHECKED) {
+	        			item = Item.ALREADYCHECKED;
 	        		}
-	        		if(tutorialFoundTrash == true && tutorialFoundEgg == true) {
-	        			item = Item.EGG;
-	        			chestButton.setEnabled(true);
-	        			newScore.setText("A power up chest appeared. Click on it!");
+	        		else {
+	        			gameBoard.setSpace(xIndex, yIndex, new GridSpace(Item.ALREADYCHECKED));
+	        			if(!tutorialFoundTrash) {
+	        				Iterator<AniObject> boardItr = animation.getImages().iterator();
+	        				while (boardItr.hasNext()) {
+	        					AniObject next = boardItr.next();
+	        					if (next.toString().compareToIgnoreCase("beach") == 0) {
+	        						next.setImage(animation.getTutorialImage(2));
+	        					}
+	        				}
+		        			item = Item.TRASH;
+		        			tutorialFoundTrash = true;
+		        		} 
+		        		else if(tutorialFoundTrash == true && tutorialFoundEgg == true) {
+		        			item = Item.EGG;
+		        			Iterator<AniObject> boardItr = animation.getImages().iterator();
+		        			while (boardItr.hasNext()) {
+	        					AniObject next = boardItr.next();
+	        					if (next.toString().compareToIgnoreCase("beach") == 0) {
+	        						next.setImage(animation.getTutorialImage(4));
+	        					}
+	        				}
+		        			chestButton.setIcon(animation.getChestIcon());
+		                	chestButton.setEnabled(true);
+		        		}
+		        		else if(tutorialFoundTrash && !tutorialFoundEgg) {
+		        			Iterator<AniObject> boardItr = animation.getImages().iterator();
+	        				while (boardItr.hasNext()) {
+	        					AniObject next = boardItr.next();
+	        					if (next.toString().compareToIgnoreCase("beach") == 0) {
+	        						next.setImage(animation.getTutorialImage(3));
+	        					}
+	        				}
+		        			item = Item.EGG;
+		        			tutorialFoundEgg = true;
+		        		}
 	        		}
 	        		if (item == Item.EGG) {
 	        			int mult = player.getEggMultiplier();
@@ -1014,18 +1080,12 @@ public class Controller implements Serializable, ActionListener {
 	        			else if (mult == 2){
 	        				birdMouse.incScoreSize(20);
 	        			}
-	        			newScore.setText("Congrats! You gain points for finding eggs. Click another square.");
 		        		ateSome.setText("You Found and egg!! ");
 		        		ateSome.setFont(ateFont);
-		        		frame.getContentPane().add(ateSome, 0);
 		        		constraints.gridx = 1;
 		        		constraints.gridy = 4;
 		        		constraints.anchor = GridBagConstraints.EAST;
 		        		tutorialPanel.add(ateSome, constraints);
-		        		if (5 < 6 && player.hasPowerUp() == false) {
-		        			chestButton.setIcon(animation.getChestIcon());
-		                	chestButton.setEnabled(true);
-		        		}
 	        		}
 	        		else if (item == Item.ALREADYCHECKED) {
 		        		ateSome = new JLabel("Already looked there ");
@@ -1037,7 +1097,6 @@ public class Controller implements Serializable, ActionListener {
 	        		}
 	        		else {
 	        			if (item == Item.TRASH) {
-	        				newScore.setText("Ooops you lose points for eating trash. Click on one of the '?' squares. They will have either an egg or trash.");
 	        				animation.scoreImage(gridIndex[2], gridIndex[3], gridIndex[4], gridIndex[5], "minus", 1);
 	        				birdMouse.decScoreSize();
 			        		ateSome.setText("Ate Some Trash :( ");
@@ -1049,7 +1108,7 @@ public class Controller implements Serializable, ActionListener {
 		        		}
 		        		
 	        			else if (item == Item.EMPTY) {
-	        				newScore.setText("You did not lose any points. Click on one of the '?' squares. They will have either an egg or trash.");
+	        				newScore.setText(" ");
 			        		ateSome.setText("Nothing there ");
 			        		ateSome.setFont(ateFont);
 			        		constraints.gridx = 1;
@@ -1732,6 +1791,15 @@ public class Controller implements Serializable, ActionListener {
 	private JButton createAnswerButtonTutorial(String answer) {
 		JButton possibleAnswer = new JButton(answer);
 		possibleAnswer.addActionListener((ActionEvent a)->{
+			Iterator<AniObject> boardItr = animation.getImages().iterator();
+			while (boardItr.hasNext()) {
+				AniObject next = boardItr.next();
+				if (next.toString().compareToIgnoreCase("beach") == 0) {
+					next.setImage(animation.getTutorialImage(5));
+				}
+			}
+			frame.getContentPane().removeMouseListener(frame.getContentPane().getMouseListeners()[0]);
+			frame.getContentPane().removeMouseMotionListener(frame.getContentPane().getMouseMotionListeners()[0]);
 			showBird();
 			player = new Player(Bird.REDKNOT);
 			gameBoard = new Board(gameBoard.getDifficulty());

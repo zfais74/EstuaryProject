@@ -42,7 +42,7 @@ public class Animation extends JPanel implements Serializable{
 		images = new ArrayList<AniObject>();
 		this.setPreferredSize(new Dimension(ratioW, ratioH));
 		try {
-			BufferedImage beach = ImageIO.read(new File("images/beach.png"));
+			BufferedImage beach = ImageIO.read(new File("images/beach5.png"));
 			List<BufferedImage> beachList = new ArrayList<BufferedImage>();
 			beachList.add(beach);
 			images.add(new AniObject("beach", 0, 0, 1200, 900, beachList));
@@ -50,7 +50,7 @@ public class Animation extends JPanel implements Serializable{
 			System.out.println("Failed to load beach, trying bin folder");
 		}
 		try {
-			BufferedImage beach = ImageIO.read(new File("beach.png"));
+			BufferedImage beach = ImageIO.read(new File("beach5.png"));
 			List<BufferedImage> beachList = new ArrayList<BufferedImage>();
 			beachList.add(beach);
 			images.add(new AniObject("beach", 0, 0, 1200, 900, beachList));
@@ -79,7 +79,7 @@ public class Animation extends JPanel implements Serializable{
 		} catch (IOException e) {
 			System.out.println("Failed to load board");
 		}
-		
+
 		try {
 			BufferedImage grass = ImageIO.read(new File("images/grass.png"));
 			List<BufferedImage> grassList = new ArrayList<BufferedImage>();
@@ -117,11 +117,59 @@ public class Animation extends JPanel implements Serializable{
 		} catch (IOException e) {
 			System.out.println("Failed to load grass");
 		}
-		
+
 		return;
 		
 	}
 	
+	public BufferedImage getTutorialImage(int num) {
+		if (num == 1) {
+			BufferedImage beach1 = null;
+			try {
+				beach1 = ImageIO.read(new File("images/beach1.png"));
+			} catch (IOException e) {
+				System.out.println("Failed to load beach, trying bin folder");
+			}
+			return beach1;
+		}
+		else if (num == 2) {
+			BufferedImage beach2 = null;
+			try {
+				beach2 = ImageIO.read(new File("images/beach2.png"));
+			} catch (IOException e) {
+				System.out.println("Failed to load beach, trying bin folder");
+			}
+			return beach2;
+		}
+		else if (num == 3) {
+			BufferedImage beach3 = null;
+			try {
+				beach3 = ImageIO.read(new File("images/beach3.png"));
+			} catch (IOException e) {
+				System.out.println("Failed to load beach, trying bin folder");
+			}
+			return beach3;
+		}
+		else if (num == 4){
+			BufferedImage beach4 = null;
+			try {
+				beach4 = ImageIO.read(new File("images/beach4.png"));
+			} catch (IOException e) {
+				System.out.println("Failed to load beach, trying bin folder");
+			}
+			return beach4;
+		}
+		else {
+			BufferedImage beach5 = null;
+			try {
+				beach5 = ImageIO.read(new File("images/beach5.png"));
+			} catch (IOException e) {
+				System.out.println("Failed to load beach, trying bin folder");
+			}
+			return beach5;
+		}
+	}
+
 	public void paint(Graphics g) {
 		Iterator<AniObject> imageIterator = images.iterator();
 		while (imageIterator.hasNext()) {
@@ -159,7 +207,7 @@ public class Animation extends JPanel implements Serializable{
 		}
 		
 	}
-
+	
 	public void scoreImage(int xLoc, int yLoc, int sizeX, int sizeY, String plusOrMinus, int scoreMult) {
 		try {
 			if (plusOrMinus.compareToIgnoreCase("plus") == 0) {
@@ -179,7 +227,7 @@ public class Animation extends JPanel implements Serializable{
 					scoreObject.setVisible(true);
 					images.add(scoreObject);
 				}
-
+				
 			}
 			else if(plusOrMinus.compareToIgnoreCase("minus") == 0) {
 				BufferedImage minusOne = ImageIO.read(new File("bottle.png"));
@@ -193,8 +241,6 @@ public class Animation extends JPanel implements Serializable{
 		} catch (IOException e1) {
 			System.out.println("failed to load plusImage, trying bin folder");
 		}
-		
-		
 	}
 
 
@@ -218,11 +264,11 @@ public class Animation extends JPanel implements Serializable{
 			AniObject chestObject = new AniObject("chest", 1410, 600, 200, 200, chestList);
 			chestObject.setVisible(false);
 			images.add(chestObject);
-            
+
 		} catch (IOException e1) {
 			System.out.println("failed to load chest");
 		}
-		
+
 		return;
 	}
 
@@ -256,7 +302,7 @@ public class Animation extends JPanel implements Serializable{
 			AniObject USObject = new AniObject("US", 100, 100, 450, 600, USList);
 			USObject.setVisible(true);
 			images.add(USObject);
-			
+
 			BufferedImage bird1 = ImageIO.read(new File("bird1.png"));
 			BufferedImage bird2 = ImageIO.read(new File("bird2.png"));
 			BufferedImage bird3 = ImageIO.read(new File("bird3.png"));
@@ -298,7 +344,7 @@ public class Animation extends JPanel implements Serializable{
 			System.out.println("failed to load US or Bird, trying bin folder");
 		}
 	}
-
+	
 	public void layEgg() {
 		BufferedImage egg;
 		BufferedImage nest;
@@ -316,7 +362,7 @@ public class Animation extends JPanel implements Serializable{
 			AniObject eggObject = new AniObject("egg", 575, 280, 100, 100, eggList);
 			eggObject.setVisible(true);
 			images.add(eggObject);
-
+			
 			int i = images.size() - 1;
 			int j = 0;
 			Iterator<AniObject> eggBirdItr = images.iterator();
@@ -332,7 +378,7 @@ public class Animation extends JPanel implements Serializable{
 			e.printStackTrace();
 		}
 	}
-
+	
 	public void deadBird() {
 		BufferedImage deadBirdImage1;
 		BufferedImage deadBirdImage2;
@@ -391,7 +437,7 @@ public class Animation extends JPanel implements Serializable{
 			e.printStackTrace();
 		}
 	}
-
+	
 	public void tombStone() {
 		BufferedImage tomb;
 		try {
@@ -406,7 +452,7 @@ public class Animation extends JPanel implements Serializable{
 			e.printStackTrace();
 		}
 	}
-
+	
 	void addMaggie(int xLoc, int yLoc, int sizeX, int sizeY) {
 		try {
 			BufferedImage maggie1 = ImageIO.read(new File("maggie1.png"));
@@ -481,6 +527,13 @@ public class Animation extends JPanel implements Serializable{
 		ImageIcon chest = new ImageIcon("chest.png");
 		Image chestImage = chest.getImage();
 		Image resizedChest = chestImage.getScaledInstance( 200, 200,  java.awt.Image.SCALE_SMOOTH ) ;  
+		return new ImageIcon(resizedChest);
+	}
+
+	public ImageIcon getTransChestIcon(){
+		ImageIcon chest = new ImageIcon("chestTrans.png");
+		Image chestImage = chest.getImage();
+		Image resizedChest = chestImage.getScaledInstance( 200, 200,  java.awt.Image.SCALE_SMOOTH ) ;
 		return new ImageIcon(resizedChest);
 	}
 
