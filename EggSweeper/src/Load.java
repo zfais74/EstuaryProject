@@ -1,6 +1,11 @@
 import java.io.*;
 
 public class Load {
+    /**
+     * Save the game status to savedata.ser using Serializable
+     * 
+     * @param cont
+     */
     public static void SaveGame(Controller cont){//everything but buffered image
         try
         {
@@ -15,6 +20,9 @@ public class Load {
             System.out.print("Exception thrown while saving game" + ex.toString());
         }
     }
+    /**
+     * Load the game from savedata.ser using Serializable
+     */
     public static void LoadGame(){
         try
         {

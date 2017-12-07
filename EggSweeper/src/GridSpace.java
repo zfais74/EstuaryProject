@@ -17,6 +17,11 @@ public class GridSpace implements Serializable {
 	private boolean isCovered = true;
 	
 	// constructor
+	/**
+	 * A GridSpace constructor to create a new GridSpace object
+	 * 
+	 * @param item
+	 */
 	GridSpace(Item item) {
 		contents = item;
 	}
@@ -29,6 +34,10 @@ public class GridSpace implements Serializable {
 		return this.contents;
 	}
 	
+	/**
+	 * Set the contents of the GridSpace to item
+	 * @param item
+	 */
 	public void setItem(Item item) {
 		this.contents = item;
 	}
