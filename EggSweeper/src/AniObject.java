@@ -56,6 +56,11 @@ public class AniObject implements Serializable {
 		this.repeat = repeatorNot;
 	}
 	
+	public void setImage(BufferedImage image) {
+		this.images.remove(images.get(0));
+		images.add(image);
+	}
+	
 	public String toString() {
 		return name;
 	}
