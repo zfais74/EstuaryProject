@@ -56,8 +56,7 @@ public class TopTen {
             System.out.print("Loaded Scores");
 
         }
-        catch (Exception ex)
-        {
+        catch (Exception ex){
             System.out.print("No Scores Recorded. Creating new score file ");
             new File("scores.ser");
         }
