@@ -3,6 +3,7 @@ import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.MouseInfo;
 import java.awt.Point;
+import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -28,9 +29,7 @@ public class Animation extends JPanel implements Serializable{
 	public int gridButtonSize = 45;
 	public int generalButtonSize = 200;
 	public int contentPaneSize = 900;
-	public int ratioW = 1600;
-	public int ratioH = 900;
-	
+	public double screenRatio;
 	private int frame = 0;
 	
 	public List<AniObject> getImages() {
@@ -39,13 +38,15 @@ public class Animation extends JPanel implements Serializable{
 	
 	// constructor, takes a Game object to link GUI to controller
 	Animation(){
+		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+       	int screenWidth = (int) screenSize.getWidth();
+       	int screenHeight = (int) screenSize.getHeight();
 		images = new ArrayList<AniObject>();
-		this.setPreferredSize(new Dimension(ratioW, ratioH));
 		try {
 			BufferedImage beach = ImageIO.read(new File("images/beach5.png"));
 			List<BufferedImage> beachList = new ArrayList<BufferedImage>();
 			beachList.add(beach);
-			images.add(new AniObject("beach", 0, 0, 1200, 900, beachList));
+			images.add(new AniObject("beach", 0, 0, (int) ((3./4.) * screenWidth), screenHeight, beachList));
 		} catch (IOException e) {
 			System.out.println("Failed to load beach, trying bin folder");
 		}
@@ -54,7 +55,8 @@ public class Animation extends JPanel implements Serializable{
 			BufferedImage board = ImageIO.read(new File("images/board.png"));
 			List<BufferedImage> boardList = new ArrayList<BufferedImage>();
 			boardList.add(board);
-			AniObject boardImg = new AniObject("board", 100,254, 1000, 646, boardList);
+			this.screenRatio =  (3./4.) * screenWidth / 1200.;
+			AniObject boardImg = new AniObject("board", (int) Math.round(screenRatio*100), (int) Math.round(screenRatio*254), (int) Math.round(screenRatio*1000), (int) Math.round(screenRatio*646), boardList);
 			images.add(boardImg);
 			boardImage = boardImg;
 		} catch (IOException e) {

@@ -7,6 +7,7 @@ import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.MouseInfo;
 import java.awt.Point;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -513,11 +514,11 @@ public class Controller implements Serializable, ActionListener {
 			}
 		}
 		
-		double birdRatio = getSizeRatio(bird.getY(), board);
+		double birdRatio = animation.screenRatio*getSizeRatio(bird.getY(), board);
 		bird.setSize(birdRatio);
 		Point mouseLoc = MouseInfo.getPointerInfo().getLocation();
-		bird.setX((int) Math.round(mouseLoc.getX() + 3 - bird.getYSize()/4.5));
-		bird.setY((int) Math.round(mouseLoc.getY() - 31 - bird.getYSize()/1.8));
+		bird.setX((int) Math.round(mouseLoc.getX() + 10 - bird.getYSize()/4.5));
+		bird.setY((int) Math.round(mouseLoc.getY() - bird.getYSize()/1.8));
 		
 		final AniObject birdMouse = bird;
 		final AniObject boardMouse = board;
@@ -550,7 +551,7 @@ public class Controller implements Serializable, ActionListener {
 			public void mouseMoved(MouseEvent e) {
 				birdMouse.setX( (int) Math.round(e.getX() + 5 - birdMouse.getYSize()/6.) + chestButton.getX());
 				birdMouse.setY((int) Math.round(e.getY() - birdMouse.getYSize()/1.8) + chestButton.getY());
-				double newBirdRatio = getSizeRatio(birdMouse.getY(), boardMouse);
+				double newBirdRatio = animation.screenRatio*getSizeRatio(birdMouse.getY(), boardMouse);
 				birdMouse.setSize(newBirdRatio);
 				frame.repaint();
 				
@@ -869,11 +870,11 @@ public class Controller implements Serializable, ActionListener {
 			}
 		}
 		
-		double birdRatio = getSizeRatio(bird.getY(), board);
+		double birdRatio = animation.screenRatio*getSizeRatio(bird.getY(), board);
 		bird.setSize(birdRatio);
 		Point mouseLoc = MouseInfo.getPointerInfo().getLocation();
-		bird.setX((int) Math.round(mouseLoc.getX() + 3 - bird.getYSize()/4.5));
-		bird.setY((int) Math.round(mouseLoc.getY() - 31 - bird.getYSize()/1.8));
+		bird.setX((int) Math.round(mouseLoc.getX() + 10 - bird.getYSize()/4.5));
+		bird.setY((int) Math.round(mouseLoc.getY() - bird.getYSize()/1.8));
 		
 		final AniObject birdMouse = bird;
 		final AniObject boardMouse = board;
@@ -906,7 +907,7 @@ public class Controller implements Serializable, ActionListener {
 			public void mouseMoved(MouseEvent e) {
 				birdMouse.setX( (int) Math.round(e.getX() + 5 - birdMouse.getYSize()/6.) + chestButton.getX());
 				birdMouse.setY((int) Math.round(e.getY() - birdMouse.getYSize()/1.8) + chestButton.getY());
-				double newBirdRatio = getSizeRatio(birdMouse.getY(), boardMouse);
+				double newBirdRatio = animation.screenRatio*getSizeRatio(birdMouse.getY(), boardMouse);
 				birdMouse.setSize(newBirdRatio);
 				frame.repaint();
 				
@@ -1194,14 +1195,20 @@ public class Controller implements Serializable, ActionListener {
 		double[] LineSlopes = {-0.3115, -0.2492, -0.1869, -0.1246, -0.0623, 0, 0.0623, 0.1246, 0.1869, 0.2492, 0.3115};
 		int[] LineTopX = {201, 261, 320, 380, 440, 500, 560, 620, 680, 739, 799};
 		
-		if (yLoc <= boardImage.getY()) {
-			yLoc = boardImage.getY();
+		
+		
+		int imageHeight = boardImage.getY();
+		
+		if (yLoc <= imageHeight) {
+			yLoc = imageHeight;
 		}
 		
-		yLoc = yLoc - boardImage.getY();
+		yLoc = yLoc - imageHeight;
 		yLoc = (int) Math.round(yLoc*(1000./boardImage.getXSize()));
 		
-		double bottomXWidth = (LineTopX[1] + (LineSlopes[1] * boardImage.getYSize())) - (LineTopX[0] + (LineSlopes[0] * boardImage.getYSize()));
+		int ySize = (int) Math.round(boardImage.getYSize()*(1000./boardImage.getXSize()));
+		
+		double bottomXWidth = (LineTopX[1] + (LineSlopes[1] * ySize)) - (LineTopX[0] + (LineSlopes[0] * ySize));
 		double locXWidth = (LineTopX[1] + (LineSlopes[1] * yLoc)) - (LineTopX[0] + (LineSlopes[0] * yLoc));
 		
 		ratio = locXWidth/bottomXWidth;
@@ -1233,8 +1240,19 @@ public class Controller implements Serializable, ActionListener {
 		xLoc = xLoc - imageXloc;
 		yLoc = yLoc - imageYloc;
 		
-		xLoc = (int) Math.round(xLoc*(1000./gridImageWidth));
-		yLoc = (int) Math.round(yLoc*(1000./gridImageWidth));
+		int itrIndex = 0;
+		for (int i: LineHeights) {
+			i = (int) Math.round(i * gridImageWidth/1000.);
+			LineHeights[itrIndex] = i;
+			itrIndex++;
+		}
+		
+		itrIndex = 0;
+		for (int j: LineTopX) {
+			j = (int) Math.round(j * gridImageWidth/1000.);
+			LineTopX[itrIndex] = j;
+			itrIndex++;
+		}
 		
 		if (yLoc < LineHeights[0]){
 			yIndex = -1;
@@ -1309,7 +1327,7 @@ public class Controller implements Serializable, ActionListener {
 		else {
 			xIndex = -1;
 		}
-		
+
 		int holeX = 1;
 		int holeY = 1;
 		int holeXSize = 1;
@@ -1318,11 +1336,11 @@ public class Controller implements Serializable, ActionListener {
 		if ((xIndex != -1) && (yIndex != -1)){
 			double boxRatio = ((double) LineHeights[9] - (double) LineHeights[8])/((double) LineHeights[10] - (double) LineHeights[9]);
 			double gridSizeRatio = 1/Math.pow(boxRatio, yIndex);
-			holeYSize = (int) Math.round(gridSizeRatio * (gridImageWidth/1000)*(LineHeights[1] - LineHeights[0]));
-			holeY = (int) Math.round(imageYloc + LineHeights[yIndex] + ((gridImageWidth/1000.)*(LineHeights[yIndex+1] - LineHeights[yIndex])/2.) - (holeYSize/2.) );
+			holeYSize = (int) Math.round(gridSizeRatio * (LineHeights[1] - LineHeights[0]));
+			holeY = (int) Math.round(imageYloc + LineHeights[yIndex] + (LineHeights[yIndex+1] - LineHeights[yIndex])/2. - (holeYSize/2.));
 			
-			holeX = (int) Math.round(imageXloc + (gridImageWidth/1000)*(LineTopX[xIndex] + LineSlopes[xIndex] * (LineHeights[yIndex] + LineHeights[yIndex+1])/2.));
-			holeXSize = (int) ((gridImageWidth/1000)*((LineTopX[xIndex + 1]  + (LineSlopes[xIndex + 1] * (LineHeights[yIndex] + LineHeights[yIndex+1])/2.)) - (LineTopX[xIndex]  + (LineSlopes[xIndex] * (LineHeights[yIndex] + LineHeights[yIndex+1])/2.))));
+			holeX = (int) Math.round(imageXloc + (LineTopX[xIndex] + LineSlopes[xIndex] * (LineHeights[yIndex] + LineHeights[yIndex+1])/2.));
+			holeXSize = (int) (((LineTopX[xIndex + 1]  + LineSlopes[xIndex + 1] * (LineHeights[yIndex] + LineHeights[yIndex+1])/2.) - (LineTopX[xIndex]  + (LineSlopes[xIndex] * (LineHeights[yIndex] + LineHeights[yIndex+1])/2.))));
 		}
 		
 		int[] gridIndex = {xIndex, yIndex, holeX, holeY, holeXSize, holeYSize};
@@ -1348,6 +1366,20 @@ public class Controller implements Serializable, ActionListener {
 		int imageXloc = boardImage.getX();
 		int imageYloc = boardImage.getY();
 		
+		int itrIndex = 0;
+		for (int i: LineHeights) {
+			i = (int) Math.round(i * gridImageWidth/1000.);
+			LineHeights[itrIndex] = i;
+			itrIndex++;
+		}
+		
+		itrIndex = 0;
+		for (int j: LineTopX) {
+			j = (int) Math.round(j * gridImageWidth/1000.);
+			LineTopX[itrIndex] = j;
+			itrIndex++;
+		}
+		
 		int newX = 1;
 		int newY = 1;
 		int newXSize = 1;
@@ -1356,11 +1388,11 @@ public class Controller implements Serializable, ActionListener {
 		if ((xIndex != -1) && (yIndex != -1)){
 			double boxRatio = ((double) LineHeights[9] - (double) LineHeights[8])/((double) LineHeights[10] - (double) LineHeights[9]);
 			double gridSizeRatio = 1/Math.pow(boxRatio, yIndex);
-			newYSize = (int) Math.round(gridSizeRatio * (gridImageWidth/1000)*(LineHeights[1] - LineHeights[0]));
-			newY = (int) Math.round(imageYloc + LineHeights[yIndex] + ((gridImageWidth/1000.)*(LineHeights[yIndex+1] - LineHeights[yIndex])/2.) - (newYSize/2.) );
+			newYSize = (int) Math.round(gridSizeRatio * (LineHeights[1] - LineHeights[0]));
+			newY = (int) Math.round(imageYloc + LineHeights[yIndex] + (LineHeights[yIndex+1] - LineHeights[yIndex])/2. - (newYSize/2.));
 			
-			newX = (int) Math.round(imageXloc + (gridImageWidth/1000)*(LineTopX[xIndex] + LineSlopes[xIndex] * (LineHeights[yIndex] + LineHeights[yIndex+1])/2.));
-			newXSize = (int) ((gridImageWidth/1000)*((LineTopX[xIndex + 1]  + (LineSlopes[xIndex + 1] * (LineHeights[yIndex] + LineHeights[yIndex+1])/2.)) - (LineTopX[xIndex]  + (LineSlopes[xIndex] * (LineHeights[yIndex] + LineHeights[yIndex+1])/2.))));
+			newX = (int) Math.round(imageXloc + (LineTopX[xIndex] + LineSlopes[xIndex] * (LineHeights[yIndex] + LineHeights[yIndex+1])/2.));
+			newXSize = (int) (((LineTopX[xIndex + 1]  + LineSlopes[xIndex + 1] * (LineHeights[yIndex] + LineHeights[yIndex+1])/2.) - (LineTopX[xIndex]  + (LineSlopes[xIndex] * (LineHeights[yIndex] + LineHeights[yIndex+1])/2.))));
 		}
 		
 		int[] gridIndex = {newX, newY, newXSize, newYSize};
