@@ -30,6 +30,7 @@ public class Player implements Serializable {
 	private PowerUps currentPowerUp = null;
 	private int totalCorrectAnswers = 0;
 	private int eggMultiplier = 1;
+	private int eggsFound = 0;
 	
 	// constructor
 	
@@ -76,6 +77,8 @@ public class Player implements Serializable {
 				eggs = eggs + eggMultiplier;
 				System.out.println("Found an egg!!!");
 				System.out.println("Score: " + Integer.toString(score));
+				space.setItem(Item.ALREADYCHECKED);
+				this.eggsFound++;
 				return Item.EGG;
 			case TRASH:
 				// reduce player score
@@ -83,15 +86,31 @@ public class Player implements Serializable {
 				trash++;
 				System.out.println("Ate some trash :(");
 				System.out.println("Score: " + Integer.toString(score));
+				space.setItem(Item.ALREADYCHECKED);
 				return Item.TRASH;
 			case EMPTY:
 				System.out.println("Nothing.");
 				System.out.println("Score: " + Integer.toString(score));
+				space.setItem(Item.ALREADYCHECKED);
 				return Item.EMPTY;
 		}
 		return null;
 	}
 	
+	/**
+	 * Get the number of eggs found
+	 * 
+	 * @return eggsFound
+	 */
+	public int getEggsFound() {
+		return this.eggsFound;
+	}
+
+	/**
+	 * Getter of if the player have power up
+	 * 
+	 * @return hasPowerUp;
+	 */
 	public boolean hasPowerUp(){
 		return this.hasPowerUp;
 	}
@@ -113,21 +132,21 @@ public class Player implements Serializable {
 	}
 	
 	/**
-	 * Increments the score
+	 * Increments the score by eggMuliplier
 	 */
 	public void incScore() {
 		score+=eggMultiplier ;
 	}
 	
 	/**
-	 * Decrements the score
+	 * Decrements the score by 1
 	 */
 	public void decScore() {
 		score--;
 	}
 	
 	/**
-	 * Returns the score
+	 * Getter for the score of the player
 	 * @return score
 	 */
 	public int getScore() {
@@ -135,7 +154,7 @@ public class Player implements Serializable {
 	}
 	
 	/**
-	 * Increments the eggs
+	 * Increments the eggs by 1
 	 */
 	public void incEggs() {
 		eggs++;
@@ -150,7 +169,7 @@ public class Player implements Serializable {
 	}
 	
 	/**
-	 * Increments the amount of trash
+	 * Increments the amount of trash by 1
 	 */
 	public void incTrash() {
 		trash++;
@@ -197,14 +216,27 @@ public class Player implements Serializable {
 		return this.yLoc;
 	}
 	
+	/**
+	 * Increment the totalCorrectAnswer by 1
+	 */
 	public void incTotalCorrectAnswers() {
 		this.totalCorrectAnswers++;
 	}
 	
+	/**
+	 * Return the total correct answers
+	 * 
+	 * @return totalCorrectAnswers
+	 */
 	public int gettotalCorrectAnswers() {
 		return this.totalCorrectAnswers;
 	}
 	
+	/**
+	 * Set the current power up
+	 * 
+	 * @param powerUp
+	 */
 	public void setCurrentPowerUp(PowerUps powerUp) {
 		this.currentPowerUp = powerUp;
 		System.out.println("Current powerUp is: " + powerUp);
@@ -219,10 +251,20 @@ public class Player implements Serializable {
 		}
 	}
 	
+	/**
+	 * Getter for the current power up
+	 * 
+	 * @return currentPowerUp
+	 */
 	public PowerUps getCurrentPowerUp() {
 		return this.currentPowerUp;
 	}
 	
+	/**
+	 * Setter for the current power up status
+	 * 
+	 * @param playerHasPowerup
+	 */
 	public void setPowerupStatus(boolean playerHasPowerup) {
 		this.hasPowerUp = playerHasPowerup;
 		if(playerHasPowerup) {
@@ -234,14 +276,29 @@ public class Player implements Serializable {
 		}
 	}
 	
+	/**
+	 * Set eggMulitplier to adjustment
+	 * 
+	 * @param adjustment
+	 */
 	public void setEggMultiplier(int adjustment) {
 		this.eggMultiplier = adjustment;
 	}
 	
+	/**
+	 * Getter for the eggMultiplier
+	 * 
+	 * @return eggMultiplier
+	 */
 	public int getEggMultiplier() {
 		return this.eggMultiplier;
 	}
 	
+	/**
+	 * This function shuffle the power ups and return the power up selected
+	 * 
+	 * @return selectedPowerUp
+	 */
 	private PowerUps generatePowerUp() {
 		List<PowerUps> powerUps = new ArrayList<>();
 		for(PowerUps choice: PowerUps.values()) {

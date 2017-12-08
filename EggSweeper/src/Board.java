@@ -43,6 +43,8 @@ public class Board implements Serializable {
 		private List<Integer> questionNumsAsked = new ArrayList<Integer>();
 		private String correctAnswer;
 		private int totalQuestions = 10;
+		private int totalQuestionAsked = 0;
+		private int totNumEggs = 0;
 		
 		
 		/**
@@ -73,6 +75,7 @@ public class Board implements Serializable {
 							}
 							else if (randomInt < (easyEggRatio)) {
 								spaceItem = Item.EGG;
+								this.totNumEggs++;
 							}
 							else {
 								spaceItem = Item.TRASH;
@@ -84,6 +87,7 @@ public class Board implements Serializable {
 							}
 							else if (randomInt < (mediumEggRatio)) {
 								spaceItem = Item.EGG;
+								this.totNumEggs++;
 							}
 							else {
 								spaceItem = Item.TRASH;
@@ -95,6 +99,7 @@ public class Board implements Serializable {
 							}
 							else if (randomInt < (hardEggRatio)) {
 								spaceItem = Item.EGG;
+								this.totNumEggs++;
 							}
 							else {
 								spaceItem = Item.TRASH;
@@ -157,6 +162,15 @@ public class Board implements Serializable {
 			return count;
 		}
 		
+		/**
+		 * This calculate the direction of retDirection
+		 * 
+		 * @param xIndex
+		 * @param yIndex
+		 * @param targetX
+		 * @param targetY
+		 * @return retDirection
+		 */
 		private Direction calculateDirection(int xIndex, int yIndex, int targetX, int targetY) {
 			Direction retDirection = Direction.UNDEFINED;
 			int xDelta = targetX - xIndex;
@@ -208,6 +222,12 @@ public class Board implements Serializable {
 			return retDirection;
 		}
 		
+		/**
+		 * Return an int depend on the y direction
+		 * 
+		 * @param dir
+		 * @return -1,1,0
+		 */
 		public int convertYDim(Direction dir) {
 			System.out.println("blah " + dir);
 			if (dir.name().contains("NORTH")) {
@@ -221,6 +241,12 @@ public class Board implements Serializable {
 			}
 		}
 		
+		/**
+		 * Return an int depend on the x direction
+		 * 
+		 * @param dir
+		 * @return -1,1,0
+		 */
 		public int convertXDim(Direction dir) {
 			if (dir.name().contains("WEST")) {
 				return -1;
@@ -233,6 +259,23 @@ public class Board implements Serializable {
 			}
 		}
 		
+		
+		/**
+		 * Get the total number of eggs
+		 * 
+		 * @return totNumEggs
+		 */
+		public int getTotEggs() {
+			return this.totNumEggs;
+		}
+
+		/**
+		 * Get adjacent item of the grid
+		 * 
+		 * @param xIndex
+		 * @param yIndex
+		 * @return adjDirections
+		 */
 		public List<Direction> getAdjacentItemGridDirections(int xIndex, int yIndex) {
 			List<Direction> adjDirections = new ArrayList<Direction>();
 			int radius = 1;
@@ -261,6 +304,14 @@ public class Board implements Serializable {
 		}
 		
 		
+		/**
+		 * Get adjacent of the item from the grid
+		 * 
+		 * @param xIndex
+		 * @param yIndex
+		 * @param targetItem
+		 * @return adjDirections
+		 */
 		public List<Direction> getAdjacentItemGridDirections(int xIndex, int yIndex, Item targetItem) {
 			List<Direction> adjDirections = new ArrayList<Direction>();
 			int radius = 1;
@@ -300,6 +351,10 @@ public class Board implements Serializable {
 			qNum.append("Q"); //marker for questions
 			File questionsFile = new File("powerQuestions.txt");
 			int questionNum = generateQuestionNum(totalQuestions);
+			if (this.totalQuestionAsked  == this.totalQuestions) {
+				this.questionNumsAsked.clear();
+				this.totalQuestionAsked = 0;
+			}
 			while (questionNumsAsked.contains(questionNum)) {
 				questionNum = generateQuestionNum(totalQuestions);
 			}
@@ -329,6 +384,7 @@ public class Board implements Serializable {
 			}
 			setAnswers(questionNum);
 			//question = removeColon(question);
+			this.totalQuestionAsked++;
 			return question;
 		}
 		
@@ -391,14 +447,29 @@ public class Board implements Serializable {
 			}
 		}
 		
+		/**
+		 * Get the question that is asked
+		 * 
+		 * @return questionNumsAsked
+		 */
 		public List<Integer> getQuestionsAsked(){
 			return this.questionNumsAsked;
 		}
 		
+		/**
+		 * Get the possible answers to the question asked
+		 * 
+		 * @return possibleAnswers
+		 */
 		public List<String> getPossibleAnswers() {
 			return this.possibleAnswers;
 		}
 		
+		/**
+		 * Get the board
+		 * 
+		 * @return board
+		 */
 		public GridSpace[][] getBoard() {
 			return this.board;
 		}
@@ -416,18 +487,39 @@ public class Board implements Serializable {
 			return filteredAnswer;
 		}
 		
+		/**
+		 * Checked the answer that was answered
+		 * 
+		 * @param playerAnswer
+		 * @return playerAnswer.equalsIgnoreCase(correctAnswer);
+		 */
 		boolean checkAnswer(String playerAnswer) {
 			return playerAnswer.equalsIgnoreCase(correctAnswer);
 		}
 		
+		/**
+		 * Get the answer
+		 * 
+		 * @return correctAnswer
+		 */
 		public String getAnswer() {
 			return this.correctAnswer;
 		}
 		
+		/**
+		 * Set the correct answer
+		 * 
+		 * @param answer
+		 */
 		public void setCorrectAnswer(String answer) {
 			this.correctAnswer = answer;
 		}
 		
+		/**
+		 * Get the difficulty
+		 * 
+		 * @return difficulty
+		 */
 		public Difficulty getDifficulty() {
 			return this.difficulty;
 		}
