@@ -30,6 +30,7 @@ public class Player implements Serializable {
 	private PowerUps currentPowerUp = null;
 	private int totalCorrectAnswers = 0;
 	private int eggMultiplier = 1;
+	private int eggsFound = 0;
 	
 	// constructor
 	
@@ -76,6 +77,8 @@ public class Player implements Serializable {
 				eggs = eggs + eggMultiplier;
 				System.out.println("Found an egg!!!");
 				System.out.println("Score: " + Integer.toString(score));
+				space.setItem(Item.ALREADYCHECKED);
+				this.eggsFound++;
 				return Item.EGG;
 			case TRASH:
 				// reduce player score
@@ -83,15 +86,26 @@ public class Player implements Serializable {
 				trash++;
 				System.out.println("Ate some trash :(");
 				System.out.println("Score: " + Integer.toString(score));
+				space.setItem(Item.ALREADYCHECKED);
 				return Item.TRASH;
 			case EMPTY:
 				System.out.println("Nothing.");
 				System.out.println("Score: " + Integer.toString(score));
+				space.setItem(Item.ALREADYCHECKED);
 				return Item.EMPTY;
 		}
 		return null;
 	}
 	
+	/**
+	 * Get the number of eggs found
+	 * 
+	 * @return eggsFound
+	 */
+	public int getEggsFound() {
+		return this.eggsFound;
+	}
+
 	/**
 	 * Getter of if the player have power up
 	 * 

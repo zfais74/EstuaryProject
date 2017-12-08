@@ -43,6 +43,8 @@ public class Board implements Serializable {
 		private List<Integer> questionNumsAsked = new ArrayList<Integer>();
 		private String correctAnswer;
 		private int totalQuestions = 10;
+		private int totalQuestionAsked = 0;
+		private int totNumEggs = 0;
 		
 		
 		/**
@@ -73,6 +75,7 @@ public class Board implements Serializable {
 							}
 							else if (randomInt < (easyEggRatio)) {
 								spaceItem = Item.EGG;
+								this.totNumEggs++;
 							}
 							else {
 								spaceItem = Item.TRASH;
@@ -84,6 +87,7 @@ public class Board implements Serializable {
 							}
 							else if (randomInt < (mediumEggRatio)) {
 								spaceItem = Item.EGG;
+								this.totNumEggs++;
 							}
 							else {
 								spaceItem = Item.TRASH;
@@ -95,6 +99,7 @@ public class Board implements Serializable {
 							}
 							else if (randomInt < (hardEggRatio)) {
 								spaceItem = Item.EGG;
+								this.totNumEggs++;
 							}
 							else {
 								spaceItem = Item.TRASH;
@@ -254,6 +259,16 @@ public class Board implements Serializable {
 			}
 		}
 		
+		
+		/**
+		 * Get the total number of eggs
+		 * 
+		 * @return totNumEggs
+		 */
+		public int getTotEggs() {
+			return this.totNumEggs;
+		}
+
 		/**
 		 * Get adjacent item of the grid
 		 * 
@@ -336,6 +351,10 @@ public class Board implements Serializable {
 			qNum.append("Q"); //marker for questions
 			File questionsFile = new File("questions/powerQuestions.txt");
 			int questionNum = generateQuestionNum(totalQuestions);
+			if (this.totalQuestionAsked  == this.totalQuestions) {
+				this.questionNumsAsked.clear();
+				this.totalQuestionAsked = 0;
+			}
 			while (questionNumsAsked.contains(questionNum)) {
 				questionNum = generateQuestionNum(totalQuestions);
 			}
@@ -365,6 +384,7 @@ public class Board implements Serializable {
 			}
 			setAnswers(questionNum);
 			//question = removeColon(question);
+			this.totalQuestionAsked++;
 			return question;
 		}
 		
