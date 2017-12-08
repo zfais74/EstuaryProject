@@ -15,19 +15,4 @@ public class GridSpaceTest {
 		assertEquals("Should be an egg", gridSpaceItem, Item.EGG);
 	}
 
-	@Test
-	public void gridSpaceIsNotCovered() {
-		gridSpaceTest.setIsCovered(isCovered);
-		boolean result = gridSpaceTest.getIsCovered();
-		assertFalse("Should be false", result);
-	}
-	
-	@Test
-	public void gridSpaceIsCovered() {
-		isCovered = true;
-		gridSpaceTest.setIsCovered(isCovered);
-		boolean result = gridSpaceTest.getIsCovered();
-		assertTrue("Should be false", true);
-	}
-
 }

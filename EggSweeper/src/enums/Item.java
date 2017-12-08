@@ -1,27 +1,12 @@
 package enums;
 /**
  * Items are used for searching gridspaces
- * @author zeke
+ * @author Zeke Faison
  *
  */
 public enum Item {
-	/**
-	 * Empty indicates a grid space is empty
-	 */
-	EMPTY, 
-	/**
-	 * Egg indicates a grid space is holding an egg
-	 */
-	EGG, 
-	/**
-	 * Trash indicates a grid space is holding trash
-	 */
+	EMPTY,
+	EGG,
 	TRASH,
-	TWIG,
-	BOTTLE,
-	PESTICIDE,
-	/**
-	 * Already checked indicates the player has already checked the grid space
-	 */
 	ALREADYCHECKED;
 }

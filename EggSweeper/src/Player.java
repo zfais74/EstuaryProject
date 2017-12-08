@@ -1,4 +1,3 @@
-import enums.Bird;
 import enums.Item;
 import enums.PowerUps;
 
@@ -10,89 +9,62 @@ import java.util.List;
 // The Model
 
 /**
- * @author Will Ransom
- *
- */
-/**
- * @author ThisMac
+ * This class holds all player data, power up data and is responsible for checking spaces on the board.
+ * @author Will Ransom, Zeke Faison
  *
  */
 public class Player implements Serializable {
 	
 	// Player data
-	private Bird bird;
 	private int score;
-	private int eggs;
-	private int trash;
 	private boolean hasPowerUp = false;
-	private int xLoc;
-	private int yLoc;
 	private PowerUps currentPowerUp = null;
+	// used for the unimplemented devour power up
 	private int totalCorrectAnswers = 0;
+	// used for the double eggs power up
 	private int eggMultiplier = 1;
+	// keeps track of the number of eggs the player has found so that the game
+	//   will end if the player finds all eggs on the board
 	private int eggsFound = 0;
-	
-	// constructor
-	
+
 	/**
 	 * Player constructor to create a new Player object
 	 * @param newBird The bird representing the player
-	 * @return Player
+	 * @return a Player object
 	 */
-	Player(Bird newBird) {
-		bird = newBird;
+	Player() {
 		score = 0;
-		eggs = 0;
-		trash = 0;
 	}
 	
-	// method to check contents of a space on the board
 	/**
-	 * This method checks the x and y co-ordinate of the board and returns what item is there
-	 * @param xIndex  The xPosition
-	 * @param yIndex  The yPosition
-	 * @param board  The Board object
-	 * @return Item
+	 * This method checks an x and y coordinate of the board and returns what item is there
+	 * @param xIndex  the x index of the space to be checked
+	 * @param yIndex  the y index of the space to be checked
+	 * @param board  the Board object
+	 * @return the item at the specified location
 	 */
 	public Item checkSpace(int xIndex, int yIndex, Board board) {
-		System.out.println(" ");
-		System.out.println("Clicked (" + Integer.toString(xIndex) + "," + Integer.toString(yIndex) + ")");
-		System.out.println(String.format("Found %d items", board.countAdjacentItems(xIndex, yIndex)));
 		GridSpace space = board.getSpace(xIndex, yIndex);
-		// if space has already been checked do not continue
-		if (space.getIsCovered() == false) {
-			System.out.println("Already checked there!");
-			System.out.println("Score: " + Integer.toString(score));
-			return Item.ALREADYCHECKED;
-		}
-		else {
-			// take a turn
-			space.setIsCovered(false);
-		}
+		// check space's item
 		Item item = space.getItem();
 		switch (item) {
 			case EGG:
 				// up player score
 				score = score + eggMultiplier;
-				eggs = eggs + eggMultiplier;
-				System.out.println("Found an egg!!!");
-				System.out.println("Score: " + Integer.toString(score));
 				space.setItem(Item.ALREADYCHECKED);
-				this.eggsFound++;
+				eggsFound++;
 				return Item.EGG;
 			case TRASH:
 				// reduce player score
 				score--;
-				trash++;
-				System.out.println("Ate some trash :(");
-				System.out.println("Score: " + Integer.toString(score));
 				space.setItem(Item.ALREADYCHECKED);
 				return Item.TRASH;
 			case EMPTY:
-				System.out.println("Nothing.");
-				System.out.println("Score: " + Integer.toString(score));
 				space.setItem(Item.ALREADYCHECKED);
 				return Item.EMPTY;
+			case ALREADYCHECKED:
+				return Item.ALREADYCHECKED;
+				
 		}
 		return null;
 	}
@@ -100,35 +72,19 @@ public class Player implements Serializable {
 	/**
 	 * Get the number of eggs found
 	 * 
-	 * @return eggsFound
+	 * @return number of eggs player has found
 	 */
 	public int getEggsFound() {
-		return this.eggsFound;
+		return eggsFound;
 	}
 
 	/**
-	 * Getter of if the player have power up
+	 * Gets whether or not the player has a power up
 	 * 
-	 * @return hasPowerUp;
+	 * @return whether or not player has power up
 	 */
 	public boolean hasPowerUp(){
-		return this.hasPowerUp;
-	}
-	
-	/**
-	 * Bird getter
-	 * @return bird
-	 */
-	public Bird getBirdType() {
-		return bird;
-	}
-	
-	/**
-	 * Bird setter
-	 * @param newBird  The new Bird
-	 */
-	public void setBirdType(Bird newBird) {
-		bird = newBird;
+		return hasPowerUp;
 	}
 	
 	/**
@@ -146,158 +102,88 @@ public class Player implements Serializable {
 	}
 	
 	/**
-	 * Getter for the score of the player
-	 * @return score
+	 * Getter for the player's score
+	 * @return the player's score
 	 */
 	public int getScore() {
 		return score;
 	}
 	
 	/**
-	 * Increments the eggs by 1
-	 */
-	public void incEggs() {
-		eggs++;
-	}
-	
-	/**
-	 * Returns the eggs
-	 * @return eggs
-	 */
-	public int getEggs() {
-		return eggs;
-	}
-	
-	/**
-	 * Increments the amount of trash by 1
-	 */
-	public void incTrash() {
-		trash++;
-	}
-	
-	/**
-	 * Returns the amount of trash
-	 * @return trash
-	 */
-	public int getTrash() {
-		return trash;
-	}
-	
-	/**
-	 * Setter for the xLocation
-	 * @param xPos  The new xPosition
-	 */
-	public void setXLoc(int xPos) {
-		this.xLoc = xPos;
-	}
-	
-	/**
-	 * Getter for the xLocation
-	 * @return xLoc
-	 */
-	public int getXLoc() {
-		return this.xLoc;
-	}
-	
-	
-	/**
-	 * Setter for the yPosition
-	 * @param yPos  The new yPosition
-	 */
-	public void setYLoc(int yPos) {
-		this.yLoc = yPos;
-	}
-	
-	/**
-	 * Getter for the yPosition
-	 * @return yLoc
-	 */
-	public int getYLoc() {
-		return this.yLoc;
-	}
-	
-	/**
 	 * Increment the totalCorrectAnswer by 1
 	 */
 	public void incTotalCorrectAnswers() {
-		this.totalCorrectAnswers++;
+		totalCorrectAnswers++;
 	}
 	
 	/**
-	 * Return the total correct answers
+	 * Get the total correct answers
 	 * 
-	 * @return totalCorrectAnswers
+	 * @return total correct answers
 	 */
 	public int gettotalCorrectAnswers() {
-		return this.totalCorrectAnswers;
+		return totalCorrectAnswers;
 	}
 	
 	/**
 	 * Set the current power up
 	 * 
-	 * @param powerUp
+	 * @param powerUp the power up to be set
 	 */
 	public void setCurrentPowerUp(PowerUps powerUp) {
 		this.currentPowerUp = powerUp;
-		System.out.println("Current powerUp is: " + powerUp);
 		if(powerUp == PowerUps.BONUS) {
-			this.setEggMultiplier(2);
-//			int newMultiplier = NumberManipulation.generateNum(5);
-//			if(newMultiplier == 1) {
-//				newMultiplier++;
-//			}
-//			System.out.println("Bonus!\n" + "You now have a multiplier of " + newMultiplier);
-//			this.setMultiplier(newMultiplier);
+			setEggMultiplier(2);
 		}
 	}
 	
 	/**
-	 * Getter for the current power up
+	 * Get the current power up
 	 * 
-	 * @return currentPowerUp
+	 * @return current power up
 	 */
 	public PowerUps getCurrentPowerUp() {
-		return this.currentPowerUp;
+		return currentPowerUp;
 	}
 	
 	/**
-	 * Setter for the current power up status
+	 * Set the current power up status
 	 * 
-	 * @param playerHasPowerup
+	 * @param playerHasPowerup whether or not the player has a power up
 	 */
 	public void setPowerupStatus(boolean playerHasPowerup) {
 		this.hasPowerUp = playerHasPowerup;
 		if(playerHasPowerup) {
 			PowerUps obtainedPowerUp = this.generatePowerUp();
-			this.setCurrentPowerUp(obtainedPowerUp);
+			setCurrentPowerUp(obtainedPowerUp);
 		} else {
-			this.currentPowerUp = null;
-			this.setEggMultiplier(1);
+			currentPowerUp = null;
+			setEggMultiplier(1);
 		}
 	}
 	
 	/**
-	 * Set eggMulitplier to adjustment
+	 * Set eggMulitplier to the desired value
 	 * 
-	 * @param adjustment
+	 * @param adjustment the desired egg multiplier
 	 */
 	public void setEggMultiplier(int adjustment) {
-		this.eggMultiplier = adjustment;
+		eggMultiplier = adjustment;
 	}
 	
 	/**
-	 * Getter for the eggMultiplier
+	 * Get the eggMultiplier
 	 * 
-	 * @return eggMultiplier
+	 * @return eggMultiplier the multiplier used for scoring eggs
 	 */
 	public int getEggMultiplier() {
-		return this.eggMultiplier;
+		return eggMultiplier;
 	}
 	
 	/**
-	 * This function shuffle the power ups and return the power up selected
+	 * Shuffles the power ups and returns a random power up
 	 * 
-	 * @return selectedPowerUp
+	 * @return selectedPowerUp a random power up
 	 */
 	private PowerUps generatePowerUp() {
 		List<PowerUps> powerUps = new ArrayList<>();

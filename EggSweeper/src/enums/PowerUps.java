@@ -1,7 +1,7 @@
 package enums;
 /**
- * The power-ups available to the user if they correctly answer 
- * @author zeke
+ * The power-ups available to the user if they correctly answer power up questions
+ * @author Zeke Faison
  *
  */
 public enum PowerUps {
@@ -14,7 +14,7 @@ public enum PowerUps {
 	 */
 	DEVOUR,
 	/**
-	 * The player will have a helper who will clean up trash
+	 * Some trash will be cleared from the board
 	 */
 	CLEANER,
 	/**
@@ -22,7 +22,7 @@ public enum PowerUps {
 	 */
 	FREEZE,
 	/**
-	 * The player will get bonus points
+	 * The player will get double eggs
 	 */
 	BONUS;
 	
