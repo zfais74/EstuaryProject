@@ -18,6 +18,7 @@ public class TopTen {
         Iterator<Player> x =scores.descendingIterator();
         int index =10;
         try {
+            //find index where score fits in
             while (x.hasNext()) {
                 if (p.getScore() > x.next().getScore()) {
                     index = scores.indexOf(x.next());
@@ -25,12 +26,13 @@ public class TopTen {
                 }
             }
         }
+        //if list empty, just add to empty list
         catch(Exception e){
             scores.add(p);
 
             }
 
-
+        //add to index where it belongs
         try {
             scores.add(index, p);
         }

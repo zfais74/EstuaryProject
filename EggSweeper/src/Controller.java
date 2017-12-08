@@ -1,12 +1,4 @@
-import java.awt.CardLayout;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.GridLayout;
-import java.awt.Image;
-import java.awt.MouseInfo;
-import java.awt.Point;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -19,13 +11,7 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JTextArea;
-import javax.swing.Timer;
+import javax.swing.*;
 
 import TimeManagement.GameBoardTimer;
 import TimeManagement.PowerUpTimer;
@@ -1380,61 +1366,86 @@ public class Controller implements Serializable, ActionListener {
 			this.gameBoardTimer.getTimer().stop();
 		}
 		this.checkTimersTimer.stop();
-		
-		JButton quitButton = new JButton("Quit");
-		quitButton.setFont(new Font("Arial", Font.PLAIN, 30));
 
-		quitButton.addActionListener(new ActionListener(){
-	        public void actionPerformed(ActionEvent e){
-	        	
-	        	// when clicked, exits
-		        System.exit(0);
-	                
-	        }
-	    });
+		JPanel endPanel = new JPanel();
+		endPanel.setLayout(new GridBagLayout());
+		GridBagConstraints constraints = constraintFactory();
 
-		if (player.getScore() > 10) {
-			Iterator<AniObject> itr = animation.getImages().iterator();
-			while (itr.hasNext()) {
-				AniObject aniObject = itr.next();
-				if (aniObject.toString().compareToIgnoreCase("bird") == 0) {
-					aniObject.setScoreSize(0);
-					aniObject.setSize(1);
-					aniObject.setY((int) Math.round(animation.contentPaneSize/3));
-					aniObject.setX(600);
-					aniObject.setVisible(true);
-				}
-			}
-			animation.migrationAnimation2();
-			aniLabel.setText("Your score was " + Integer.toString(player.getScore()) + ". Your Red Knot will make it to the Arctic!!!");
-			aniLabel.setFont(new Font("Arial", Font.PLAIN, 50));
-			screens.show(cardPanel, "Blank");
-			tickStage = 3;
-		}
-		else {
-			Iterator<AniObject> itr = animation.getImages().iterator();
-			while (itr.hasNext()) {
-				AniObject aniObject = itr.next();
-				if (aniObject.toString().compareToIgnoreCase("bird") == 0) {
-					aniObject.setScoreSize(0);
-					aniObject.setSize(1);
-					aniObject.setY((int) Math.round(animation.contentPaneSize/3));
-					aniObject.setX(600);
-					aniObject.setVisible(true);
-				}
-			}
-			animation.migrationAnimation2();
-			aniLabel.setText("Your score was " + Integer.toString(player.getScore()) + ". Your Red Knot will not make it to the Arctic :(");
-			aniLabel.setFont(new Font("Arial", Font.PLAIN, 50));
-			screens.show(cardPanel, "Blank");
-			tickStage = 5;
-		}
+		constraints.gridx = 1;
+		constraints.gridy = 1;
+		constraints.anchor = GridBagConstraints.EAST;
+
+
+		JButton test = new JButton("HighScores!");
+		test.setFont(new Font("Arial", Font.PLAIN, 40));
+		endPanel.add(test, constraints);
+
+		test.addActionListener((ActionEvent e)->{
+			highscoreScreen();
+
+		});
+
+		cardPanel.add(endPanel, "Endscreen");
+		screens.show(cardPanel, "Endscreen");
+
+//		if (player.getScore() > 10) {
+//			Iterator<AniObject> itr = animation.getImages().iterator();
+//			while (itr.hasNext()) {
+//				AniObject aniObject = itr.next();
+//				if (aniObject.toString().compareToIgnoreCase("bird") == 0) {
+//					aniObject.setScoreSize(0);
+//					aniObject.setSize(1);
+//					aniObject.setY((int) Math.round(animation.contentPaneSize/3));
+//					aniObject.setX(600);
+//					aniObject.setVisible(true);
+//				}
+//			}
+//			animation.migrationAnimation2();
+//			aniLabel.setText("Your score was " + Integer.toString(player.getScore()) + ". Your Red Knot will make it to the Arctic!!!");
+//			aniLabel.setFont(new Font("Arial", Font.PLAIN, 50));
+//			screens.show(cardPanel, "Blank");
+//			tickStage = 3;
+//		}
+//		else {
+//			Iterator<AniObject> itr = animation.getImages().iterator();
+//			while (itr.hasNext()) {
+//				AniObject aniObject = itr.next();
+//				if (aniObject.toString().compareToIgnoreCase("bird") == 0) {
+//					aniObject.setScoreSize(0);
+//					aniObject.setSize(1);
+//					aniObject.setY((int) Math.round(animation.contentPaneSize/3));
+//					aniObject.setX(600);
+//					aniObject.setVisible(true);
+//				}
+//			}
+//			animation.migrationAnimation2();
+//			aniLabel.setText("Your score was " + Integer.toString(player.getScore()) + ". Your Red Knot will not make it to the Arctic :(");
+//			aniLabel.setFont(new Font("Arial", Font.PLAIN, 50));
+//			screens.show(cardPanel, "Blank");
+//			tickStage = 5;
+//		}
+
 
 		//Add and repaint
 		frame.validate();
 		frame.repaint();
 	}
-	
+
+	private void highscoreScreen() {
+		JPanel highscorePanel = new JSIPanel();
+		highscorePanel.setLayout(new BorderLayout());
+
+		JTable table = new JTable();
+		table.setFont(new Font("Arial", Font.BOLD, 15));
+
+
+		cardPanel.add(highscorePanel, "HighScores");
+		screens.show(cardPanel, "HighScores");
+		frame.validate();
+		frame.repaint();
+
+	}
+
 	private void questionScreen(String question, List<String> possibleAns) {
 		gameBoardTimer.getTimer().stop();
 		JPanel questionPanel = new JPanel();

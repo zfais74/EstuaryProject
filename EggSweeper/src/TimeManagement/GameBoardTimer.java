@@ -14,7 +14,7 @@ public class GameBoardTimer implements ActionListener, Serializable {
 	public boolean timerStarted;
 	
 	public GameBoardTimer() {
-		this.timeRemaining = 40000;
+		this.timeRemaining = 400;
 		this.setTimer();
 	}
 
