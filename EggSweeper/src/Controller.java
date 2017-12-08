@@ -1848,8 +1848,8 @@ public class Controller implements Serializable, ActionListener {
        	//cont.frame.setPreferredSize(new Dimension(1000,1000));
        	cont.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
        	//cont.frame.setResizable(true);
-       	cont.frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
-       	cont.frame.setUndecorated(true);
+       	cont.frame.setExtendedState(JFrame.MAXIMIZED_BOTH); 
+		cont.frame.setUndecorated(true);
 	  	cont.animation = new Animation();
 	  	cont.animation.setVisible(true);
 	  	cont.frame.add(cont.animation);
