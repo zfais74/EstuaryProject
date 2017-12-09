@@ -1,6 +1,6 @@
 /**
  * A utility class used to manipulate numbers
- * @author zeke
+ * @author Zeke Faison
  *
  */
 public class NumberManipulation {

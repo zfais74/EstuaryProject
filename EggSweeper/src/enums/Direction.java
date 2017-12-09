@@ -2,7 +2,7 @@ package enums;
 /**
  * Direction indicate the 8 cardinal directions on a grid
  * 
- * @author elton
+ * @author Elton Mwale
  *
  */
 public enum Direction {

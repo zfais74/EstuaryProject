@@ -1,8 +1,10 @@
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.MouseInfo;
 import java.awt.Point;
+import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -14,38 +16,51 @@ import java.util.List;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 // The View
-
+/**
+ * This class controls all image loading, painting, and creation of AniObjects.
+ * @author Will Ransom
+ *
+ */
 public class Animation extends JPanel implements Serializable{
 	
+	// List of images to be painted
 	private transient List<AniObject> images;
+	// board image object must be stored for placing grass of the correct isometric size
 	private AniObject boardImage;
 
-	// constants for placing buttons
-	public int buffer = 50;
-	public int gridButtonSize = 45;
-	public int generalButtonSize = 200;
-	public int contentPaneSize = 900;
-	public int ratioW = 1600;
-	public int ratioH = 900;
-	
+	// ratio of the screens native resolution to the value used for placing images
+	public double screenRatio;
+	// the paint frame
 	private int frame = 0;
+	private int screenWidth;
+	private int screenHeight;
 	
+	/**
+	 * Returns the List of AniObjects which are being used in the game
+	 * @return
+	 */
 	public List<AniObject> getImages() {
 		return images;
 	}
 	
-	// constructor, takes a Game object to link GUI to controller
+	/**
+	 * Constructor, creates beach board and grass AniObjects and sets screen width and height
+	 * to the native resolution
+	 */
 	Animation(){
+		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+       	screenWidth = (int) screenSize.getWidth();
+       	screenHeight = (int) screenSize.getHeight();
 		images = new ArrayList<AniObject>();
-		this.setPreferredSize(new Dimension(ratioW, ratioH));
 		try {
 			BufferedImage beach = ImageIO.read(new File("images/beach5.png"));
 			List<BufferedImage> beachList = new ArrayList<BufferedImage>();
 			beachList.add(beach);
-			images.add(new AniObject("beach", 0, 0, 1200, 900, beachList));
+			images.add(new AniObject("beach", 0, 0, (int) ((3./4.) * screenWidth), screenHeight, beachList));
 		} catch (IOException e) {
 			System.out.println("Failed to load beach, trying bin folder");
 		}
@@ -54,7 +69,9 @@ public class Animation extends JPanel implements Serializable{
 			BufferedImage board = ImageIO.read(new File("images/board.png"));
 			List<BufferedImage> boardList = new ArrayList<BufferedImage>();
 			boardList.add(board);
-			AniObject boardImg = new AniObject("board", 100,254, 1000, 646, boardList);
+			// screen ratio is used for determining the size and position of various images
+			this.screenRatio =  (3./4.) * screenWidth / 1200.;
+			AniObject boardImg = new AniObject("board", (int) Math.round(screenRatio*100), (int) Math.round(screenRatio*254), (int) Math.round(screenRatio*1000), (int) Math.round(screenRatio*646), boardList);
 			images.add(boardImg);
 			boardImage = boardImg;
 		} catch (IOException e) {
@@ -65,17 +82,18 @@ public class Animation extends JPanel implements Serializable{
 			BufferedImage grass = ImageIO.read(new File("images/grass.png"));
 			List<BufferedImage> grassList = new ArrayList<BufferedImage>();
 			grassList.add(grass);
+			// each grass image is a separate object with its own position and size
 			int size0 = 250;
-			images.add(new AniObject("grass1", 180, 150, (int) (size0*Controller.getSizeRatio(150, boardImage)), (int) (size0*Controller.getSizeRatio(150, boardImage)), grassList));
-			images.add(new AniObject("grass2", 0, 150, (int) (size0*Controller.getSizeRatio(150, boardImage)), (int) (size0*Controller.getSizeRatio(150, boardImage)), grassList));
-			images.add(new AniObject("grass3", 130, 220, (int) (size0*Controller.getSizeRatio(220, boardImage)), (int) (size0*Controller.getSizeRatio(220, boardImage)), grassList));
-			images.add(new AniObject("grass4", - 25, 250, (int) (size0*Controller.getSizeRatio(250, boardImage)), (int) (size0*Controller.getSizeRatio(250, boardImage)), grassList));
-			images.add(new AniObject("grass5", 70, 300, (int) (size0*Controller.getSizeRatio(300, boardImage)), (int) (size0*Controller.getSizeRatio(300, boardImage)), grassList));
-			images.add(new AniObject("grass6", -15, 380, (int) (size0*Controller.getSizeRatio(380, boardImage)), (int) (size0*Controller.getSizeRatio(380, boardImage)), grassList));
-			images.add(new AniObject("grass7", 70, 400, (int) (size0*Controller.getSizeRatio(400, boardImage)), (int) (size0*Controller.getSizeRatio(400, boardImage)), grassList));
-			images.add(new AniObject("grass8", 45, 480, (int) (size0*Controller.getSizeRatio(480, boardImage)), (int) (size0*Controller.getSizeRatio(480, boardImage)), grassList));
-			images.add(new AniObject("grass9", -40, 520, (int) (size0*Controller.getSizeRatio(520, boardImage)), (int) (size0*Controller.getSizeRatio(520, boardImage)), grassList));
-			images.add(new AniObject("grass10", 0, 600, (int) (size0*Controller.getSizeRatio(600, boardImage)), (int) (size0*Controller.getSizeRatio(600, boardImage)), grassList));
+			images.add(new AniObject("grass", (int) (screenRatio*190), (int) (screenRatio*170), (int) (size0*Controller.getSizeRatio(150, boardImage)), (int) (size0*Controller.getSizeRatio(150, boardImage)), grassList));
+			images.add(new AniObject("grass", (int) (screenRatio*10), (int) (screenRatio*170), (int) (size0*Controller.getSizeRatio(150, boardImage)), (int) (size0*Controller.getSizeRatio(150, boardImage)), grassList));
+			images.add(new AniObject("grass", (int) (screenRatio*140), (int) (screenRatio*240), (int) (size0*Controller.getSizeRatio(220, boardImage)), (int) (size0*Controller.getSizeRatio(220, boardImage)), grassList));
+			images.add(new AniObject("grass", (int) (screenRatio*-15), (int) (screenRatio*270), (int) (size0*Controller.getSizeRatio(250, boardImage)), (int) (size0*Controller.getSizeRatio(250, boardImage)), grassList));
+			images.add(new AniObject("grass", (int) (screenRatio*80), (int) (screenRatio*320), (int) (size0*Controller.getSizeRatio(300, boardImage)), (int) (size0*Controller.getSizeRatio(300, boardImage)), grassList));
+			images.add(new AniObject("grass", (int) (screenRatio*-5), (int) (screenRatio*400), (int) (size0*Controller.getSizeRatio(380, boardImage)), (int) (size0*Controller.getSizeRatio(380, boardImage)), grassList));
+			images.add(new AniObject("grass", (int) (screenRatio*80), (int) (screenRatio*420), (int) (size0*Controller.getSizeRatio(400, boardImage)), (int) (size0*Controller.getSizeRatio(400, boardImage)), grassList));
+			images.add(new AniObject("grass", (int) (screenRatio*55), (int) (screenRatio*500), (int) (size0*Controller.getSizeRatio(480, boardImage)), (int) (size0*Controller.getSizeRatio(480, boardImage)), grassList));
+			images.add(new AniObject("grass", (int) (screenRatio*-30), (int) (screenRatio*540), (int) (size0*Controller.getSizeRatio(520, boardImage)), (int) (size0*Controller.getSizeRatio(520, boardImage)), grassList));
+			images.add(new AniObject("grass", (int) (screenRatio*10), (int) (screenRatio*620), (int) (size0*Controller.getSizeRatio(600, boardImage)), (int) (size0*Controller.getSizeRatio(600, boardImage)), grassList));
 		} catch (IOException e) {
 			System.out.println("Failed to load grass, trying bin folder");
 		}
@@ -84,6 +102,11 @@ public class Animation extends JPanel implements Serializable{
 		
 	}
 	
+	/**
+	 * Returns the image associated with that stage of the tutorial
+	 * @param num a positive integer from 1 to 5
+	 * @return
+	 */
 	public BufferedImage getTutorialImage(int num) {
 		if (num == 1) {
 			BufferedImage beach1 = null;
@@ -132,6 +155,10 @@ public class Animation extends JPanel implements Serializable{
 		}
 	}
 	
+	/**
+	 * Paint method responsible for drawing all the AniObject's images in the List images
+	 * also increments the frame value each time it is called so that moving images will animate
+	 */
 	public void paint(Graphics g) {
 		Iterator<AniObject> imageIterator = images.iterator();
 		while (imageIterator.hasNext()) {
@@ -144,6 +171,15 @@ public class Animation extends JPanel implements Serializable{
     	
 	}
 
+	/**
+	 * Adds a new hole AniOjbect of the specified size at the specified location,
+	 * and then swaps the positions of the bird and hole in the images List
+	 * so that the bird is painted on top 
+	 * @param xLoc the x location of the hole
+	 * @param yLoc the y location of the hole
+	 * @param sizeX the horizontal size of the hole
+	 * @param sizeY the vertical size off the hole
+	 */
 	public void addHole(int xLoc, int yLoc, int sizeX, int sizeY) {
 		try {
             BufferedImage hole = ImageIO.read(new File("images/hole2.png"));
@@ -152,16 +188,19 @@ public class Animation extends JPanel implements Serializable{
 			AniObject holeObject = new AniObject("hole", xLoc, yLoc, sizeX, sizeY, holeList);
 			holeObject.setVisible(true);
 			images.add(holeObject);
+			// the hole will be at the end of the List
 			int i = images.size() - 1;
+			// iterate through to find the bird
 			int j = 0;
 			Iterator<AniObject> holeBirdItr = images.iterator();
 			while (holeBirdItr.hasNext()) {
 				AniObject next = holeBirdItr.next();
-				if (next.toString().compareToIgnoreCase("bird") == 0) {
+				if (next.toString().equalsIgnoreCase("bird")) {
 					break;
 				}
 				j++;
 			}
+			// swap their positions
 			Collections.swap(images, i, j);
             return;
 		} catch (IOException e1) {
@@ -170,9 +209,18 @@ public class Animation extends JPanel implements Serializable{
 		
 	}
 	
+	/**
+	 * Adds the proper scoreImage AniOjbect of the specified size at the specified location,
+	 * @param xLoc the x position of the image
+	 * @param yLoc the y position of the image
+	 * @param sizeX the horizontal size of the image
+	 * @param sizeY the vertical size of the image
+	 * @param plusOrMinus "plus" means a horseshoe crab egg image will be used, "minus" means a bottle image will be used
+	 * @param scoreMult either 1 or 2, if 2 a double horseshoe crab egg image is used for double eggs power up
+	 */
 	public void scoreImage(int xLoc, int yLoc, int sizeX, int sizeY, String plusOrMinus, int scoreMult) {
 		try {
-			if (plusOrMinus.compareToIgnoreCase("plus") == 0) {
+			if (plusOrMinus.equalsIgnoreCase("plus")) {
 				if (scoreMult == 1) {
 					BufferedImage plusOne = ImageIO.read(new File("images/horseshoeEgg2.png"));
 					List<BufferedImage> scoreList = new ArrayList<BufferedImage>();
@@ -191,7 +239,7 @@ public class Animation extends JPanel implements Serializable{
 				}
 				
 			}
-			else if(plusOrMinus.compareToIgnoreCase("minus") == 0) {
+			else if(plusOrMinus.equalsIgnoreCase("minus")) {
 				BufferedImage minusOne = ImageIO.read(new File("images/bottle.png"));
 				List<BufferedImage> scoreList = new ArrayList<BufferedImage>();
 				scoreList.add(minusOne);
@@ -205,23 +253,9 @@ public class Animation extends JPanel implements Serializable{
 		}
 	}
 
-
-	public void addChest() {
-		try {
-			BufferedImage chest = ImageIO.read(new File("images/chest.png"));
-			List<BufferedImage> chestList = new ArrayList<BufferedImage>();
-			chestList.add(chest);
-			AniObject chestObject = new AniObject("chest", 1410, 600, 200, 200, chestList);
-			chestObject.setVisible(false);
-			images.add(chestObject);
-            return;
-		} catch (IOException e1) {
-			System.out.println("failed to load chest, trying bin folder");
-		}
-		
-		return;
-	}
-
+	/**
+	 * Creates the Americas and bird AniObjects to be used in the first animation
+	 */
 	public void migrationAnimation() {
 		try {
 			BufferedImage US = ImageIO.read(new File("images/map.png"));
@@ -231,6 +265,8 @@ public class Animation extends JPanel implements Serializable{
 			USObject.setVisible(true);
 			images.add(USObject);
 			
+			// multiple  images are added to the birdObject's image List.  These
+			// will be painted one after another based on the frame to simulate flapping
 			BufferedImage bird1 = ImageIO.read(new File("images/bird1.png"));
 			BufferedImage bird2 = ImageIO.read(new File("images/bird2.png"));
 			BufferedImage bird3 = ImageIO.read(new File("images/bird3.png"));
@@ -248,6 +284,10 @@ public class Animation extends JPanel implements Serializable{
 		return;
 	}
 	
+	/**
+	 * Recreates the Americas AniObject which was deleted and then swaps the positions of 
+	 * the bird and the Americas in the images List to make sure the bird is painted on top
+	 */
 	public void migrationAnimation2() {
 		try {			
 			BufferedImage US = ImageIO.read(new File("images/map.png"));
@@ -256,16 +296,19 @@ public class Animation extends JPanel implements Serializable{
 			AniObject USObject = new AniObject("US", 350, 100, 450, 600, USList);
 			USObject.setVisible(true);
 			images.add(USObject);
+			// The americas will be at the end of the List
 			int i = images.size() - 1;
+			// iterate trhough to find the bird
 			int j = 0;
 			Iterator<AniObject> holeBirdItr = images.iterator();
 			while (holeBirdItr.hasNext()) {
 				AniObject next = holeBirdItr.next();
-				if (next.toString().compareToIgnoreCase("bird") == 0) {
+				if (next.toString().equalsIgnoreCase("bird")) {
 					break;
 				}
 				j++;
 			}
+			// swap their positions
 			Collections.swap(images, i, j);
 			
             return;
@@ -274,6 +317,11 @@ public class Animation extends JPanel implements Serializable{
 		}
 	}
 	
+	/**
+	 * Creates the egg and nest AniObjects which will be used in the winning animation
+	 * then swaps the positions bird and the last image inserted in the images List
+	 * to make sure its painted on top
+	 */
 	public void layEgg() {
 		BufferedImage egg;
 		BufferedImage nest;
@@ -292,23 +340,31 @@ public class Animation extends JPanel implements Serializable{
 			eggObject.setVisible(true);
 			images.add(eggObject);
 			
+			// the egg will be at the end of the List
 			int i = images.size() - 1;
+			// iterate through to find the bird
 			int j = 0;
 			Iterator<AniObject> eggBirdItr = images.iterator();
 			while (eggBirdItr.hasNext()) {
 				AniObject next = eggBirdItr.next();
-				if (next.toString().compareToIgnoreCase("bird") == 0) {
+				if (next.toString().equalsIgnoreCase("bird")) {
 					break;
 				}
 				j++;
 			}
+			// swap their positions
 			Collections.swap(images, i, j);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
 	
+	/**
+	 * Creates the deadBird AniObject for the losing animation
+	 */
 	public void deadBird() {
+		// 15 images are used because the tick frequency does not change and the
+		// flipping animation should last for many frames
 		BufferedImage deadBirdImage1;
 		BufferedImage deadBirdImage2;
 		BufferedImage deadBirdImage3;
@@ -325,6 +381,8 @@ public class Animation extends JPanel implements Serializable{
 		BufferedImage deadBirdImage14;
 		BufferedImage deadBirdImage15;
 		try {
+			// only three images are actually used, each inserted 5 times
+			// so that it is painted for 5 frames
 			deadBirdImage1 = ImageIO.read(new File("images/deadbird1.png"));
 			deadBirdImage2 = ImageIO.read(new File("images/deadbird1.png"));
 			deadBirdImage3 = ImageIO.read(new File("images/deadbird1.png"));
@@ -367,6 +425,9 @@ public class Animation extends JPanel implements Serializable{
 		}
 	}
 	
+	/*
+	 * Creates the tombStone AniObject for the losing animation
+	 */
 	public void tombStone() {
 		BufferedImage tomb;
 		try {			
@@ -382,8 +443,20 @@ public class Animation extends JPanel implements Serializable{
 		}
 	}
 	
+	/**
+	 * Creates a new maggie AniObject of the specified size at the specified location
+	 * to be used in the help finding eggs power up then swaps the position of the
+	 * maggie and the bird to make sure the bird is painted on top
+	 * @param xLoc the x position of the maggie
+	 * @param yLoc the y position of the magggie
+	 * @param sizeX the horizontal size of the maggie
+	 * @param sizeY the vertical size of the maggie
+	 */
 	void addMaggie(int xLoc, int yLoc, int sizeX, int sizeY) {
 		try {
+			// multiple images added to the maggieObject's image List 
+			// so that each one will be painted one after another for each frame
+			// simulating hand waving
 			BufferedImage maggie1 = ImageIO.read(new File("images/maggie1.png"));
 			BufferedImage maggie2 = ImageIO.read(new File("images/maggie2.png"));
 			BufferedImage maggie3 = ImageIO.read(new File("images/maggie3.png"));
@@ -406,16 +479,19 @@ public class Animation extends JPanel implements Serializable{
 			AniObject maggieObject = new AniObject("maggie", xLoc, yLoc, sizeX, sizeY, maggieList);
 			maggieObject.setVisible(true);
 			images.add(maggieObject);
+			// maggie will be at the end of the List
 			int i = images.size() - 1;
+			// iterate through to find the bird
 			int j = 0;
 			Iterator<AniObject> maggieBirdItr = images.iterator();
 			while (maggieBirdItr.hasNext()) {
 				AniObject next = maggieBirdItr.next();
-				if (next.toString().compareToIgnoreCase("bird") == 0) {
+				if (next.toString().equalsIgnoreCase("bird")) {
 					break;
 				}
 				j++;
 			}
+			// swap their positions
 			Collections.swap(images, i, j);
             return;
 		} catch (IOException e1) {
@@ -425,6 +501,15 @@ public class Animation extends JPanel implements Serializable{
 		
 	}
 	
+	/**
+	 * adds a question mark AniObject of the specified size at the specified location to
+	 * be used in the hint system, then swaps the positions of the question mark and the
+	 * bird in the images List to make sure the bird is painted on top.
+	 * @param xLoc the x position of the question mark
+	 * @param yLoc the y position of the question mark
+	 * @param sizeX the horizontal size of the question mark
+	 * @param sizeY the vertical size of the question mark
+	 */
 	void addQuestionmark(int xLoc, int yLoc, int sizeX, int sizeY) {
 		try {
 			BufferedImage questionmark = ImageIO.read(new File("images/questionMark2.png"));
@@ -433,16 +518,19 @@ public class Animation extends JPanel implements Serializable{
 			AniObject qmObject = new AniObject("qm", xLoc, yLoc, sizeX, sizeY, qmList);
 			qmObject.setVisible(true);
 			images.add(qmObject);
+			// the question mark will be at the end of the List
 			int i = images.size() - 1;
+			// iterate through to find the bird
 			int j = 0;
 			Iterator<AniObject> qmBirdItr = images.iterator();
 			while (qmBirdItr.hasNext()) {
 				AniObject next = qmBirdItr.next();
-				if (next.toString().compareToIgnoreCase("bird") == 0) {
+				if (next.toString().equalsIgnoreCase("bird")) {
 					break;
 				}
 				j++;
 			}
+			// swap their positions
 			Collections.swap(images, i, j);
             return;
 		} catch (IOException e1) {
@@ -452,6 +540,10 @@ public class Animation extends JPanel implements Serializable{
 		
 	}
 	
+	/**
+	 * Generates an image icon of the chest for the power up button
+	 * @return an ImageIcon of the chest
+	 */
 	public ImageIcon getChestIcon(){
 		ImageIcon chest = new ImageIcon("images/chest.png");
 		Image chestImage = chest.getImage();
@@ -459,6 +551,11 @@ public class Animation extends JPanel implements Serializable{
 		return new ImageIcon(resizedChest);
 	}
 	
+	/**
+	 * Generates a transparent image to force the layout manager to paint
+	 * the chest button the correct size even when it is invisible and deactivated
+	 * @return an ImageIcon of a transparent square
+	 */
 	public ImageIcon getTransChestIcon(){
 		ImageIcon chest = new ImageIcon("images/chestTrans.png");
 		Image chestImage = chest.getImage();
@@ -466,6 +563,33 @@ public class Animation extends JPanel implements Serializable{
 		return new ImageIcon(resizedChest);
 	}
 	
+	/**
+	 * Generates ImageIcon for the start screen and difficulty screen backgrounds
+	 * @return the background image
+	 */
+	public ImageIcon getBackgroundImage() {
+		ImageIcon back = new ImageIcon("images/homeBackground.png");
+		Image backImage = back.getImage();
+		Image resizedBack = backImage.getScaledInstance( screenWidth, screenHeight,  java.awt.Image.SCALE_SMOOTH ) ; 
+		ImageIcon newIcon = new ImageIcon(resizedBack);
+		return newIcon;
+	}
+	
+	/**
+	 * Generates the ImageIcon for the instructions
+	 * @return the instructions image
+	 */
+	public ImageIcon getInstructionsIcon() {
+		ImageIcon i = new ImageIcon("images/instructions.png");
+		Image image = i.getImage();
+		Image newimg = image.getScaledInstance(screenWidth/2, screenHeight/2, Image.SCALE_SMOOTH);
+		return new ImageIcon(newimg);
+	}
+	
+	/**
+	 *Returns the current painting frame
+	 * @return and int corresponding to the current paint frame
+	 */
 	public int getFrame() {
 		return this.frame;
 	}

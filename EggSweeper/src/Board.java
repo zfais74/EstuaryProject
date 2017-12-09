@@ -12,22 +12,21 @@ import enums.Direction;
 // The Model
 
 /**
+ * This class represents the actual game board, holding an array of GridSpace objects.
+ * It also controls power up question loading and the hint system.
+ * @author Will Ransom, Zeke Faison, Elton Mwale
  * 
- * @author Will Ransom
  *
  */
 
 
 public class Board implements Serializable {
 	
-	// the GameBoard is an empty 2D array of GridSpace pointers
+	// the GameBoard is a 2D array of GridSpace pointers
 		private GridSpace[][] board = new GridSpace[boardSize][boardSize];
 		
-		// the Difficulty affects distribution of EGGs and TRASH
-		
-		// Board data
+		// difficulty affects the distribution of eggs and trash
 		private Difficulty difficulty;
-		private List<String>possibleAnswers = new ArrayList<>();
 		
 		// size of the board
 		public static int boardSize = 10;
@@ -40,24 +39,30 @@ public class Board implements Serializable {
 		private double easyEggRatio = randConst * (9./10.);
 		private double mediumEggRatio = randConst * (8.5/10.);
 		private double hardEggRatio = randConst * (8./10.);
+		
+		// list of questions already asked to prevent repeats
 		private List<Integer> questionNumsAsked = new ArrayList<Integer>();
+		// the list of answers for the power up questions
+		private List<String>possibleAnswers = new ArrayList<>();
+		// the correct answer
 		private String correctAnswer;
+		// total questions in file
 		private int totalQuestions = 10;
+		// keeping track of how many questions were asked out of the total
 		private int totalQuestionAsked = 0;
+		
+		// the number of eggs on the board, used to end the game if the player finds them all
 		private int totNumEggs = 0;
 		
 		
 		/**
-		 * Constructor
+		 * Constructor, randomly sets Items in all grid spaces based on difficulty
 		 * @param newDifficulty difficulty to play the game at
 		 * @return a new Board object
 		 * 
 		 */
 		// sets EMPTY, TRASH and EGG spaces in the board
 		Board(Difficulty newDifficulty) {
-			System.out.println(" ");
-			System.out.println("Difficulty selected: " + newDifficulty);
-			System.out.println("Score: 0");
 			difficulty = newDifficulty;
 			
 			Random rand = new Random();
@@ -75,7 +80,7 @@ public class Board implements Serializable {
 							}
 							else if (randomInt < (easyEggRatio)) {
 								spaceItem = Item.EGG;
-								this.totNumEggs++;
+								totNumEggs++;
 							}
 							else {
 								spaceItem = Item.TRASH;
@@ -87,7 +92,7 @@ public class Board implements Serializable {
 							}
 							else if (randomInt < (mediumEggRatio)) {
 								spaceItem = Item.EGG;
-								this.totNumEggs++;
+								totNumEggs++;
 							}
 							else {
 								spaceItem = Item.TRASH;
@@ -99,7 +104,7 @@ public class Board implements Serializable {
 							}
 							else if (randomInt < (hardEggRatio)) {
 								spaceItem = Item.EGG;
-								this.totNumEggs++;
+								totNumEggs++;
 							}
 							else {
 								spaceItem = Item.TRASH;
@@ -132,104 +137,74 @@ public class Board implements Serializable {
 		}
 		
 		/**
-		 * gets the number of items surrounding a space
-		 * @param xIndex x index of the grid space to be set
-		 * @param yIndex y index of the grid space to be set
-		 * @return items surrounding
+		 * Get the total number of eggs on the board
+		 * 
+		 * @return totNumEggs total # of eggs on the board
 		 */
-		public int countAdjacentItems(int xIndex, int yIndex) {
-			int count = 0;
-			int radius = 1;
-			if(xIndex < 0 || yIndex < 0 || xIndex >= boardSize || yIndex >= boardSize) {
-				System.out.println(String.format("Called countAdjacentItems with incorrect arguments (%d,%d)", xIndex, yIndex));
-			}
-			else {
-				for(int i = -radius; i <= radius; i++) {
-					for(int j = -radius; j <= radius; j++) {
-						if(i == 0 && j == 0)
-							continue;
-						if(xIndex + i < 0 || xIndex + i >= boardSize)
-							continue;
-						if(yIndex + j < 0 || yIndex + j >= boardSize)
-							continue;
-						GridSpace space = getSpace(xIndex + i, yIndex + j);
-						Item thisItem = space.getItem();
-						if( thisItem != Item.EMPTY && thisItem != Item.ALREADYCHECKED)
-							count++;
-					}
-				}
-			}
-			return count;
+		public int getTotEggs() {
+			return totNumEggs;
 		}
 		
 		/**
-		 * This calculate the direction of retDirection
+		 *Calculates the Direction of a target GirdSpace from the base GridSpace
 		 * 
-		 * @param xIndex
-		 * @param yIndex
-		 * @param targetX
-		 * @param targetY
-		 * @return retDirection
+		 * @param xIndex the x index of the base GridSpace
+		 * @param yIndex the y index of the base GridSpace
+		 * @param targetX the x index of the target GridSpace
+		 * @param targetY the y index of the target GridSpace
+		 * @return retDirection the Direction from base to target GridSpace
 		 */
 		private Direction calculateDirection(int xIndex, int yIndex, int targetX, int targetY) {
 			Direction retDirection = Direction.UNDEFINED;
+			// find difference in their indexes
 			int xDelta = targetX - xIndex;
 			int yDelta = targetY - yIndex;
-			//If the given arguments are greater than 1 gridspace away return 
-			if(Math.abs(xDelta) > 1 || Math.abs(yDelta) > 1) {
-				System.out.println(String.format("Target Arguments out of range current Loc: (%d,%d) to end Loc (%d, %d)",  xIndex,  yIndex,  targetX,  targetY));
+			//Northern
+			if(yDelta == -1) {
+				if(xDelta == 1) {
+					retDirection = Direction.NORTHEAST;
+				}
+				else if(xDelta == -1) {
+					retDirection = Direction.NORTHWEST;
+				}
+				else if(xDelta == 0){
+					retDirection = Direction.NORTH;
+				}
 			}
-			//Otherwise calculate the direction
-			else {
-				//Northern
-				if(yDelta == -1) {
-					if(xDelta == 1) {
-						retDirection = Direction.NORTHEAST;
-					}
-					else if(xDelta == -1) {
-						retDirection = Direction.NORTHWEST;
-					}
-					else if(xDelta == 0){
-						retDirection = Direction.NORTH;
-					}
+			//Southern
+			else if(yDelta == 1) {
+				if(xDelta == 1) {
+					retDirection = Direction.SOUTHEAST;
 				}
-				//Southern
-				else if(yDelta == 1) {
-					if(xDelta == 1) {
-						retDirection = Direction.SOUTHEAST;
-					}
-					else if(xDelta == -1) {
-						retDirection = Direction.SOUTHWEST;
-					}
-					else if(xDelta == 0){
-						retDirection = Direction.SOUTH;
-					}
+				else if(xDelta == -1) {
+					retDirection = Direction.SOUTHWEST;
 				}
-				//East or West
-				else if(yDelta == 0){
-					if(xDelta == 1) {
-						retDirection = Direction.EAST;
-					}
-					else if(xDelta == -1 ) {
-						retDirection = Direction.WEST;
-					}
-					else if(xDelta == 0) {
-						retDirection = Direction.UNDEFINED;
-						System.out.println(String.format("Target Arguments are identical current Loc: (%d,%d) to end Loc (%d, %d)",  xIndex,  yIndex,  targetX,  targetY));
-					}
+				else if(xDelta == 0){
+					retDirection = Direction.SOUTH;
+				}
+			}
+			//East or West
+			else if(yDelta == 0){
+				if(xDelta == 1) {
+					retDirection = Direction.EAST;
+				}
+				else if(xDelta == -1 ) {
+					retDirection = Direction.WEST;
+				}
+				else if(xDelta == 0) {
+					retDirection = Direction.UNDEFINED;
 				}
 			}
 			return retDirection;
 		}
 		
 		/**
-		 * Return an int depend on the y direction
+		 *Return the integer interpretation of a direction in the y direction, ie -1 for south
 		 * 
-		 * @param dir
-		 * @return -1,1,0
+		 * @param dir the Direction to be converted
+		 * @return -1,1,0 an integer corresponding to the integer interpretation of the Direction
 		 */
 		public int convertYDim(Direction dir) {
-			System.out.println("blah " + dir);
 			if (dir.name().contains("NORTH")) {
 				return -1;
 			}
@@ -242,10 +217,10 @@ public class Board implements Serializable {
 		}
 		
 		/**
-		 * Return an int depend on the x direction
+		 *Return the integer interpretation of a direction in the x direction, ie -1 for west
 		 * 
-		 * @param dir
-		 * @return -1,1,0
+		 * @param dir the Direction to be converted
+		 * @return -1,1,0 an integer corresponding to the integer interpretation of the Direction
 		 */
 		public int convertXDim(Direction dir) {
 			if (dir.name().contains("WEST")) {
@@ -258,134 +233,149 @@ public class Board implements Serializable {
 				return 0;
 			}
 		}
-		
-		
-		/**
-		 * Get the total number of eggs
-		 * 
-		 * @return totNumEggs
-		 */
-		public int getTotEggs() {
-			return this.totNumEggs;
-		}
 
 		/**
-		 * Get adjacent item of the grid
+		 * Gets Directions of adjacent GridSpaces containing not EMPTY Items
 		 * 
-		 * @param xIndex
-		 * @param yIndex
-		 * @return adjDirections
+		 * @param xIndex the x index of the GridSpace to be searched around
+		 * @param yIndex the y index of the GridSpace to be searched around
+		 * @return adjDirections the List of Directions
 		 */
 		public List<Direction> getAdjacentItemGridDirections(int xIndex, int yIndex) {
 			List<Direction> adjDirections = new ArrayList<Direction>();
+			// search the 3x3 grid around the space[xIndex][yIndex]
 			int radius = 1;
-			if(xIndex < 0 || yIndex < 0 || xIndex >= boardSize || yIndex >= boardSize) {
-				System.out.println(String.format("Called countAdjacentItems with incorrect arguments (%d,%d)", xIndex, yIndex));
-			}
-			else {
-				for(int i = -radius; i <= radius; i++) {
-					for(int j = -radius; j <= radius; j++) {
-						if(i == 0 && j == 0)
-							continue;
-						int targetX = xIndex + i;
-						int targetY = yIndex + j;
-						if( targetX < 0 || targetX >= boardSize)
-							continue;
-						if(targetY < 0 ||targetY  >= boardSize)
-							continue;
-						GridSpace space = getSpace(targetX, targetY);
-						Item thisItem = space.getItem();
-						if( thisItem != Item.EMPTY && thisItem != Item.ALREADYCHECKED && space.getIsCovered())
-							adjDirections.add(calculateDirection(xIndex, yIndex, targetX, targetY));
-					}
+			for(int i = -radius; i <= radius; i++) {
+				for(int j = -radius; j <= radius; j++) {
+					// skip the space itself
+					if(i == 0 && j == 0)
+						continue;
+					// the target spaces coordinates
+					int targetX = xIndex + i;
+					int targetY = yIndex + j;
+					// boundary conditions
+					if( targetX < 0 || targetX >= boardSize)
+						continue;
+					if(targetY < 0 ||targetY  >= boardSize)
+						continue;
+					// check the space
+					GridSpace space = getSpace(targetX, targetY);
+					Item thisItem = space.getItem();
+					if( thisItem != Item.EMPTY && thisItem != Item.ALREADYCHECKED)
+						adjDirections.add(calculateDirection(xIndex, yIndex, targetX, targetY));
 				}
 			}
 			return adjDirections;
 		}
-		
-		
-		/**
-		 * Get adjacent of the item from the grid
-		 * 
-		 * @param xIndex
-		 * @param yIndex
-		 * @param targetItem
-		 * @return adjDirections
-		 */
-		public List<Direction> getAdjacentItemGridDirections(int xIndex, int yIndex, Item targetItem) {
-			List<Direction> adjDirections = new ArrayList<Direction>();
-			int radius = 1;
-			if(xIndex < 0 || yIndex < 0 || xIndex >= boardSize || yIndex >= boardSize) {
-				System.out.println(String.format("Called countAdjacentItems with incorrect arguments (%d,%d)", xIndex, yIndex));
-			}
-			else {
-				for(int i = -radius; i <= radius; i++) {
-					for(int j = -radius; j <= radius; j++) {
-						if(i == 0 && j == 0)
-							continue;
-						int targetX = xIndex + i;
-						int targetY = yIndex + j;
-						if( targetX < 0 || targetX >= boardSize)
-							continue;
-						if(targetY < 0 ||targetY  >= boardSize)
-							continue;
-						GridSpace space = getSpace(targetX, targetY);
-						Item thisItem = space.getItem();
-						if(thisItem == targetItem && space.getIsCovered())
-							adjDirections.add(calculateDirection(xIndex, yIndex, targetX, targetY));
-					}
-				}
-			}
-			return adjDirections;
-		}
+	
 		
 		/**
-		 * read estuary question from text file
+		 * Reads estuary question from text file
 		 * @return string form of question
 		 * @throws FileNotFoundException
 		 */
 		public String getPowerupQuestion() throws FileNotFoundException {
-			possibleAnswers.clear();
 			String question = "";
-			StringBuilder qNum = new StringBuilder(); // string builder for the question number
-			qNum.append("Q"); //marker for questions
+			StringBuilder qNum = new StringBuilder();
+			// Questions are marked with Q
+			qNum.append("Q");
 			File questionsFile = new File("questions/powerQuestions.txt");
+			// randomly pick a question number 
 			int questionNum = generateQuestionNum(totalQuestions);
-			if (this.totalQuestionAsked  == this.totalQuestions) {
-				this.questionNumsAsked.clear();
-				this.totalQuestionAsked = 0;
+			// empty the list of already asked questions if all questions have been asked
+			if (totalQuestionAsked  == totalQuestions) {
+				questionNumsAsked.clear();
+				totalQuestionAsked = 0;
 			}
+			// check to make sure question is not a repeat
 			while (questionNumsAsked.contains(questionNum)) {
 				questionNum = generateQuestionNum(totalQuestions);
 			}
-			this.questionNumsAsked.add(questionNum);
+			// keep track of questions asked
+			questionNumsAsked.add(questionNum);
 			qNum.append(questionNum);
-			qNum.append(":"); // another marker for questions
+			// another marker for questions
+			qNum.append(":");
+			// scan the file for that question
 			try {
 				Scanner fn = new Scanner (questionsFile);
 				while(fn.hasNextLine()) {
 					String line = fn.nextLine();
-					if(line.contains(qNum.toString())){ // if the line contains the Q(number):, then add it to the question string builder 
+					// if the line contains the Q(number):, then add it to the question string builder 
+					if(line.contains(qNum.toString())){ 
 						int colonPosition = line.indexOf(":") + 1;
 						line = line.substring(colonPosition);
+						// html is used for multi-line questions.  questions cannot be more than 2 lines long
 						question = "<html>" + line;
 						String nextLine = fn.nextLine();
 						if (nextLine.length() != 0) {
 							question = question + "<br/>" + nextLine + "</html>";
 						}
-						System.out.println("Selected Question:" + question.toString());
 						break;
 					}
 				}
 				fn.close();
 			} catch (FileNotFoundException e){
 				System.out.println(e.getMessage());
-				System.exit(0);
 			}
 			setAnswers(questionNum);
-			//question = removeColon(question);
-			this.totalQuestionAsked++;
+			// keep track of total number of questions asked
+			totalQuestionAsked++;
 			return question;
+		}
+		
+		/**
+		 * read question answers from text file
+		 * @param questionNum the question number
+		 * @return string form of answer
+		 * @throws FileNotFoundException
+		 */
+		private void setAnswers(int questionNum) throws FileNotFoundException{
+			possibleAnswers.clear();
+			StringBuilder answer = new StringBuilder(); 
+			StringBuilder aNum = new StringBuilder(); 
+			StringBuilder caNum = new StringBuilder();
+			// wrong answers are marked with an A
+			aNum.append("A");
+			aNum.append(questionNum);
+			aNum.append(":");
+			// correct answers are marked with a CA
+			caNum.append("CA");
+			caNum.append(questionNum);
+			caNum.append(":");
+			File questionsFile = new File("questions/answers.txt");
+			try {
+				//scan the file for possible answers
+				Scanner fn = new Scanner (questionsFile);
+				while(fn.hasNextLine()) {
+					String line = fn.nextLine();
+					// if the line contains the Answer number add it to the possible answers
+					if(line.contains(caNum.toString())){ 
+						answer.append(line);
+						answer = removeColon(answer);
+						possibleAnswers.add(answer.toString());
+						setCorrectAnswer(answer.toString());
+						answer.setLength(0);
+						break;
+					}
+				}
+				fn.close();
+				//scan the file for the correct answer
+				Scanner fn2 = new Scanner (questionsFile);
+				while(fn2.hasNextLine()) {
+					String line = fn2.nextLine();
+					if(line.contains(aNum.toString()) && !(line.contains(caNum.toString()))){ 
+						answer.append(line);
+						answer = removeColon(answer);
+						possibleAnswers.add(answer.toString());
+						answer.setLength(0);
+						continue;
+					}
+				}
+				fn2.close();
+			} catch (FileNotFoundException e){
+				System.out.println(e.getMessage());
+			}
 		}
 		
 		/**
@@ -399,85 +389,27 @@ public class Board implements Serializable {
 		}
 		
 		/**
-		 * read question answer from text file
-		 * @param questionNum
-		 * @return string form of answer
-		 * @throws FileNotFoundException
-		 */
-		private void setAnswers(int questionNum) throws FileNotFoundException{
-			StringBuilder answer = new StringBuilder(); 
-			StringBuilder aNum = new StringBuilder(); 
-			StringBuilder caNum = new StringBuilder();
-			aNum.append("A"); //marker for questions
-			aNum.append(questionNum);
-			aNum.append(":");
-			caNum.append("CA"); //marker for questions
-			caNum.append(questionNum);
-			caNum.append(":");
-			File questionsFile = new File("questions/answers.txt");
-			try {
-				Scanner fn = new Scanner (questionsFile);
-				while(fn.hasNextLine()) {
-					String line = fn.nextLine();
-					if(line.contains(caNum.toString())){ 
-						answer.append(line);
-						answer = removeColon(answer);
-						this.possibleAnswers.add(answer.toString());
-						setCorrectAnswer(answer.toString());
-						answer.setLength(0);
-						break;
-					}
-				}
-				fn.close();
-				Scanner fn2 = new Scanner (questionsFile);
-				while(fn2.hasNextLine()) {
-					String line = fn2.nextLine();
-					if(line.contains(aNum.toString()) && !(line.contains(caNum.toString()))){ 
-						answer.append(line);
-						answer = removeColon(answer);
-						this.possibleAnswers.add(answer.toString());
-						answer.setLength(0);
-						continue;
-					}
-				}
-				fn2.close();
-			} catch (FileNotFoundException e){
-				System.out.println(e.getMessage());
-				System.exit(0);
-			}
-		}
-		
-		/**
-		 * Get the question that is asked
-		 * 
-		 * @return questionNumsAsked
-		 */
-		public List<Integer> getQuestionsAsked(){
-			return this.questionNumsAsked;
-		}
-		
-		/**
 		 * Get the possible answers to the question asked
 		 * 
-		 * @return possibleAnswers
+		 * @return possible answers to the question asked
 		 */
 		public List<String> getPossibleAnswers() {
-			return this.possibleAnswers;
+			return possibleAnswers;
 		}
 		
 		/**
 		 * Get the board
 		 * 
-		 * @return board
+		 * @return the board
 		 */
 		public GridSpace[][] getBoard() {
-			return this.board;
+			return board;
 		}
 		
 		/**
-		 * Removes question and answer identifiers ex: A1: & Q1: from the string
-		 * @param possibleAnswer
-		 * @return
+		 * Removes answer identifiers ex: A1: from the string
+		 * @param possibleAnswer the answer to be editted
+		 * @return the answer filtered of its identifier
 		 */
 		private StringBuilder removeColon(StringBuilder possibleAnswer) {
 			StringBuilder filteredAnswer = new StringBuilder();
@@ -488,40 +420,40 @@ public class Board implements Serializable {
 		}
 		
 		/**
-		 * Checked the answer that was answered
+		 * Checked if the answer was correct
 		 * 
-		 * @param playerAnswer
-		 * @return playerAnswer.equalsIgnoreCase(correctAnswer);
+		 * @param playerAnswer the answer
+		 * @return whether or not the player's answer was correct
 		 */
 		boolean checkAnswer(String playerAnswer) {
 			return playerAnswer.equalsIgnoreCase(correctAnswer);
 		}
 		
 		/**
-		 * Get the answer
+		 *Get the answer correct answer
 		 * 
-		 * @return correctAnswer
+		 * @return the correct answer
 		 */
 		public String getAnswer() {
-			return this.correctAnswer;
+			return correctAnswer;
 		}
 		
 		/**
-		 * Set the correct answer
+		 *Set the correct answer
 		 * 
-		 * @param answer
+		 * @param answer the correct answer
 		 */
 		public void setCorrectAnswer(String answer) {
-			this.correctAnswer = answer;
+			correctAnswer = answer;
 		}
 		
 		/**
-		 * Get the difficulty
+		 *Get the Difficulty
 		 * 
-		 * @return difficulty
+		 * @return the game Difficulty
 		 */
 		public Difficulty getDifficulty() {
-			return this.difficulty;
+			return difficulty;
 		}
 }
 	

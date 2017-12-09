@@ -1,5 +1,10 @@
 import java.io.*;
 
+/**
+ * This class was meant to control the serialization of the game, but has not been fully implemented.
+ * @author Chima Akparanta
+ *
+ */
 public class Load {
     /**
      * Save the game status to savedata.ser using Serializable
