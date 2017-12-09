@@ -44,8 +44,6 @@ import enums.PowerUps;
  */
 public class Controller implements Serializable, ActionListener {
 	
-	Controller thisController;
-	
 	// The Model
 	Player player;
 	Board gameBoard;
@@ -1400,6 +1398,7 @@ public class Controller implements Serializable, ActionListener {
 	 */
 	public void endScreen() {
 		// suppresses the gameplay images, and shuts down the listeners and timers
+		System.out.println(frame.getContentPane());
 		frame.getContentPane().removeMouseListener(frame.getContentPane().getMouseListeners()[0]);
 		frame.getContentPane().removeMouseMotionListener(frame.getContentPane().getMouseMotionListeners()[0]);
 		hideImages();
@@ -1420,7 +1419,7 @@ public class Controller implements Serializable, ActionListener {
 				}
 			}
 			// restart the game
-			thisController.startScreen();
+			startScreen();
 			tickStage = 0;
 		});
 		
@@ -1913,8 +1912,8 @@ public class Controller implements Serializable, ActionListener {
 		if(gameBoardTimer != null) {
 			boolean timeElapsed = gameBoardTimer.isTimesUp();
 			if(timeElapsed) {
-				this.gameBoardTimer.getTimer().stop();
-				
+				this.gameBoardTimer = null;
+				this.checkTimersTimer.stop();
 				this.endScreen();
 			}
 		}
@@ -1948,8 +1947,7 @@ public class Controller implements Serializable, ActionListener {
 	  	cont.screens = new CardLayout();
 	  	cont.cardPanel.setLayout(cont.screens);
 	  	
-	  	// set the controller reference
-	  	cont.thisController = cont;
+	  	
 	  	
 	  	// start the game
 	  	cont.startScreen();
