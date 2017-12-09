@@ -1,9 +1,5 @@
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
+import java.awt.event.*;
 import java.io.FileNotFoundException;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -12,6 +8,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 
 import TimeManagement.GameBoardTimer;
 import TimeManagement.PowerUpTimer;
@@ -1432,12 +1429,89 @@ public class Controller implements Serializable, ActionListener {
 	}
 
 	private void highscoreScreen() {
+		TopTen.getTopTenList();
 		JPanel highscorePanel = new JSIPanel();
-		highscorePanel.setLayout(new BorderLayout());
+		highscorePanel.setLayout(new GridBagLayout());
 
-		JTable table = new JTable();
+		GridBagConstraints constraints = constraintFactory();
+
+		constraints.gridx = 1;
+		constraints.gridy = 1;
+		constraints.anchor = GridBagConstraints.EAST;
+
+		Score test = new Score("", player.getScore());
+		if(TopTen.checkTopTen(test)) {
+
+			JTextField input = new JTextField("You Have A new High Score!!!!");
+			input.setFont(new Font("Arial", Font.BOLD, 40));
+			input.addFocusListener(new FocusListener() {
+				@Override
+				public void focusGained(FocusEvent e) {
+					input.setText("");
+				}
+
+				@Override
+				public void focusLost(FocusEvent e) {
+
+				}
+			});
+
+
+
+			constraints.gridx = 1;
+			constraints.gridy = 1;
+			constraints.anchor = GridBagConstraints.EAST;
+
+			JButton enter = new JButton("Save Score!!!");
+			enter.setFont(new Font("Arial", Font.BOLD, 40));
+			enter.addActionListener((ActionEvent e)->{
+				test.setName(input.getText());
+				enter.setVisible(false);
+				input.setVisible(false);
+				TopTen.addTopTen(test);
+				TopTen.SaveTopTenList();
+
+			});
+
+			highscorePanel.add(input, constraints);
+			constraints.gridy = 2;
+			highscorePanel.add(enter, constraints);
+
+
+
+		}
+
+
+		constraints.gridx = 1;
+		constraints.gridy = 1;
+		constraints.anchor = GridBagConstraints.NORTHWEST;
+
+//		DefaultTableModel model = new DefaultTableModel();
+//		JTable table = new JTable(model);
+//
+//		for(Score s:TopTen.winners){
+//			model.addRow(new Object[]{s.getName(),s.getScore()});
+//		}
+//
+//		table.setFont(new Font("Arial", Font.BOLD, 15));
+//		table.setVisible(true);
+//		highscorePanel.add(table, constraints);
+
+		String[] columnNames = {"Name", "Score"};
+		Object[][] data ={{"",0},{"",0},{"",0},{"",0},{"",0},{"",0},{"",0},{"",0},{"",0},{"",0}};
+
+		for(Score s:TopTen.winners){
+			data[TopTen.winners.indexOf(s)][0] =s.getName();
+			data[TopTen.winners.indexOf(s)][1] =s.getScore();
+		}
+
+
+		JTable table = new JTable(data,columnNames);
 		table.setFont(new Font("Arial", Font.BOLD, 15));
-
+		//table.doLayout();
+		JScrollPane tableContainer = new JScrollPane(table);
+		//tableContainer.doLayout();
+		highscorePanel.add(tableContainer,constraints);
 
 		cardPanel.add(highscorePanel, "HighScores");
 		screens.show(cardPanel, "HighScores");
@@ -1739,9 +1813,7 @@ public class Controller implements Serializable, ActionListener {
 			}
 		}
 		else if(controller.tickStage==7){
-			TopTen.getTopTenList();
-			TopTen.checkTopTen(controller.player);
-			TopTen.SaveTopTenList();
+
 			controller.tickStage=8;
 		}
 

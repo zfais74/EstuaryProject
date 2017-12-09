@@ -1,45 +1,62 @@
 import java.io.*;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.LinkedList;
+import java.util.*;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 public class TopTen {
-    public static LinkedList<Player> scores = new LinkedList<>();
-    LinkedList<Player> winners = scores
-            .stream()
-            .limit(10)
-            .collect(Collectors.toCollection(LinkedList::new));
+    public static LinkedList<Score> scores = new LinkedList<>();
+    public static LinkedList<Score> winners;
 
 
-    public static void checkTopTen(Player p){
-        Iterator<Player> x =scores.descendingIterator();
-        int index =10;
-        try {
-            //find index where score fits in
-            while (x.hasNext()) {
-                if (p.getScore() > x.next().getScore()) {
-                    index = scores.indexOf(x.next());
-
-                }
-            }
+    public static boolean checkTopTen(Score p){
+        winners = scores
+                .stream()
+                .limit(10)
+                .collect(Collectors.toCollection(LinkedList::new));
+        if(winners.size() <10 || winners.getLast().getScore()<p.getScore()){
+            return true;
         }
-        //if list empty, just add to empty list
-        catch(Exception e){
-            scores.add(p);
-
-            }
-
-        //add to index where it belongs
-        try {
-            scores.add(index, p);
+        else{
+            return false;
         }
-        catch (Exception e){
-            scores.add(p);
+
+    }
+
+    public static void addTopTen( Score p){
+        if(winners.size()<10){
+            winners.addLast(p);
         }
-        System.out.println("Score Recorded");
+        else{
+            winners.removeLast();
+            winners.addLast(p);
+
+        }
+        Collections.sort(winners);
+//        Iterator<Score> x =scores.descendingIterator();
+//        int index =10;
+//        try {
+//            //find index where score fits in
+//            while (x.hasNext()) {
+//                if (p.getScore() > x.next().getScore()) {
+//                    index = scores.indexOf(x.next());
+//
+//                }
+//            }
+//        }
+//        //if list empty, just add to empty list
+//        catch(Exception e){
+//            scores.add(p);
+//
+//        }
+//
+//        //add to index where it belongs
+//        try {
+//            scores.add(index, p);
+//        }
+//        catch (Exception e){
+//            scores.add(p);
+//        }
+//        System.out.println("Score Recorded");
 
     }
 
@@ -48,7 +65,7 @@ public class TopTen {
         {
             FileInputStream fis = new FileInputStream("scores.ser");
             ObjectInputStream ois = new ObjectInputStream(fis);
-            TopTen.scores = (LinkedList<Player>) ois.readObject();
+            TopTen.scores = (LinkedList<Score>) ois.readObject();
             ois.close();
 
 
@@ -71,7 +88,7 @@ public class TopTen {
 
             FileOutputStream fos = new FileOutputStream("scores.ser");
             ObjectOutputStream oos = new ObjectOutputStream(fos);
-            oos.writeObject(TopTen.scores);
+            oos.writeObject(TopTen.winners);
             oos.close();
             System.out.println("Saved Scores!");
         }
@@ -80,7 +97,5 @@ public class TopTen {
             System.out.print("Exception thrown while saving high scores" + ex.toString());
         }
     }
-    public static void DisplayTopTen(){
 
-    }
 }
